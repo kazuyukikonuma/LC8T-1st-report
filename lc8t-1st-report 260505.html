@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC8T — 數據證明的再成長之路</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --bg:       #F4F8FF;
+  --white:    #FFFFFF;
+  --ink:      #1A1A1A;
+  --ink-sub:  #555555;
+  --ink-dim:  #999999;
+  --rule:     #C8D8EE;
+  --rule-lt:  #E4EEFF;
+  --ac-blue:  #4A7CC7;
+  --ac-sky:   #7AAEE0;
+  --ac-mint:  #6AB08A;
+  --ac-lav:   #8B9ED4;
+  --ac-rose:  #E07070;
+  --ac-lemon: #F0C050;
+  --ac-grey:  #C4B898;
+  --pill-bg:  #E8F0FF;
+  --font:     'Noto Sans JP', sans-serif;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(244,248,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1.5px solid var(--rule);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 48px;
+}
+.nav-logo {
+  font-size: 11px; font-weight: 900; letter-spacing: 0.2em;
+  color: var(--ac-blue); text-transform: uppercase;
+}
+.nav-tabs { display: flex; gap: 2px; }
+.nav-tab {
+  padding: 5px 12px; font-size: 11px; font-weight: 700;
+  border: none; background: transparent; cursor: pointer;
+  color: var(--ink-dim); border-radius: 4px; font-family: var(--font);
+  letter-spacing: 0.04em; transition: all 0.18s;
+}
+.nav-tab:hover { color: var(--ac-blue); background: var(--pill-bg); }
+.nav-tab.on { color: var(--white); background: var(--ac-blue); }
+
+/* ── PAGE ── */
+.page {
+  max-width: 1100px; margin: 0 auto;
+  padding: 72px 48px 56px;
+  border-bottom: 1.5px solid var(--rule);
+}
+.page:last-child { border-bottom: none; }
+@media(max-width:680px) { .page { padding: 72px 20px 40px; } }
+
+/* ── SEC TAG ── */
+.sec-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 5px 16px 5px 8px;
+  background: var(--pill-bg); border-radius: 5px;
+  font-size: 13px; font-weight: 700; color: var(--ac-blue);
+  letter-spacing: 0.06em; margin-bottom: 20px;
+}
+.sec-num {
+  width: 26px; height: 26px; border-radius: 4px;
+  background: var(--ac-blue); color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900;
+}
+
+/* ── KEY MESSAGE ── */
+.keymsg {
+  margin-bottom: 28px; padding: 26px 32px;
+  border-radius: 12px; background: var(--pill-bg);
+  border-left: 4px solid var(--ac-blue);
+}
+.keymsg-eye {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ac-blue); margin-bottom: 8px;
+}
+.keymsg-txt {
+  font-size: clamp(20px, 3vw, 32px); font-weight: 900;
+  line-height: 1.25; letter-spacing: -0.01em;
+}
+.keymsg-sub {
+  font-size: 15px; margin-top: 10px; color: var(--ink-sub); line-height: 1.75;
+}
+
+/* ── GRID ── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+@media(max-width:680px) { .g2,.g3,.g4 { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: 10px; padding: 22px 24px;
+}
+.ctitle {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-sub); margin-bottom: 16px;
+}
+
+/* ── KPI ── */
+.kpi-strip { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.kpi-box {
+  flex: 1; min-width: 130px;
+  background: var(--white); border: 1.5px solid var(--rule);
+  border-radius: 10px; padding: 18px 20px;
+}
+.kpi-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-sub); margin-bottom: 6px; }
+.kpi-val { font-size: clamp(26px, 4vw, 38px); font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.kpi-val small { font-size: 14px; font-weight: 500; color: var(--ink-sub); }
+.kpi-nte { font-size: 12px; color: var(--ink-dim); }
+
+/* ── FORMULA ── */
+.formula-block {
+  background: var(--white); border: 1.5px solid var(--rule);
+  border-radius: 12px; padding: 36px 32px; margin-bottom: 24px;
+}
+.formula-eq {
+  font-size: clamp(22px,4vw,48px); font-weight: 300;
+  letter-spacing: 0.04em; text-align: center; margin-bottom: 32px;
+  line-height: 1.2;
+}
+.formula-eq .hi { color: var(--ac-blue); font-weight: 900; }
+.formula-vars { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+@media(max-width:680px) { .formula-vars { grid-template-columns: 1fr 1fr; } }
+.fvar {
+  background: var(--bg); border: 1.5px solid var(--rule);
+  border-radius: 8px; padding: 14px 16px;
+  border-top: 3px solid var(--ac-blue);
+}
+.fvar.n   { border-top-color: var(--ac-sky); }
+.fvar.cv  { border-top-color: var(--ac-mint); }
+.fvar.i   { border-top-color: var(--ac-grey); }
+.fvar-key { font-size: 22px; font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--ac-blue); }
+.fvar.n   .fvar-key { color: var(--ac-sky); }
+.fvar.cv  .fvar-key { color: var(--ac-mint); }
+.fvar.i   .fvar-key { color: var(--ac-grey); }
+.fvar-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.fvar-desc { font-size: 11px; color: var(--ink-sub); line-height: 1.65; }
+
+/* ── INSIGHT ── */
+.ins {
+  margin-top: 14px; padding: 13px 16px;
+  border-radius: 8px; font-size: 13px; line-height: 1.8;
+  background: var(--pill-bg); color: var(--ink);
+}
+.ins strong { color: var(--ac-blue); }
+.ins.mint { background: #EAF5EE; }
+.ins.mint strong { color: var(--ac-mint); }
+.ins.rose { background: #FFF0F0; }
+.ins.rose strong { color: var(--ac-rose); }
+
+/* ── TABLE ── */
+.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dt th {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-sub);
+  padding: 9px 12px; border-bottom: 1.5px solid var(--rule); text-align: right;
+}
+.dt th:first-child { text-align: left; }
+.dt td {
+  padding: 8px 12px; border-bottom: 1px solid var(--rule);
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+.dt td:first-child { text-align: left; font-weight: 500; }
+.dt tr:last-child td { border-bottom: none; }
+.hi-row td { background: #F0F5FF; font-weight: 700; }
+.neg { color: var(--ac-rose); font-weight: 700; }
+.pos { color: var(--ac-mint); font-weight: 700; }
+.hi  { color: var(--ac-blue); font-weight: 700; }
+
+/* ── CHART WRAPPER ── */
+.ch     { position: relative; height: 220px; }
+.ch-lg  { position: relative; height: 270px; }
+.ch-sm  { position: relative; height: 170px; }
+
+/* ── FUNNEL ── */
+.funnel { display: flex; align-items: center; gap: 0; margin: 16px 0; }
+.f-step {
+  flex: 1; text-align: center; padding: 18px 8px;
+  background: var(--bg); border: 1.5px solid var(--rule);
+  border-right: none; position: relative;
+}
+.f-step:last-child { border-right: 1.5px solid var(--rule); border-radius: 0 8px 8px 0; }
+.f-step:first-child { border-radius: 8px 0 0 8px; }
+.f-step::after {
+  content: '▶'; position: absolute; right: -14px; top: 50%;
+  transform: translateY(-50%); color: var(--ac-sky); font-size: 14px; z-index: 1;
+}
+.f-step:last-child::after { display: none; }
+.f-n { font-size: clamp(20px,3vw,30px); font-weight: 800; line-height: 1; margin-bottom: 4px; color: var(--ac-blue); }
+.f-lbl { font-size: 11px; color: var(--ink-sub); }
+
+/* ── TAG BAR ── */
+.tag-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.tag-bar-lbl { width: 64px; font-size: 11px; color: var(--ink-sub); flex-shrink: 0; }
+.tag-bar-track { flex: 1; height: 30px; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; display: flex; align-items: center; }
+.tag-bar-fill { height: 100%; display: flex; align-items: center; padding-left: 10px; border-radius: 3px; }
+.tag-bar-val { font-size: 11px; font-weight: 700; color: var(--white); white-space: nowrap; }
+.tag-bar-n { width: 68px; font-size: 10px; color: var(--ink-dim); text-align: right; flex-shrink: 0; }
+
+/* ── LAYER BAR ── */
+.layer-row {
+  display: grid; grid-template-columns: 100px 1fr 60px;
+  align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.layer-lbl { font-size: 12px; color: var(--ink-sub); }
+.layer-track { height: 26px; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; display: flex; align-items: center; overflow: visible; }
+.layer-fill { height: 100%; display: flex; align-items: center; padding-left: 10px; border-radius: 3px; }
+.layer-fill-val { font-size: 11px; font-weight: 700; color: var(--white); }
+.layer-pct { font-size: 12px; font-weight: 700; color: var(--ac-blue); text-align: right; }
+
+/* ── HOT LAYER ── */
+.hot-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 16px; background: var(--white);
+  border: 1.5px solid var(--rule); border-radius: 8px;
+  margin-bottom: 8px;
+}
+.hot-row.top { border-color: var(--ac-rose); background: #FFF8F8; }
+.hot-row.hi2 { border-color: var(--ac-blue); background: var(--pill-bg); }
+.hot-n { font-size: clamp(20px,3vw,28px); font-weight: 800; min-width: 100px; color: var(--ac-blue); }
+.hot-n.red { color: var(--ac-rose); }
+.hot-lbl { font-size: 13px; font-weight: 700; }
+.hot-sub { font-size: 11px; color: var(--ink-sub); margin-top: 2px; }
+
+/* ── ACTION GROUP ── */
+.action-group { margin-bottom: 24px; }
+.action-hd {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--rule);
+}
+.action-badge {
+  width: 32px; height: 32px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; flex-shrink: 0;
+}
+.badge-o  { background: #FFF3E0; color: #C07820; }
+.badge-n  { background: var(--pill-bg); color: var(--ac-blue); }
+.badge-cv { background: #EAF5EE; color: var(--ac-mint); }
+.badge-i  { background: #F5F0F8; color: #7A5A9A; }
+.action-ttl { font-size: 15px; font-weight: 700; flex: 1; }
+.action-pill {
+  font-size: 10px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; letter-spacing: 0.06em; white-space: nowrap;
+}
+.pill-o  { background: #FFF3E0; color: #C07820; }
+.pill-n  { background: var(--pill-bg); color: var(--ac-blue); }
+.pill-cv { background: #EAF5EE; color: var(--ac-mint); }
+.pill-i  { background: #F5F0F8; color: #7A5A9A; }
+.action-list { display: flex; flex-direction: column; gap: 8px; }
+.action-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; background: var(--white);
+  border: 1.5px solid var(--rule); border-radius: 8px;
+}
+.action-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  margin-top: 7px; flex-shrink: 0;
+}
+.dot-o  { background: #C07820; }
+.dot-n  { background: var(--ac-blue); }
+.dot-cv { background: var(--ac-mint); }
+.dot-i  { background: #7A5A9A; }
+.action-body { font-size: 13px; line-height: 1.65; }
+.action-data { font-size: 11px; color: var(--ink-sub); margin-top: 3px; }
+
+/* ── FINAL ── */
+.final-card {
+  background: var(--ac-blue); color: var(--white);
+  border-radius: 14px; padding: 40px 36px;
+  text-align: center; margin-top: 32px;
+}
+.final-text {
+  font-size: clamp(15px,2.2vw,19px);
+  line-height: 2.1; font-weight: 300; max-width: 640px; margin: 0 auto 20px;
+}
+.final-text em { font-style: normal; font-weight: 900; color: var(--ac-lemon); }
+.final-sub {
+  font-size: 11px; letter-spacing: 0.22em;
+  opacity: 0.6; text-transform: uppercase;
+}
+
+
+.lang-btn {
+  padding: 4px 10px; font-size: 11px; font-weight: 700;
+  border: 1.5px solid var(--rule); background: var(--white);
+  cursor: pointer; border-radius: 4px; font-family: var(--font);
+  color: var(--ink-sub); transition: all 0.15s;
+}
+.lang-btn:hover { border-color: var(--ac-blue); color: var(--ac-blue); }
+.lang-btn.lang-on { background: var(--ac-blue); border-color: var(--ac-blue); color: #fff; }
+.lang-switch { display: flex; gap: 4px; margin-left: 12px; }
+
+/* ── SCROLL ── */
+.fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ── STORY NAV ── */
+.story-nav {
+  display: flex; gap: 0;
+  border: 1.5px solid var(--rule); border-radius: 10px;
+  overflow: hidden; margin-top: 28px;
+}
+.s-step {
+  flex: 1; padding: 14px 12px;
+  border-right: 1.5px solid var(--rule);
+  font-size: 12px; line-height: 1.5; background: var(--white);
+  text-align: center;
+}
+.s-step:last-child { border-right: none; }
+.s-icon { font-size: 18px; font-weight: 900; color: var(--ac-blue); line-height: 1; margin-bottom: 4px; }
+.s-lbl { font-weight: 700; font-size: 12px; color: var(--ink); margin-bottom: 2px; }
+.s-dsc { color: var(--ink-dim); font-size: 10px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo"><span data-i18n="t_title"><span data-i18n="nav_title">LC8T 簡報</span></span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab on" onclick="goTo('p00')">CH.00</button>
+    <button class="nav-tab" onclick="goTo('p01')">CH.01</button>
+    <button class="nav-tab" onclick="goTo('p02')">CH.02</button>
+    <button class="nav-tab" onclick="goTo('p03')">CH.03</button>
+    <button class="nav-tab" onclick="goTo('p04')">CH.04</button>
+    <button class="nav-tab" onclick="goTo('p05')">CH.05</button>
+    <button class="nav-tab" onclick="goTo('p06')">CH.06</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;margin-left:8px;padding-left:8px;border-left:1px solid var(--rule);">
+    <button id="btn-ja" onclick="setLang('ja')" style="padding:4px 10px;font-size:11px;font-weight:700;border-radius:4px;border:1.5px solid var(--ac-blue);background:var(--ac-blue);color:#fff;cursor:pointer;font-family:var(--font);">JP</button>
+    <button id="btn-zh" onclick="setLang('zh')" style="padding:4px 10px;font-size:11px;font-weight:700;border-radius:4px;border:1.5px solid var(--rule);background:var(--white);color:var(--ink-sub);cursor:pointer;font-family:var(--font);">中文</button>
+  </div>
+<div class="lang-switch">
+    <button class="lang-btn lang-on" data-lang="ja" onclick="setLang('ja')">日本語</button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+  </div>
+</nav>
+
+<!-- ══ CH.00 ══ -->
+<div class="page" id="p00">
+  <div class="sec-tag"><span class="sec-num">00</span> <span data-i18n="t_ch00_tag"><span data-i18n="ch00_tag">TBBS策略的基礎</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch00_eye"><span data-i18n="ch00_eye">基礎</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch00_h1a">台灣分公司的持續成長，</span><br><span data-i18n="t_ch00_h1b">靠這個公式驅動。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch00_sub"><span data-i18n="ch00_sub">在少子化這個不可逆的市場收縮趨勢中，台灣分公司要持續創造利潤的結構，可以用一個公式來表達。</span></span></div>
+  </div>
+
+  <div class="formula-block fade-up">
+    <div class="formula-eq">
+      <span class="hi">P(LTV)</span> &nbsp;=&nbsp; <span class="hi">O</span> &nbsp;×&nbsp; <span class="hi" style="color:var(--ac-sky);">N</span> &nbsp;×&nbsp; <span class="hi" style="color:var(--ac-mint);">CV</span> &nbsp;−&nbsp; <span class="hi" style="color:#888;">I</span>
+    </div>
+    <div class="formula-vars">
+      <div class="fvar">
+        <div class="fvar-key">O</div>
+        <div class="fvar-name">機會點</div>
+        <div style="font-size:10px;color:var(--ac-blue);font-weight:700;letter-spacing:0.06em;margin-bottom:5px;"><span data-i18n="ch00_o_en">Opportunity</span></div>
+        <div class="fvar-desc"><span data-i18n="ch00_o_desc">SKU數量 × 傳遞時機的精準度。商品與月齡吻合的那個瞬間，就是機會。</span></div>
+      </div>
+      <div class="fvar n">
+        <div class="fvar-key">N</div>
+        <div class="fvar-name">母數</div>
+        <div style="font-size:10px;color:var(--ac-sky);font-weight:700;letter-spacing:0.06em;margin-bottom:5px;"><span data-i18n="ch00_n_en">Number of Prospects</span></div>
+        <div class="fvar-desc"><span data-i18n="ch00_n_desc">BCL持有數量與持有占比。就是我們能夠接觸到的人數。目前<span data-i18n="ch01_kpi4_lbl">覆蓋率</span>9.1%。</span></div>
+      </div>
+      <div class="fvar cv">
+        <div class="fvar-key">CV</div>
+        <div class="fvar-name">轉換率</div>
+        <div style="font-size:10px;color:var(--ac-mint);font-weight:700;letter-spacing:0.06em;margin-bottom:5px;"><span data-i18n="ch00_cv_en">Conversion Rate</span></div>
+        <div class="fvar-desc"><span data-i18n="ch00_cv_desc">溝通的品質、品牌好感度、標籤的深度。溝通方式決定了購買機率。</span></div>
+      </div>
+      <div class="fvar i">
+        <div class="fvar-key">I</div>
+        <div class="fvar-name">投資金額</div>
+        <div style="font-size:10px;color:var(--ac-grey);font-weight:700;letter-spacing:0.06em;margin-bottom:5px;"><span data-i18n="ch00_i_en">Investment</span></div>
+        <div class="fvar-desc">BCL獲取成本與行銷施策成本。透過高效投資<span data-i18n="ch00_c2_h">最大化P(LTV)</span>。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3 fade-up">
+    <div class="card">
+      <div class="ctitle"><span data-i18n="t_ch00_c1t"><span data-i18n="ch00_c1_t">O × N × CV × I</span></span></div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px;"><span data-i18n="t_ch00_c1h"><span data-i18n="ch00_c1_h">相互強化</span></span></div>
+      <div style="font-size:12px;color:var(--ink-sub);line-height:1.7;"><span data-i18n="t_ch00_c1d"><span data-i18n="ch00_c1_d">N增加，O的機會就增加。CV提升，I的效率就提升。這四個變數並非各自獨立。</span></span></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span data-i18n="t_ch00_c2t"><span data-i18n="ch00_c2_t">不增加I，</span></span></div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px;"><span data-i18n="t_ch00_c2h">最大化P(LTV)</span></div>
+      <div style="font-size:12px;color:var(--ink-sub);line-height:1.7;"><span data-i18n="t_ch00_c2d"><span data-i18n="ch00_c2_d">不增加成本，透過推動O、N、CV來提升利潤，這就是台灣分公司的基本策略。</span></span></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span data-i18n="t_ch00_c3t"><span data-i18n="ch00_c3_t">什麼是LC8T</span></span></div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px;"><span data-i18n="t_ch00_c3h"><span data-i18n="ch00_c3_h">驅動這個公式的引擎</span></span></div>
+      <div style="font-size:12px;color:var(--ink-sub);line-height:1.7;"><span data-i18n="t_ch00_c3d"><span data-i18n="ch00_c3_d">LINE、Community、Super8、TEL四個要素，同時承擔O、N、CV的功能。</span></span></div>
+    </div>
+  </div>
+
+  <div class="story-nav fade-up">
+    <div class="s-step">
+      <div class="s-icon">N</div>
+      <div class="s-lbl"><span data-i18n="ch00_s1_lbl">DB的現況</span></div>
+      <div class="s-dsc"><span data-i18n="ch00_s1_dsc">持有占比9.1%的成長空間</span></div>
+    </div>
+    <div class="s-step">
+      <div class="s-icon">O</div>
+      <div class="s-lbl"><span data-i18n="ch00_s2_lbl">月齡別精準度</span></div>
+      <div class="s-dsc"><span data-i18n="ch00_s2_dsc">改變傳遞的時機</span></div>
+    </div>
+    <div class="s-step">
+      <div class="s-icon">CV</div>
+      <div class="s-lbl"><span data-i18n="ch00_s3_lbl">標籤的力量</span></div>
+      <div class="s-dsc"><span data-i18n="ch00_s3_dsc">用實測數據證明購買率</span></div>
+    </div>
+    <div class="s-step">
+      <div class="s-icon">TEL</div>
+      <div class="s-lbl"><span data-i18n="ch00_s4_lbl">與電銷的連動</span></div>
+      <div class="s-dsc"><span data-i18n="ch00_s4_dsc">LINE改變電話銷售的成果</span></div>
+    </div>
+    <div class="s-step">
+      <div class="s-icon">★</div>
+      <div class="s-lbl"><span data-i18n="ch00_s5_lbl">鎖定高潛力顧客</span></div>
+      <div class="s-dsc"><span data-i18n="ch00_s5_dsc">DB中的6.5萬人</span></div>
+    </div>
+    <div class="s-step">
+      <div class="s-icon">→</div>
+      <div class="s-lbl"><span data-i18n="ch00_s6_lbl">行動方針</span></div>
+      <div class="s-dsc"><span data-i18n="ch00_s6_dsc">推動四個因子</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH.01 ══ -->
+<div class="page" id="p01">
+  <div class="sec-tag"><span class="sec-num">01</span> <span data-i18n="t_ch01_tag"><span data-i18n="ch01_tag">N（母數）的現況</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch01_eye"><span data-i18n="ch01_eye">BCL 資料庫</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch01_h1a">知名度97%的品牌，</span><br><span data-i18n="t_ch01_h1b">卻只掌握了市場的9.1%。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch01_sub"><span data-i18n="ch01_sub">這不是問題，而是機會的大小。91%的家長還不在我們的DB裡。</span></span></div>
+  </div>
+
+  <div class="kpi-strip fade-up">
+    <div class="kpi-box">
+      <div class="kpi-lbl"><span data-i18n="ch01_kpi1_lbl">DB總數</span></div>
+      <div class="kpi-val">21.2<small>万人</small></div>
+      <div class="kpi-nte"><span data-i18n="ch01_kpi1_nte">有效＋無效BCL合計</span></div>
+    </div>
+    <div class="kpi-box" style="border-color:var(--ac-sky)">
+      <div class="kpi-lbl"><span data-i18n="ch01_kpi2_lbl">有效BCL</span></div>
+      <div class="kpi-val" style="color:var(--ac-blue)">14.8<small>万人</small></div>
+      <div class="kpi-nte"><span data-i18n="ch01_kpi2_nte">活躍的接觸點</span></div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl"><span data-i18n="ch01_kpi3_lbl">潛在市場</span></div>
+      <div class="kpi-val">163<small>万人</small></div>
+      <div class="kpi-nte"><span data-i18n="ch01_kpi3_nte">台灣0〜10歲人口</span></div>
+    </div>
+    <div class="kpi-box" style="border-color:var(--ac-rose)">
+      <div class="kpi-lbl">覆蓋率</div>
+      <div class="kpi-val" style="color:var(--ac-rose)">9.1<small>%</small></div>
+      <div class="kpi-nte"><span data-i18n="ch01_kpi4_nte">91%尚未獲取</span></div>
+    </div>
+  </div>
+
+  <div class="g2 fade-up" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="ctitle"><span data-i18n="ch01_birth_t">出生年別BCL保有数 &amp; 覆蓋率</span></div>
+      <div class="ch"><canvas id="c-birth"></canvas></div>
+      <div class="ins"><span data-i18n="ch01_birth_ins"><strong>2025年出生（10.8萬人）中，我們只掌握了5.9%。</strong>出生年越新，進入DB的比例越低。越是小月齡的孩子，我們越是人手不足。</span></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span data-i18n="ch01_donut_t">BCL月齡分布（2026/04基準）</span></div>
+      <div class="ch"><canvas id="c-donut"></canvas></div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px;">
+        <div style="display:flex;justify-content:space-between;padding:7px 12px;background:var(--bg);border-radius:5px;font-size:12px;">
+          <span style="color:var(--ink-sub)"><span data-i18n="ch01_young">0〜36M 下線</span></span>
+          <span style="font-weight:700;color:var(--ac-mint)"><span data-i18n="ch01_young_v">29,823人 / 20%</span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 12px;background:var(--bg);border-radius:5px;font-size:12px;">
+          <span style="color:var(--ink-sub)"><span data-i18n="ch01_old">37M以上 上線</span></span>
+          <span style="font-weight:700;color:var(--ink-dim)"><span data-i18n="ch01_old_v">118,526人 / 80%</span></span>
+        </div>
+      </div>
+      <div class="ins"><span data-i18n="ch01_donut_ins"><strong>商品最有效果的0〜36M層只佔20%。</strong>壯大下線才是最重要的課題。</span></div>
+    </div>
+  </div>
+
+  <div class="card fade-up">
+    <div class="ctitle"><span data-i18n="ch01_monthly_t">月度新增BCL登錄趨勢（2024/04〜2026/03）</span></div>
+    <div class="ch-lg"><canvas id="c-monthly"></canvas></div>
+    <div class="g2" style="margin-top:12px;margin-bottom:0;">
+      <div class="ins"><span data-i18n="ch01_ins1"><strong>FY25前半平均：1,598人/月 → 後半：2,276人/月（+42%）</strong><br>2026/03：4,263人（FY25最高值）</span></div>
+      <div class="ins mint"><span data-i18n="ch01_ins2"><strong>引擎已經點火了。</strong>後半的加速是真實的。維持並加速這個步伐，就是擴大N的核心所在。</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH.02 ══ -->
+<div class="page" id="p02">
+  <div class="sec-tag"><span class="sec-num">02</span> <span data-i18n="t_ch02_tag"><span data-i18n="ch02_tag">O（機會點）的精準度</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch02_eye"><span data-i18n="ch02_eye">以月齡為基礎的方法</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch02_h1a">從學年單位，進化到月齡單位。</span><br><span data-i18n="t_ch02_h1b">傳遞時機的精準度決定成效。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch02_sub"><span data-i18n="ch02_sub">幼兒的發展不是以年為單位，而是每個月都在改變。數據顯示，每項商品都有「最佳購買月齡」。</span></span></div>
+  </div>
+
+  <div class="g2 fade-up" style="margin-bottom:20px;">
+    <div class="card" style="background:var(--bg);border-style:dashed;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px;"><span data-i18n="t_ch02_old"><span data-i18n="ch02_old_t">舊有的思維</span></span></div>
+      <div style="font-size:18px;font-weight:700;color:var(--ink-sub);margin-bottom:8px;"><span data-i18n="ch02_old_h">「適合幾歲？」</span></div>
+      <div style="font-size:12px;color:var(--ink-dim);line-height:1.7;"><span data-i18n="ch02_old_d">以學年為單位（每年生日為起點）<br>對所有人使用相同的時機</span></div>
+    </div>
+    <div class="card" style="border-color:var(--ac-blue);border-width:2px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ac-blue);margin-bottom:10px;"><span data-i18n="t_ch02_new"><span data-i18n="ch02_new_t">新的思維</span></span></div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;"><span data-i18n="ch02_new_h">「在幾個月大的時候傳遞？」</span></div>
+      <div style="font-size:12px;color:var(--ink-sub);line-height:1.7;"><span data-i18n="ch02_new_d">以月齡為單位（孩子每個月都在改變）<br>配合孩子的發展階段</span></div>
+    </div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle"><span data-i18n="ch02_cvr_t">【當前事實】依月齡層別 FY25購買結構 — 有無月刊訂購經驗</span></div>
+    <div class="ch"><canvas id="c-layer-cvr"></canvas></div>
+    <div style="margin-top:12px;">
+      <div class="g2" style="margin-bottom:8px;">
+        <div class="ins"><span data-i18n="ch02_ins1"><strong>A層（37〜60M）的88.8%、B層的90.5%是由曾訂購月刊的顧客所購買。</strong>現在的業績大部分是靠過去的月刊顧客在支撐，而這個母數會隨時間不斷減少。</span></div>
+        <div class="ins mint"><span data-i18n="ch02_ins2"><strong>SS、S層超過70%是沒有月刊訂購經驗的。</strong>這才是「真正的新購買」。培育這個層，是持續成長的核心，也是LC8T最應該發揮力量的領域。</span></div>
+      </div>
+      <div style="display:flex;gap:12px;padding:10px 14px;background:var(--bg);border-radius:6px;font-size:11px;align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:14px;height:14px;border-radius:3px;background:var(--ac-rose);opacity:0.8;"></div><span><span data-i18n="ch02_legend1">有月刊訂購（舊有資產）</span></span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><div style="width:14px;height:14px;border-radius:3px;background:var(--ac-blue);opacity:0.7;"></div><span><span data-i18n="ch02_legend2">無月刊訂購（新購買）</span></span></div>
+        <span style="color:var(--ink-dim);"><span data-i18n="ch02_legend3">※ 月齡為購買時最小孩子的月齡</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up">
+    <div class="ctitle"><span data-i18n="ch02_chart_t">BCL活化設計（假設）vs 實際購買月齡 — WEB・TM・KOL比較</span></div>
+
+    <!-- legend -->
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;">
+        <div style="width:20px;height:0;border-top:2.5px dashed var(--ac-rose);"></div>
+        <span><span data-i18n="ch02_leg1">BCL活化設計M（假設）</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--ac-blue);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.15);"></div>
+        <span>WEB（自主購買＝真實需求時期）</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--ac-mint);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.15);"></div>
+        <span><span data-i18n="ch02_leg3">TM（電銷）</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:#E0A04A;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.15);"></div>
+        <span><span data-i18n="ch02_leg4">KOL（団購）</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-dim);">
+        <div style="width:24px;height:8px;border-radius:4px;background:var(--ac-blue);opacity:0.2;"></div>
+        <span>IQR（購買的分布範圍）</span>
+      </div>
+    </div>
+
+    <!-- filter -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="ch02-filter">
+      <button class="ch02-btn on" onclick="ch02Filter('all',this)" style="padding:4px 14px;font-size:11px;font-weight:700;border-radius:20px;border:1.5px solid var(--rule);background:var(--ac-blue);color:#fff;cursor:pointer;font-family:var(--font);">全部</button>
+      <button class="ch02-btn" onclick="ch02Filter('est',this)" style="padding:4px 14px;font-size:11px;font-weight:700;border-radius:20px;border:1.5px solid var(--rule);background:var(--white);color:var(--ink-sub);cursor:pointer;font-family:var(--font);"><span data-i18n="ch02_filter2">✅ 可信度高（上市1年以上）</span></button>
+      <button class="ch02-btn" onclick="ch02Filter('new',this)" style="padding:4px 14px;font-size:11px;font-weight:700;border-radius:20px;border:1.5px solid var(--rule);background:var(--white);color:var(--ink-sub);cursor:pointer;font-family:var(--font);"><span data-i18n="ch02_filter3">⚠️ 實績累積中</span></button>
+    </div>
+
+    <!-- charts -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="ch02-grid"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;">
+      <div class="ins">
+        <strong>KOL誘發「提早購買」</strong><br>
+        英語Plus（−10M）、注音2.0（−13M），KOL的購買月齡比WEB早了許多。在孩子還無法使用的月齡購買，會降低使用體驗的價值。<br>→ 需針對不同月齡設計KOL的操作方式。
+      </div>
+      <div class="ins mint">
+        <strong>TM與WEB在相同月齡觸及</strong><br>
+        幾乎所有商品TM中位數≒WEB中位數（±2M以內）。電話在真實需求時期觸及顧客。提升名單月齡篩選精準度，成交率還能進一步提升。
+      </div>
+      <div class="ins">
+        <strong>可信度高的商品最佳傳遞時機</strong><br>
+        實績滿1年的商品，WEB購買月齡已趨於穩定。從中位數的前1〜2個月開始發送，就是LC8T Super8的設計基準。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CH02 タイムラインチャート ──
+(function(){
+const PRODS02 = [
+  { key:'生活好習慣', status:'est', act:13,
+    ch:{ WEB:{med:18,q1:10,q3:26}, TM:{med:15,q1:8,q3:22}, KOL:{med:18,q1:11,q3:25} },
+    note:'全通路與活化設計幾乎一致。需求結構穩定。' },
+  { key:'英語Plus', status:'est', act:30,
+    ch:{ WEB:{med:33,q1:22,q3:44}, TM:{med:35,q1:24,q3:46}, KOL:{med:22,q1:14,q3:33} },
+    note:'KOL提早10個月。透過KOL觸及較小月齡層。' },
+  { key:'注音2.0', status:'est', act:54,
+    ch:{ WEB:{med:52,q1:39,q3:63}, TM:{med:48,q1:34,q3:60}, KOL:{med:38,q1:26,q3:52} },
+    note:'KOL提早13個月。越是高月齡商品，越明顯誘發提早購買。' },
+  { key:'好情緒EQ', status:'new', act:25,
+    ch:{ WEB:{med:33,q1:22,q3:44}, TM:{med:35,q1:24,q3:46}, KOL:{med:29,q1:19,q3:39} },
+    note:'2025/05上市。WEB中位數33M。初年度實績。' },
+  { key:'語彙智育', status:'new', act:18,
+    ch:{ WEB:{med:23,q1:13,q3:35}, TM:{med:23,q1:14,q3:34}, KOL:{med:21,q1:13,q3:32} },
+    note:'2025/10上市。僅FY25後半。全通路表現良好。' },
+  { key:'点読図鑑', status:'new', act:6,
+    ch:{ WEB:{med:17,q1:8,q3:28}, TM:{med:17,q1:8,q3:26}, KOL:{med:19,q1:10,q3:30} },
+    note:'2026/01社群活動。初期階段的參考值。' },
+  { key:'数学套組', status:'new', act:49,
+    ch:{ WEB:{med:45,q1:35,q3:56}, TM:{med:45,q1:34,q3:55}, KOL:{med:42,q1:31,q3:52} },
+    note:'2026/03社群活動。初期階段的參考值。' },
+];
+const MIN=0, MAX=72;
+const TICKS=[0,12,24,36,48,60,72];
+const CH_COLORS = { WEB:'#4A7CC7', TM:'#6AB08A', KOL:'#E0A04A' };
+
+function pct(m){ return ((m-MIN)/(MAX-MIN)*100).toFixed(2)+'%'; }
+
+function makeCard(p){
+  const wrap = document.createElement('div');
+  wrap.dataset.status = p.status;
+  const isNew = p.status === 'new';
+  wrap.style.cssText = `background:var(--white);border:1.5px solid var(--rule);border-radius:8px;padding:14px 16px;border-left:4px solid ${isNew?'#E0A04A':'var(--ac-blue)'};`;
+
+  // header
+  const hdr = document.createElement('div');
+  hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';
+  hdr.innerHTML = `
+    <span style="font-size:13px;font-weight:700;">${p.key}</span>
+    <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:${isNew?'#FFF5E0':'#E8F0FF'};color:${isNew?'#C07020':'var(--ac-blue)'};">${isNew?'⚠️ 累積中':'✅ 可信度高'}</span>`;
+  wrap.appendChild(hdr);
+
+  // axis
+  const axisWrap = document.createElement('div');
+  axisWrap.style.cssText = 'position:relative;height:22px;margin-bottom:2px;';
+  const axBg = document.createElement('div');
+  axBg.style.cssText = 'position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule);transform:translateY(-50%);';
+  axisWrap.appendChild(axBg);
+  TICKS.forEach(m=>{
+    const t = document.createElement('div');
+    t.style.cssText = `position:absolute;left:${pct(m)};top:0;transform:translateX(-50%);font-size:9px;color:var(--ink-dim);white-space:nowrap;display:flex;flex-direction:column;align-items:center;`;
+    t.innerHTML = `${m}M<span style="display:block;width:1px;height:5px;background:var(--rule);margin-top:1px;"></span>`;
+    axisWrap.appendChild(t);
+  });
+  wrap.appendChild(axisWrap);
+
+  // channel rows
+  ['WEB','TM','KOL'].forEach(chName=>{
+    const d = p.ch[chName];
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:7px;height:24px;';
+
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'width:32px;font-size:10px;color:var(--ink-sub);flex-shrink:0;text-align:right;';
+    lbl.textContent = chName;
+    row.appendChild(lbl);
+
+    const track = document.createElement('div');
+    track.style.cssText = 'flex:1;position:relative;height:100%;';
+
+    // activation line (WEB rowのみ縦線を全row分カバー)
+    if(chName==='WEB'){
+      const al = document.createElement('div');
+      al.style.cssText = `position:absolute;left:${pct(p.act)};top:-44px;width:2px;height:92px;background:var(--ac-rose);opacity:0.6;z-index:1;`;
+      const alLabel = document.createElement('div');
+      alLabel.style.cssText = `position:absolute;left:${pct(p.act)};top:-58px;transform:translateX(-50%);font-size:9px;color:var(--ac-rose);font-weight:700;white-space:nowrap;`;
+      alLabel.textContent = `設計${p.act}M`;
+      track.appendChild(al);
+      track.appendChild(alLabel);
+    }
+
+    // IQR span
+    const span = document.createElement('div');
+    const lPct = (d.q1-MIN)/(MAX-MIN)*100;
+    const wPct = (d.q3-d.q1)/(MAX-MIN)*100;
+    span.style.cssText = `position:absolute;left:${lPct}%;width:${wPct}%;top:50%;transform:translateY(-50%);height:8px;border-radius:4px;background:${CH_COLORS[chName]};opacity:0.18;`;
+    track.appendChild(span);
+
+    // median dot
+    const dot = document.createElement('div');
+    dot.style.cssText = `position:absolute;left:${pct(d.med)};top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:${CH_COLORS[chName]};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);z-index:2;cursor:default;transition:transform 0.12s;`;
+    dot.title = `${p.key} ${chName}: 中央値${d.med}M (IQR ${d.q1}〜${d.q3}M) / 設計${p.act}M比 ${d.med>=p.act?'+':''}${d.med-p.act}M`;
+    dot.addEventListener('mouseenter',()=>{ dot.style.transform='translate(-50%,-50%) scale(1.5)'; });
+    dot.addEventListener('mouseleave',()=>{ dot.style.transform='translate(-50%,-50%) scale(1)'; });
+    track.appendChild(dot);
+
+    row.appendChild(track);
+    wrap.appendChild(row);
+  });
+
+  // note
+  const note = document.createElement('div');
+  note.style.cssText = 'font-size:10px;color:var(--ink-dim);margin-top:4px;line-height:1.6;';
+  note.textContent = p.note;
+  wrap.appendChild(note);
+
+  return wrap;
+}
+
+const grid02 = document.getElementById('ch02-grid');
+PRODS02.forEach(p=>{ grid02.appendChild(makeCard(p)); });
+
+window.ch02Filter = function(type, btn){
+  document.querySelectorAll('.ch02-btn').forEach(b=>{
+    b.style.background = 'var(--white)';
+    b.style.color = 'var(--ink-sub)';
+    b.classList.remove('on');
+  });
+  btn.style.background = 'var(--ac-blue)';
+  btn.style.color = '#fff';
+  btn.classList.add('on');
+  Array.from(grid02.children).forEach(card=>{
+    card.style.display = (type==='all' || card.dataset.status===type) ? '' : 'none';
+  });
+};
+})();
+</script>
+
+<!-- ══ CH.03 ══ -->
+<div class="page" id="p03">
+  <div class="sec-tag"><span class="sec-num">03</span> <span data-i18n="t_ch03_tag"><span data-i18n="ch03_tag">CV（轉換率）的核心</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch03_eye"><span data-i18n="ch03_eye">標籤力量 — 真實數據</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch03_h1a">標籤改變購買率。</span><br><span data-i18n="t_ch03_h1b">這不是假設，而是實測數據。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch03_sub"><span data-i18n="ch03_sub">從30萬人DB計算出的實際數字告訴我們：標籤的數量與品質，決定性地改變了購買機率。</span></span></div>
+  </div>
+
+  <!-- タグ説明カード -->
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle"><span data-i18n="ch03_tag_what_t">什麼是標籤（Tag）— 在什麼時候、會被貼上什麼標籤</span></div>
+    <p style="font-size:13px;color:var(--ink-sub);margin-bottom:16px;line-height:1.8;"><span data-i18n="ch03_tag_what_sub">LC8T的核心就是累積標籤。每當顧客在LINE或官網上有行動，就會自動被貼上標籤。不只是標籤的數量，<strong>標籤的種類與品質</strong>，代表著我們與那位媽媽之間的距離。</span></p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px;">
+
+      <div style="background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;padding:14px;border-top:3px solid var(--ac-sky);">
+        <div style="display:inline-block;background:var(--ac-sky);color:#fff;font-size:16px;font-weight:900;letter-spacing:0.1em;padding:4px 12px;border-radius:5px;margin-bottom:8px;">MG_</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;"><span data-i18n="ch03_mg_name">BCL獲取・綁定標籤</span></div>
+        <div style="font-size:11px;color:var(--ink-sub);line-height:1.65;">記錄加入LINE的管道與時間。<br>顯示顧客是從哪裡來的。</div>
+        <div style="margin-top:8px;font-size:10px;color:var(--ink-dim);background:var(--white);border-radius:4px;padding:6px 8px;line-height:1.6;">
+          例：從官網登錄<br>例：透過育兒小調查<br>例：在舞台劇會場掃描QR碼
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;padding:14px;border-top:3px solid var(--ac-lav);">
+        <div style="display:inline-block;background:var(--ac-lav);color:#fff;font-size:16px;font-weight:900;letter-spacing:0.1em;padding:4px 12px;border-radius:5px;margin-bottom:8px;">ME_</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;"><span data-i18n="ch03_me_name">月齡・對象屬性標籤</span></div>
+        <div style="font-size:11px;color:var(--ink-sub);line-height:1.65;"><span data-i18n="ch03_me_desc">顯示孩子的月齡、居住地區與活動對象。是發送分眾的基礎。</span></div>
+        <div style="margin-top:8px;font-size:10px;color:var(--ink-dim);background:var(--white);border-radius:4px;padding:6px 8px;line-height:1.6;">
+          例：1〜10歲・新竹以北<br>例：舞台劇通知對象<br>例：有點擊英語劇活動
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;padding:14px;border-top:3px solid var(--ac-blue);">
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;">
+          <div style="background:var(--ac-blue);color:#fff;font-size:16px;font-weight:900;letter-spacing:0.1em;padding:4px 12px;border-radius:5px;">MD_</div>
+          <span style="font-size:13px;">⭐</span>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;"><span data-i18n="ch03_md_name">商品別興趣標籤</span></div>
+        <div style="font-size:11px;color:var(--ink-sub);line-height:1.65;"><span data-i18n="ch03_md_desc"><strong>最接近購買的標籤。</strong>記錄了開封或點擊特定商品介紹的行為。表示「現在對這項商品感興趣」。</span></div>
+        <div style="margin-top:8px;font-size:10px;color:var(--ink-dim);background:var(--white);border-radius:4px;padding:6px 8px;line-height:1.6;">
+          例：開封了語彙智育的介紹<br>例：點擊了語彙智育的連結<br>例：按下LINE選單的學習館
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;padding:14px;border-top:3px solid var(--ac-mint);">
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;">
+          <div style="background:var(--ac-mint);color:#fff;font-size:16px;font-weight:900;letter-spacing:0.1em;padding:4px 12px;border-radius:5px;">行為_</div>
+          <span style="font-size:13px;">⭐</span>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;"><span data-i18n="ch03_kodo_name">實際行為追蹤標籤</span></div>
+        <div style="font-size:11px;color:var(--ink-sub);line-height:1.65;"><span data-i18n="ch03_kodo_desc">記錄Super8、官方LINE內的具體行為。包含點擊、綁定、問卷回答等。</span></div>
+        <div style="margin-top:8px;font-size:10px;color:var(--ink-dim);background:var(--white);border-radius:4px;padding:6px 8px;line-height:1.6;">
+          例：SHOPLINE登錄時的綁定<br>例：點擊了新商品公告訊息<br>例：參加了育兒知識王問答
+        </div>
+      </div>
+
+      <div style="background:#FFF8F0;border:1.5px solid #F0D4A8;border-radius:8px;padding:14px;border-top:3px solid var(--ac-rose);">
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;">
+          <div style="background:var(--ac-rose);color:#fff;font-size:16px;font-weight:900;letter-spacing:0.06em;padding:4px 12px;border-radius:5px;">購物車</div>
+          <span style="font-size:16px;">🔥</span>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;"><span data-i18n="ch03_cart_name">加入購物車標籤</span></div>
+        <div style="font-size:11px;color:var(--ink-sub);line-height:1.65;"><span data-i18n="ch03_cart_desc"><strong>最接近購買的高溫信號。</strong>將商品加入購物車卻未完成購買的顧客。現在就要立刻追蹤。</span></div>
+        <div style="margin-top:8px;font-size:10px;color:var(--ink-dim);background:var(--white);border-radius:4px;padding:6px 8px;line-height:1.6;">
+          例：將好情緒EQ加入購物車<br>例：曾將注音2.0加入購物車<br>→ 711人仍未完成購買
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;padding:14px;border-top:3px solid var(--ac-grey);">
+        <div style="display:inline-block;background:var(--ac-grey);color:#fff;font-size:14px;font-weight:900;letter-spacing:0.06em;padding:4px 12px;border-radius:5px;margin-bottom:8px;">酷必 / 其他</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px;"><span data-i18n="ch03_other_name">電銷CRM・基本屬性標籤</span></div>
+        <div style="font-size:11px;color:var(--ink-sub);line-height:1.65;"><span data-i18n="ch03_other_desc">登錄電銷系統（CRCT）、過去月刊訂購記錄等。DB管理上的基本標記。</span></div>
+        <div style="margin-top:8px;font-size:10px;color:var(--ink-dim);background:var(--white);border-radius:4px;padding:6px 8px;line-height:1.6;">
+          例：酷必後台BCL（電銷對象）<br>例：PIXSEE聯動顧客<br>例：有月刊訂購經驗
+        </div>
+      </div>
+
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:var(--pill-bg);border-radius:6px;font-size:12px;line-height:1.7;">
+      <span data-i18n="ch03_tag_summary">⭐ <strong>MD_標籤與行為_標籤的組合最為重要。</strong>同時具備「對此商品有興趣（MD_）＋實際點擊（行為_）」的顧客，電銷承諾率是一般的<strong>2.6倍</strong>。標籤不只是數量，<strong>種類與組合決定了與顧客之間的距離</strong>。</span>
+    </div>
+  </div>
+
+
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle"><span data-i18n="ch03_bar_t">標籤數量（唯一值）× FY25購買率 — 全層整合・30萬人實測</span></div>
+    <div id="tag-bars" style="padding:8px 0;"></div>
+    <div class="g2" style="margin-top:12px;margin-bottom:0;">
+      <div class="ins"><span data-i18n="ch03_ins_bar1"><strong>標籤1〜5個：0.6% → 標籤31〜50個：38.2%</strong><br>超過30個標籤，購買率就達到DB平均的<strong>12倍</strong>。</span></div>
+      <div class="ins"><span data-i18n="ch03_ins_bar2"><strong>標籤51個以上：52.1%</strong><br>超過每兩人就有一人購買。累積標籤，就等於提升購買機率。</span></div>
+    </div>
+  </div>
+
+  <div class="card fade-up">
+    <div class="ctitle"><span data-i18n="ch03_qual_t">標籤的「品質」— 依標籤種類別購買率（以DB全體持有者計算）</span></div>
+    <div class="ch"><canvas id="c-tag-qual"></canvas></div>
+    <div style="margin-top:12px;">
+      <div class="g2" style="margin-bottom:8px;">
+        <div class="ins">
+          <strong>持有購物車標籤（加入購物車）者的購買率：49.5%（DB平均的17倍）</strong><br>
+          將商品加入購物車後停下來的人，每兩人就有一人購買。是現在就應該追蹤的711人。
+        </div>
+        <div class="ins mint">
+          <strong>持有MD_標籤（商品別興趣）數量越多，購買率加速越快：</strong><br>
+          無2.6% → 1個14.0% → 2個25.9% → 3個<strong>50.0%</strong> → 4個以上<strong>87.5%</strong><br>
+          能精確到商品名稱的興趣標籤累積越多，購買機率就越是大幅提升。
+        </div>
+      </div>
+      <div class="ins" style="font-size:12px;">
+        <strong>行為_、MD_標籤的購買率是DB平均的6〜8倍。</strong>「對什麼內容有反應、對哪個商品表示興趣」的記錄，決定了購買機率。在Super8中累積這些標籤，是提升CV最直接的手段。
+      </div>
+    </div>
+  </div>
+
+  <!-- 距離マップ：CH.03の締め -->
+  <div class="card fade-up" style="margin-top:16px;">
+    <div class="ctitle"><span data-i18n="ch03_dist_t">標籤所顯示的「與顧客的距離感」— 以購買率衡量的參與度地圖</span></div>
+    <p style="font-size:12px;color:var(--ink-sub);margin-bottom:16px;line-height:1.7;"><span data-i18n="ch03_dist_sub">標籤顯示顧客「當下的溫度」。越往下，越接近購買。看懂這張地圖，就能自然而然決定該對誰、何時、做什麼。</span></p>
+    <div style="position:relative;">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:52px;display:flex;flex-direction:column;justify-content:space-between;padding:10px 0;">
+        <div style="font-size:9px;color:var(--ink-dim);text-align:center;line-height:1.5;">🌡️<br>低溫<br>遠</div>
+        <div style="font-size:9px;color:var(--ac-rose);text-align:center;font-weight:700;line-height:1.5;">🔥<br>高溫<br>近</div>
+      </div>
+      <div style="position:absolute;left:24px;top:10px;bottom:10px;width:2px;background:linear-gradient(to bottom,#C8D8EE,#E07070);border-radius:1px;"></div>
+      <div style="margin-left:60px;display:flex;flex-direction:column;gap:8px;">
+        <div style="padding:10px 14px;background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;border-left:4px solid #C8D8EE;">
+          <div style="font-size:10px;font-weight:700;color:var(--ink-dim);letter-spacing:0.08em;margin-bottom:6px;"><span data-i18n="ch03_z1_t">ZONE 1 — BCL登錄後不久　購買率 ~3〜6%</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div style="background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#7AAEE0;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">MG_</span>MG_2601新BCL活動_開始測驗</div>
+            <div style="background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#7AAEE0;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">MG_</span>MG_2511我的育兒四季_綁定</div>
+          </div>
+          <div style="font-size:10px;color:var(--ink-dim);margin-top:6px;"><span data-i18n="ch03_z1_d">→ 「只是認識了巧虎」的狀態。從這裡開始累積標籤，縮短距離。</span></div>
+        </div>
+        <div style="padding:10px 14px;background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;border-left:4px solid var(--ac-sky);">
+          <div style="font-size:10px;font-weight:700;color:var(--ac-sky);letter-spacing:0.08em;margin-bottom:6px;"><span data-i18n="ch03_z2_t">ZONE 2 — 開封並瀏覽訊息　購買率 ~9〜11%</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div style="background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#8B9ED4;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">ME_</span>ME_2511耶誕特別活動有點擊<span style="font-size:10px;color:var(--ac-sky);font-weight:700;margin-left:6px;">9%</span></div>
+            <div style="background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#8B9ED4;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">ME_</span>ME_26春舞臺劇開賣預告_有點擊<span style="font-size:10px;color:var(--ac-sky);font-weight:700;margin-left:6px;">11%</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--ink-dim);margin-top:6px;"><span data-i18n="ch03_z2_d">→ 開始產生興趣。傳遞商品別內容，培育成MD_標籤的階段。</span></div>
+        </div>
+        <div style="padding:10px 14px;background:#F0F5FF;border:1.5px solid var(--ac-sky);border-radius:8px;border-left:4px solid var(--ac-blue);">
+          <div style="font-size:10px;font-weight:700;color:var(--ac-blue);letter-spacing:0.08em;margin-bottom:6px;"><span data-i18n="ch03_z3_t">ZONE 3 — 對特定商品有反應　購買率 30〜46%　⭐ Super8培育的重要區域</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div style="background:var(--white);border:1px solid var(--ac-sky);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:var(--ac-blue);color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">MD_</span>MD_LINE選單_學習館（按下學習館）<span style="font-size:10px;color:var(--ac-blue);font-weight:700;margin-left:6px;">~30%</span></div>
+            <div style="background:var(--white);border:1px solid var(--ac-sky);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:var(--ac-mint);color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">行為_</span>行為_MA_2603_學習館兒童節活動_點擊<span style="font-size:10px;color:var(--ac-mint);font-weight:700;margin-left:6px;">46%</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--ink-sub);margin-top:6px;"><span data-i18n="ch03_z3_d">→ 一旦有點擊的行為標籤，距離就一口氣縮短。設計能從開封引導到點擊的內容，是關鍵。</span></div>
+        </div>
+        <div style="padding:10px 14px;background:#FFF8ED;border:1.5px solid #E0B060;border-radius:8px;border-left:4px solid #E0A04A;">
+          <div style="font-size:10px;font-weight:700;color:#C07020;letter-spacing:0.08em;margin-bottom:6px;"><span data-i18n="ch03_z4_t">ZONE 4 — 主動行動　購買率 47〜64%</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div style="background:var(--white);border:1px solid #E0B060;border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#E0A04A;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">行為_</span>有點選轉接真人（要求轉接負責人）<span style="font-size:10px;color:#C07020;font-weight:700;margin-left:6px;">59%</span></div>
+            <div style="background:var(--white);border:1px solid #E0B060;border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#E0A04A;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">MD_</span>👉我要登記-搶先通知（先行通知希望）<span style="font-size:10px;color:#C07020;font-weight:700;margin-left:6px;">47%</span></div>
+            <div style="background:var(--white);border:1px solid #E0B060;border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:#E0A04A;color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">MD_</span>有興趣_語彙套組(老客戶預購)<span style="font-size:10px;color:#C07020;font-weight:700;margin-left:6px;">64%</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--ink-sub);margin-top:6px;"><span data-i18n="ch03_z4_d">→ 媽媽自己主動行動的記錄。對在聊天中按下「想說話」的人打電話，結果截然不同。</span></div>
+        </div>
+        <div style="padding:10px 14px;background:#FFF0F0;border:2px solid var(--ac-rose);border-radius:8px;border-left:4px solid var(--ac-rose);">
+          <div style="font-size:10px;font-weight:700;color:var(--ac-rose);letter-spacing:0.08em;margin-bottom:6px;"><span data-i18n="ch03_z5_t">ZONE 5 — 購買前夕・已購買者　購買率 49〜67%　🔥 立刻行動</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div style="background:var(--white);border:1px solid var(--ac-rose);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:var(--ac-rose);color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">購物車</span>購物車未結帳_2025（放棄結帳）<span style="font-size:10px;color:var(--ac-rose);font-weight:700;margin-left:6px;">49.5% / 711人</span></div>
+            <div style="background:var(--white);border:1px solid var(--ac-rose);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:var(--ac-rose);color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">行為_</span>行為_CX_人員手動_綁定_客服（主動問詢）<span style="font-size:10px;color:var(--ac-rose);font-weight:700;margin-left:6px;">64%</span></div>
+            <div style="background:var(--white);border:1px solid var(--ac-rose);border-radius:5px;padding:4px 10px;font-size:11px;"><span style="font-size:9px;background:var(--ac-rose);color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;">MD_</span>MD_語彙智育_周邊(購買)_點擊（已購買→下個商品）<span style="font-size:10px;color:var(--ac-rose);font-weight:700;margin-left:6px;">66.5%</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--ac-rose);font-weight:700;margin-top:6px;"><span data-i18n="ch03_z5_d">→ 現在就應該打電話或傳訊息的顧客。這個區域有超過1,161人。</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding:10px 14px;background:var(--pill-bg);border-radius:6px;font-size:12px;line-height:1.7;">
+      <span data-i18n="ch03_map_ins"><strong>標籤是「這位媽媽現在在哪裡」的地圖。</strong>對只有ZONE1的顧客打電話，成交率很低。對ZONE5的顧客打電話，每兩人就有一人購買。LC8T就是自動持續更新這張地圖的系統。</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH.04 ══ -->
+<div class="page" id="p04">
+  <div class="sec-tag"><span class="sec-num">04</span> <span data-i18n="t_ch04_tag"><span data-i18n="ch04_tag">LC8T的T段：與電銷的連動</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch04_eye"><span data-i18n="ch04_eye">LINE → 電銷 連動</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch04_h1a">標籤決定了電話銷售的成果，</span><br><span data-i18n="t_ch04_h1b">而且是在打電話之前就決定了。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch04_sub"><span data-i18n="ch04_sub">CH.03中看到的ZONE地圖，直接連結到電銷名單的設計。對哪個ZONE的顧客打電話，承諾率最多可以相差2.6倍。</span></span></div>
+  </div>
+
+  <!-- ZONE×電銷承諾率の対応表 -->
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle"><span data-i18n="ch04_zone_t">各ZONE的電銷承諾率 — 標籤的溫度決定電話結果</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+
+      <div style="display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:12px;padding:10px 14px;background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--ink-dim);">ZONE 1-2<br><span style="font-weight:400;font-size:10px;">僅一般標籤</span></div>
+        <div style="height:22px;background:var(--rule-lt);border-radius:4px;overflow:hidden;">
+          <div style="width:26%;height:100%;background:#C8D8EE;border-radius:4px;display:flex;align-items:center;padding-left:8px;">
+            <span style="font-size:11px;font-weight:700;color:#666;">4.2%</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ink-dim);white-space:nowrap;">基準</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:12px;padding:10px 14px;background:#F0F5FF;border:1.5px solid var(--ac-sky);border-radius:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--ac-sky);">ZONE 3<br><span style="font-weight:400;font-size:10px;">有點擊標籤</span></div>
+        <div style="height:22px;background:var(--rule-lt);border-radius:4px;overflow:hidden;">
+          <div style="width:42%;height:100%;background:var(--ac-sky);opacity:0.8;border-radius:4px;display:flex;align-items:center;padding-left:8px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;">6.7%</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ac-sky);font-weight:700;white-space:nowrap;">+1.6倍</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:12px;padding:10px 14px;background:#EAF5EE;border:1.5px solid var(--ac-mint);border-radius:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--ac-mint);">ZONE 3-4<br><span style="font-weight:400;font-size:10px;">有行為_標籤</span></div>
+        <div style="height:22px;background:var(--rule-lt);border-radius:4px;overflow:hidden;">
+          <div style="width:57%;height:100%;background:var(--ac-mint);border-radius:4px;display:flex;align-items:center;padding-left:8px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;">9.1%</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ac-mint);font-weight:700;white-space:nowrap;">+2.2倍</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:12px;padding:10px 14px;background:var(--pill-bg);border:2px solid var(--ac-blue);border-radius:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--ac-blue);">ZONE 4-5<br><span style="font-weight:400;font-size:10px;">MD_＋行為_両方</span></div>
+        <div style="height:22px;background:var(--rule-lt);border-radius:4px;overflow:hidden;">
+          <div style="width:69%;height:100%;background:var(--ac-blue);border-radius:4px;display:flex;align-items:center;padding-left:8px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;">11.1%</span>
+          </div>
+        </div>
+        <div style="font-size:13px;color:var(--ac-blue);font-weight:900;white-space:nowrap;"><strong>+2.6倍</strong></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:140px 1fr auto;align-items:center;gap:12px;padding:10px 14px;background:#FFF8ED;border:2px solid #E0A04A;border-radius:8px;">
+        <div style="font-size:11px;font-weight:700;color:#C07020;">ZONE 5（特定）<br><span style="font-weight:400;font-size:10px;">商品A級・高意願</span></div>
+        <div style="height:22px;background:var(--rule-lt);border-radius:4px;overflow:hidden;">
+          <div style="width:86%;height:100%;background:#E0A04A;border-radius:4px;display:flex;align-items:center;padding-left:8px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;">雙語點讀_高意願 13.8%</span>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#C07020;font-weight:900;white-space:nowrap;"><strong>+3.3倍</strong></div>
+      </div>
+    </div>
+    <div class="ins"><span data-i18n="ch04_zone_ins"><strong>對ZONE5（商品別高意願）打電話，承諾率高達3.3倍。</strong>在建立名單前確認ZONE，從根本改變電銷團隊的生產力。</span></div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle"><span data-i18n="ch04_funnel_t">FY25 電銷漏斗全貌 — 仍有改善空間</span></div>
+    <div class="funnel">
+      <div class="f-step"><div class="f-n">13.3<span style="font-size:14px;">万</span></div><div class="f-lbl"><span data-i18n="ch04_f1">名単総数</span></div></div>
+      <div class="f-step"><div class="f-n" style="color:var(--ac-sky)">45%</div><div class="f-lbl">接通率</div></div>
+      <div class="f-step"><div class="f-n" style="color:var(--ac-mint)">5.6%</div><div class="f-lbl"><span data-i18n="ch04_f3">承諾成交率（平均）</span></div></div>
+      <div class="f-step" style="background:var(--pill-bg);border-color:var(--ac-blue);"><div class="f-n" style="color:var(--ac-blue)">11.1%</div><div class="f-lbl"><span data-i18n="ch04_f4">若是ZONE4-5名單</span></div></div>
+    </div>
+    <div class="ins"><span data-i18n="ch04_funnel_ins"><strong>不是用平均5.6%的效率處理所有名單，而是集中在ZONE4-5的名單，同樣的件數可以讓承諾數翻倍。</strong>名單的品質改變了漏斗的出口。</span></div>
+  </div>
+
+  <div class="g2 fade-up" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="ctitle"><span data-i18n="ch04_combo_t">複合標籤模式 × 電銷承諾率</span></div>
+      <div class="ch"><canvas id="c-combo"></canvas></div>
+      <div class="ins" style="margin-top:12px;"><span data-i18n="ch04_combo_ins"><strong>MD_＋行為_的組合最強：承諾率11.1%（一般的2.6倍）。</strong><br>僅有MD_標籤則為4.1%，與一般無異。必須「興趣」＋「實際行動」同時具備，才會大幅提升。</span></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span data-i18n="ch04_md_t">MD_標籤持有數 × 電銷承諾率</span></div>
+      <div class="ch"><canvas id="c-md"></canvas></div>
+      <div class="ins mint" style="margin-top:12px;"><strong>可重現的高承諾率名單來源：</strong><br>雙語點讀_高意願購買：13.8%<br>數學套組-A級：12.8%<br>有互動：11.2% / 有點擊：10.0%</div>
+    </div>
+  </div>
+
+  <div class="ins fade-up" style="font-size:14px;padding:16px 20px;">
+    <span data-i18n="ch04_final_ins"><strong>在Super8中培育MD_×行為_標籤，直接提升TM的生產力。累積標籤，就是讓下一通電話成功的關鍵。</strong></span>
+  </div>
+</div>
+
+<!-- ══ CH.05 ══ -->
+<div class="page" id="p05">
+  <div class="sec-tag"><span class="sec-num">05</span> <span data-i18n="t_ch05_tag"><span data-i18n="ch05_tag">鎖定高潛力顧客</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch05_eye"><span data-i18n="ch05_eye">高潛力顧客識別</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch05_h1a">高潛力顧客，</span><br><span data-i18n="t_ch05_h1b">已經就在DB裡面了。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch05_sub"><span data-i18n="ch05_sub">不需要新獲客，現有DB中就有高潛力顧客。他們已經在用行動發出信號了。接下來只需要我們察覺並採取行動。</span></span></div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle">以信號強度篩選 — DB未購買者292,137人</div>
+    <div style="margin:12px 0;display:flex;flex-direction:column;gap:8px;">
+      <div class="hot-row">
+        <div class="hot-n">65,138<small style="font-size:12px;">人</small></div>
+        <div><div class="hot-lbl"><span data-i18n="ch05_hot1_lbl">具備某種行動標籤（最廣義）</span></div><div class="hot-sub"><span data-i18n="ch05_hot1_sub">持有點擊・互動・MD_・行為_其中之一</span></div></div>
+      </div>
+      <div class="hot-row hi2">
+        <div class="hot-n">22,548<small style="font-size:12px;">人</small></div>
+        <div><div class="hot-lbl"><span data-i18n="ch05_hot2_lbl">持有MD_ OR 行為_標籤（商品・實際行動層）</span></div><div class="hot-sub"><span data-i18n="ch05_hot2_sub">持有能精確到商品名稱的興趣</span></div></div>
+      </div>
+      <div class="hot-row" style="border-color:var(--ac-blue);background:var(--pill-bg);">
+        <div class="hot-n">1,161<small style="font-size:12px;">人</small></div>
+        <div><div class="hot-lbl"><span data-i18n="ch05_hot3_lbl">MD_ AND 行為_（最高溫度・立刻打電話）</span></div><div class="hot-sub"><span data-i18n="ch05_hot3_sub">電銷承諾率11.1%（一般的2.6倍）</span></div></div>
+      </div>
+      <div class="hot-row top">
+        <div class="hot-n red">711<small style="font-size:12px;">人</small></div>
+        <div><div class="hot-lbl"><span data-i18n="ch05_hot4_lbl">購物車標籤（加了購物車卻停下來）</span></div><div class="hot-sub"><span data-i18n="ch05_hot4_sub">最優先・現在就應該追蹤的顧客</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2 fade-up" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="ctitle"><span data-i18n="ch05_layer_t">依月齡層別 高潛力未購買層（行動標籤持有率）</span></div>
+      <div style="margin-top:8px;" id="layer-bars"></div>
+      <div class="ins mint" style="margin-top:12px;"><span data-i18n="ch05_layer_ins"><strong>SS、S層超過63〜72%的未購買者持有行動信號。</strong>購買期待最高的月齡層，正處於最熱的狀態。</span></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span data-i18n="ch05_cross_t">現有購買者中的「下一個目標」</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div style="padding:14px 16px;background:var(--bg);border-radius:8px;border:1.5px solid var(--rule);">
+          <div style="font-size:11px;color:var(--ink-sub);margin-bottom:4px;"><span data-i18n="ch05_cross1_lbl">交叉銷售候選</span></div>
+          <div style="font-size:28px;font-weight:800;color:var(--ac-blue);line-height:1;">6,511<small style="font-size:13px;font-weight:400;color:var(--ink-sub);">人</small></div>
+          <div style="font-size:11px;color:var(--ink-sub);margin-top:4px;">只購買1個事業 / 其中僅學習商品5,483人</div>
+        </div>
+        <div style="padding:14px 16px;background:var(--bg);border-radius:8px;border:1.5px solid var(--rule);">
+          <div style="font-size:11px;color:var(--ink-sub);margin-bottom:4px;"><span data-i18n="ch05_cross2_lbl">回購候選（有行動標籤）</span></div>
+          <div style="font-size:28px;font-weight:800;color:var(--ac-sky);line-height:1;">5,506<small style="font-size:13px;font-weight:400;color:var(--ink-sub);">人</small></div>
+          <div style="font-size:11px;color:var(--ink-sub);margin-top:4px;"><span data-i18n="ch05_cross2_d">購買1次 × 持有行動標籤 / 現在就可以</span></div>
+        </div>
+      </div>
+      <div class="ins" style="margin-top:10px;"><span data-i18n="ch05_cross_ins"><strong>跨事業購買使LTV達到1.9倍（9,931 vs 5,245 NTD）。</strong>高潛力顧客不只在外面，已經購買過的人當中也有。</span></div>
+    </div>
+  </div>
+
+  <!-- A. 学習商品9SKU × クラスター -->
+  <div class="card fade-up" style="margin-bottom:20px;">
+    <div class="ctitle"><span data-i18n="ch05_prod_t">A. 學習商品9SKU — 依商品別 高潛力未購買者群集</span></div>
+    <p style="font-size:12px;color:var(--ink-sub);margin-bottom:8px;line-height:1.7;"><span data-i18n="ch05_prod_sub">將尚未購買各商品的顧客依ZONE分類。🔥ZONE5（立刻）×⭐ZONE4（高溫）為立即接觸對象。</span></p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:#FFF0F0;border:1.5px solid var(--ac-rose);border-radius:8px;font-size:11px;">
+        <span style="font-size:16px;">🔥</span>
+        <div><strong style="color:var(--ac-rose);"><span data-i18n="ch05_z5_leg_strong">ZONE5 立即層</span></strong><br><span style="color:var(--ink-sub);">購物車放棄・呼叫負責人・預購登錄等<br>主動表示購買意願信號的顧客</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--pill-bg);border:1.5px solid var(--ac-blue);border-radius:8px;font-size:11px;">
+        <span style="font-size:16px;">⭐</span>
+        <div><strong style="color:var(--ac-blue);"><span data-i18n="ch05_z4_leg_strong">ZONE4 高溫層</span></strong><br><span style="color:var(--ink-sub);">同時持有MD_（商品別興趣）＋行為_（實際點擊）<br>兩種標籤的顧客</span></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;" id="prod-cluster-grid"></div>
+
+    <div class="ins" style="margin-top:12px;">
+      <span data-i18n="ch05_prod_ins"><strong>加入月齡條件篩選後的真正高潛力層：Z5合計7,366人・Z4合計6,464人。</strong>只鎖定孩子在各商品適齡區間的顧客，是精準度高的名單。期待業績合計17,837K NTD。另外，月齡數據未登錄的佔25.6%，因此實際的高潛力層還更多。</span>
+    </div>
+  </div>
+
+  <!-- B. 交叉銷售候選 -->
+  <div class="card fade-up">
+    <div class="ctitle"><span data-i18n="ch05_cross_sec_t">B. 交叉銷售候選 — 現有購買者中的下一筆業績</span></div>
+    <p style="font-size:12px;color:var(--ink-sub);margin-bottom:14px;line-height:1.7;"><span data-i18n="ch05_cross_sec_sub">在FY25已購買某些商品的顧客中，還有尚未購買的事業類別。</span></p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div style="padding:14px 16px;background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;border-left:4px solid var(--ac-blue);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;margin-bottom:3px;"><span data-i18n="ch05_cs1_lbl">學習商品購買者 → 周邊商品未購買</span></div>
+            <div style="font-size:11px;color:var(--ink-sub);"><span data-i18n="ch05_cs1_d">對象5,595人 / 平均LTV 4,975 NTD / 有行動標籤2,448人</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:20px;font-weight:800;color:var(--ac-blue);">839K<span style="font-size:11px;font-weight:400;color:var(--ink-sub);"> NTD期待追加</span></div>
+            <div style="font-size:10px;color:var(--ink-dim);"><span data-i18n="ch05_cs1_exp">預期追加購買者 1,049人</span></div>
+          </div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:10px;background:var(--pill-bg);color:var(--ac-blue);padding:3px 10px;border-radius:20px;font-weight:700;">有行動標籤 2,448人</span>
+          <span style="font-size:10px;background:var(--bg);color:var(--ink-dim);padding:3px 10px;border-radius:20px;">其他 3,147人</span>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;border-left:4px solid var(--ac-mint);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;margin-bottom:3px;"><span data-i18n="ch05_cs2_lbl">學習商品購買者 → Mirafeel未購買</span></div>
+            <div style="font-size:11px;color:var(--ink-sub);"><span data-i18n="ch05_cs2_d">對象7,596人 / 平均LTV 5,670 NTD / 有行動標籤3,682人</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:20px;font-weight:800;color:var(--ac-mint);">4,488K<span style="font-size:11px;font-weight:400;color:var(--ink-sub);"> NTD期待追加</span></div>
+            <div style="font-size:10px;color:var(--ink-dim);"><span data-i18n="ch05_cs2_exp">預期追加購買者 1,496人</span></div>
+          </div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:10px;background:#EAF5EE;color:var(--ac-mint);padding:3px 10px;border-radius:20px;font-weight:700;">有行動標籤 3,682人</span>
+          <span style="font-size:10px;background:var(--bg);color:var(--ink-dim);padding:3px 10px;border-radius:20px;">其他 3,914人</span>
+          <span style="font-size:10px;background:#FFF5E0;color:#C07020;padding:3px 10px;border-radius:20px;font-weight:700;"><span data-i18n="ch05_cs2_badge">💡 最大的交叉銷售機會</span></span>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;border-left:4px solid var(--ac-lav);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;margin-bottom:3px;"><span data-i18n="ch05_cs3_lbl">周邊商品購買者 → 學習商品未購買</span></div>
+            <div style="font-size:11px;color:var(--ink-sub);"><span data-i18n="ch05_cs3_d">對象1,234人 / 有行動標籤679人</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:20px;font-weight:800;color:var(--ac-lav);">906K<span style="font-size:11px;font-weight:400;color:var(--ink-sub);"> NTD期待追加</span></div>
+            <div style="font-size:10px;color:var(--ink-dim);"><span data-i18n="ch05_cs3_exp">預期追加購買者 259人</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="ins mint" style="margin-top:12px;">
+      <span data-i18n="ch05_cs_ins"><strong>三個交叉銷售機會的期待追加業績合計：6,233K NTD。</strong>特別是「學習購買者→Mirafeel」是7,596人這個最大目標群，是連結到消耗品回購的高LTV路徑。</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CH.06 ══ -->
+<div class="page" id="p06">
+  <div class="sec-tag"><span class="sec-num">06</span> <span data-i18n="t_ch06_tag"><span data-i18n="ch06_tag">我們的努力方向</span></span></div>
+  <div class="keymsg">
+    <div class="keymsg-eye"><span data-i18n="t_ch06_eye"><span data-i18n="ch06_eye">行動方向</span></span></div>
+    <div class="keymsg-txt"><span data-i18n="t_ch06_h1a">P(LTV) = O × N × CV − I</span><br><span data-i18n="t_ch06_h1b">數據，決定行動。</span></div>
+    <div class="keymsg-sub"><span data-i18n="t_ch06_sub"><span data-i18n="ch06_sub">整理CH.01〜05數據所揭示的「下一步行動」。每個行動背後，都有數字作為依據。</span></span></div>
+  </div>
+
+  <!-- O -->
+  <div class="action-group fade-up">
+    <div class="action-hd">
+      <div class="action-badge badge-o">O</div>
+      <div class="action-ttl"><span data-i18n="t_ch06_o_ttl"><span data-i18n="ch06_o_ttl">擴大機會點 — 提升「何時傳遞」的精準度</span></span></div>
+      <span class="action-pill pill-o"><span data-i18n="t_ch06_o_pill"><span data-i18n="ch06_o_pill">機會 × 時機</span></span></span>
+    </div>
+    <div style="padding:10px 14px;background:#FFF8F0;border-radius:6px;border-left:3px solid #C07820;font-size:11px;color:var(--ink-sub);margin-bottom:10px;line-height:1.7;">
+      <span data-i18n="ch06_o_data">📊 <strong>數據發現：</strong>點讀圖鑑活化設計6M，實際購買中位數17M（+11M）。好情緒EQ是+8M。KOL在英語Plus、注音2.0比適齡提早10〜13M誘發購買。「何時」的精準度改變業績。</span>
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-dot dot-o"></div>
+        <div><div class="action-body"><span data-i18n="ch06_o1_body">將可信度高的商品（上市1年以上）的發送時機，重新設計以配合實際購買中位數</span></div><div class="action-data"><span data-i18n="ch06_o1_data">生活好習慣（中位數17M）、好情緒EQ（33M）、英語Plus（33M）為最優先。從WEB購買月齡的前1〜2個月開始發送。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-o"></div>
+        <div><div class="action-body"><span data-i18n="ch06_o2_body">新商品（數學套組・點讀大冒險・雙語點讀圖鑑）邊累積實績，邊每月更新劇本</span></div><div class="action-data"><span data-i18n="ch06_o2_data">上市3〜6個月後確認購買月齡分布，建立修正活化設計的運作循環。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-o"></div>
+        <div><div class="action-body"><span data-i18n="ch06_o3_body">在KOL施策中導入月齡篩選（消除提早購買的風險）</span></div><div class="action-data"><span data-i18n="ch06_o3_data">KOL誘發比適齡提早10〜13M的購買。讓孩子在還無法使用的月齡購買，會降低體驗價值，也不會帶來持續購買。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-o"></div>
+        <div><div class="action-body"><span data-i18n="ch06_o4_body">設計學習購買者→Mirafeel・周邊商品的交叉銷售劇本</span></div><div class="action-data"><span data-i18n="ch06_o4_data">學習→Mirafeel未購買7,596人。期待追加業績4,488K NTD。跨事業購買使LTV達1.9倍（5,245→9,931 NTD）。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- N -->
+  <div class="action-group fade-up">
+    <div class="action-hd">
+      <div class="action-badge badge-n">N</div>
+      <div class="action-ttl"><span data-i18n="t_ch06_n_ttl"><span data-i18n="ch06_n_ttl">擴大母數 — 壯大下線（0〜36M）的BCL</span></span></div>
+      <span class="action-pill pill-n"><span data-i18n="t_ch06_n_pill"><span data-i18n="ch06_n_pill">現況9.1% → 目標20%</span></span></span>
+    </div>
+    <div style="padding:10px 14px;background:#EEF4FF;border-radius:6px;border-left:3px solid var(--ac-blue);font-size:11px;color:var(--ink-sub);margin-bottom:10px;line-height:1.7;">
+      <span data-i18n="ch06_n_data">📊 <strong>數據發現：</strong>BCL的80%是37M以上。6〜35M層的實質轉換率高達25〜30%，卻只佔BCL整體的20%。2025年出生的10.8萬人中，只掌握了5.9%。與其說數量，「下線」的厚度才是關鍵。</span>
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-dot dot-n"></div>
+        <div><div class="action-body"><span data-i18n="ch06_n1_body">用「轉換率×LTV」重新評估獲取管道</span></div><div class="action-data"><span data-i18n="ch06_n1_data">SHOPLINE54.5%、客服手動64%、官網13%效率高。樂飛0.12%、全管道2.6%需要重新考慮。相同成本下轉換率相差20倍。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-n"></div>
+        <div><div class="action-body"><span data-i18n="ch06_n2_body">強化孕期〜SS層（0〜12M）的獲取施策（Baby Mine APP・婦幼展）</span></div><div class="action-data"><span data-i18n="ch06_n2_data">現在孕期1,603人・SS5,867人。這個層的轉換率超過30%。現在獲取就能帶來2〜3年的購買機會。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-n"></div>
+        <div><div class="action-body"><span data-i18n="ch06_n3_body">徹底將舞台劇觀眾轉為BCL</span></div><div class="action-data">非BCL來場家庭轉換率6.8%→30%改善，每年+3,660人BCL。是知名度97%品牌中成本最低的BCL獲取管道。</div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-n"></div>
+        <div><div class="action-body"><span data-i18n="ch06_n4_body">重新活化無效BCL 63,710人（獲取成本為零）</span></div><div class="action-data"><span data-i18n="ch06_n4_data">若全員有效化的追加業績試算＋21.2M NTD。對那些曾經來過的人，再一次呼喚他們。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CV -->
+  <div class="action-group fade-up">
+    <div class="action-hd">
+      <div class="action-badge badge-cv">CV</div>
+      <div class="action-ttl"><span data-i18n="t_ch06_cv_ttl"><span data-i18n="ch06_cv_ttl">擴大轉換率 — 累積標籤，對高潛力顧客毫不猶豫地採取行動</span></span></div>
+      <span class="action-pill pill-cv"><span data-i18n="t_ch06_cv_pill"><span data-i18n="ch06_cv_pill">超過30個標籤達DB平均的12倍</span></span></span>
+    </div>
+    <div style="padding:10px 14px;background:#EAF5EE;border-radius:6px;border-left:3px solid var(--ac-mint);font-size:11px;color:var(--ink-sub);margin-bottom:10px;line-height:1.7;">
+      <span data-i18n="ch06_cv_data">📊 <strong>數據發現：</strong>標籤1〜5個購買率0.6%→標籤31〜50個38.2%（63倍）。MD_×行為_複合，電銷承諾率11.1%（一般的2.6倍）。加入月齡的ZONE5層7,366人・ZONE4層6,464人が今すぐアプローチ対象。</span>
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-dot dot-cv"></div>
+        <div><div class="action-body"><span data-i18n="ch06_cv1_body">立刻行動：以加入月齡的ZONE5層（7,366人）×商品別名單優先進行電銷</span></div><div class="action-data"><span data-i18n="ch06_cv1_data">購物車放棄711人・高意願標籤持有者。打電話前確認ZONE，是名單設計的基本原則。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-cv"></div>
+        <div><div class="action-body"><span data-i18n="ch06_cv2_body">將Super8劇本依月齡×商品別精緻化，設計成能增加MD_、行為_標籤的內容</span></div><div class="action-data"><span data-i18n="ch06_cv2_data">MD_標籤3個購買率50%・4個以上87.5%。從開封引導到點擊，是從ZONE3升至ZONE4的關鍵。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-cv"></div>
+        <div><div class="action-body"><span data-i18n="ch06_cv3_body">將SS、S層未購買×持有行動標籤者設為最優先目標</span></div><div class="action-data"><span data-i18n="ch06_cv3_data">SS層72%、S層64%持有行動信號。購買期待最高的月齡層，正處於最熱的狀態。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-cv"></div>
+        <div><div class="action-body"><span data-i18n="ch06_cv4_body">對1次購買×有行動標籤的5,506人促進回購與交叉銷售</span></div><div class="action-data"><span data-i18n="ch06_cv4_data">3條交叉銷售路徑的期待追加業績合計6,233K NTD。目標是將LTV從5,245提升至9,931 NTD。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- I -->
+  <div class="action-group fade-up">
+    <div class="action-hd">
+      <div class="action-badge badge-i">I</div>
+      <div class="action-ttl"><span data-i18n="t_ch06_i_ttl"><span data-i18n="ch06_i_ttl">最大化投資效益 — 以品質而非數量來判斷</span></span></div>
+      <span class="action-pill pill-i"><span data-i18n="t_ch06_i_pill"><span data-i18n="ch06_i_pill">不增加成本，增加出手機會</span></span></span>
+    </div>
+    <div style="padding:10px 14px;background:#F5F0F8;border-radius:6px;border-left:3px solid #7A5A9A;font-size:11px;color:var(--ink-sub);margin-bottom:10px;line-height:1.7;">
+      <span data-i18n="ch06_i_data">📊 <strong>數據發現：</strong>主動綁定CV46.3% vs 異業合作2.3%（相差20倍）。樂飛0.12%即使獲取數量多也不會轉換。電銷集中在ZONE4-5，承諾率5.6%→11.1%。相同的I，做法不同效果就不同。</span>
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-dot dot-i"></div>
+        <div><div class="action-body"><span data-i18n="ch06_i1_body">將BCL獲取的評估指標從「件數」改為「轉換率×LTV」</span></div><div class="action-data"><span data-i18n="ch06_i1_data">用獲取成本÷轉換率的「實質獲取單價」重新評估所有管道。停止對轉換率0.12%管道的投資。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-i"></div>
+        <div><div class="action-body"><span data-i18n="ch06_i2_body">用ZONE篩選電銷名單，以相同件數增加承諾數</span></div><div class="action-data"><span data-i18n="ch06_i2_data">不以平均5.6%處理所有名單，集中在ZONE4-5達到11.1%。名單的品質改變成本效益。</span></div></div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot dot-i"></div>
+        <div><div class="action-body"><span data-i18n="ch06_i3_body">建立以P(LTV)各變數監控施策效果的機制</span></div><div class="action-data"><span data-i18n="ch06_i3_data">記錄「做了什麼讓N增加・CV提升」，提升下一次投資判斷的精準度。這就是LC8T經營決策工具的核心。</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── P(LTV) 統合シミュレーション ── -->
+  <!-- ── P(LTV) 統合シミュレーション ── -->
+  <div class="card fade-up" style="margin-bottom:24px;border-top:3px solid var(--ac-blue);">
+    <div class="ctitle">數據揭示的最優解 — P(LTV)=O×N×CV-I 各因子的影響</div>
+
+    <!-- レバー比較 -->
+    <div class="g2" style="margin-bottom:16px;">
+
+      <!-- O：月齢轉換率の逆転現象 -->
+      <div style="background:var(--bg);border-radius:8px;padding:16px;border:1px solid var(--rule);">
+        <div style="font-size:11px;font-weight:700;color:var(--ac-blue);letter-spacing:0.1em;margin-bottom:10px;">O — 機會點：月齢帯別 實質轉換率</div>
+        <div id="o-bars"></div>
+        <div class="ins" style="margin-top:10px;font-size:12px;">
+          <strong>6〜35M的轉換率達25〜30%，但BCL持有量少。</strong><br>
+          37M以上佔BCL整體80%，轉換率卻急降至1〜11%。<br>
+          比起擴充SKU，<strong>「增加高轉換月齡帶的BCL」</strong>更具即時效果。
+        </div>
+      </div>
+
+      <!-- CV：1人あたり期待売上 -->
+      <div style="background:var(--bg);border-radius:8px;padding:16px;border:1px solid var(--rule);">
+        <div style="font-size:11px;font-weight:700;color:var(--ac-mint);letter-spacing:0.1em;margin-bottom:10px;">CV — 轉換率：標籤數 × 每人期待業績</div>
+        <div id="cv-bars"></div>
+        <div class="ins mint" style="margin-top:10px;font-size:12px;">
+          <strong>標籤31〜50個CV率38.2%・LTV也達6,837 NTD（1-5個帶的1.64倍）</strong><br>
+          CV率與LTV同時提升。每人期待業績達基準的<strong>112倍</strong>倍。<br>
+          累積標籤是同時推升CV×LTV的最強槓桿。
+        </div>
+      </div>
+    </div>
+
+    <!-- N：チャネル別投資効率 -->
+    <div style="background:var(--bg);border-radius:8px;padding:16px;border:1px solid var(--rule);margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:700;color:var(--ac-sky);letter-spacing:0.1em;margin-bottom:10px;">N — 母數：BCL獲取管道別 購買轉換率（投資効率）</div>
+      <div style="overflow-x:auto;">
+        <table class="dt">
+          <thead>
+            <tr>
+              <th style="text-align:left;">獲取管道</th>
+              <th>BCL数</th>
+              <th>購買轉換率</th>
+              <th>効率評価</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="hi-row"><td>客服手動綁定</td><td>161</td><td class="pos">63.9%</td><td style="text-align:left;font-size:11px;color:var(--ac-mint);">◎ 成本幾乎為零・最高效率</td></tr>
+            <tr class="hi-row"><td>SHOPLINE</td><td>2,356</td><td class="pos">54.5%</td><td style="text-align:left;font-size:11px;color:var(--ac-mint);">◎ 帶著購買意願來的顧客</td></tr>
+            <tr><td>官網-Welcome</td><td>3,085</td><td>13.0%</td><td style="text-align:left;font-size:11px;color:var(--ink-sub);">○ 高效</td></tr>
+            <tr><td>LineOA</td><td>3,367</td><td>11.1%</td><td style="text-align:left;font-size:11px;color:var(--ink-sub);">○ 高效</td></tr>
+            <tr><td>全管道（旧DB）</td><td>234,506</td><td>2.6%</td><td style="text-align:left;font-size:11px;color:var(--ink-dim);">△ 數量雖多但效率低</td></tr>
+            <tr><td>揆眾婦幼展</td><td>1,920</td><td>1.3%</td><td style="text-align:left;font-size:11px;color:var(--ink-dim);">△ 需要重新評估</td></tr>
+            <tr><td style="color:var(--ac-rose);">樂飛発票</td><td>2,459</td><td class="neg">0.12%</td><td style="text-align:left;font-size:11px;color:var(--ac-rose);">✕ 無投資效益</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ins" style="margin-top:10px;font-size:12px;">
+        <strong>若封鎖的無效BCL 63,710人全員有效的追加業績試算：+21.2M NTD。</strong>
+        降低封鎖率，是零獲取成本的業績增加策略。
+      </div>
+    </div>
+
+    <!-- 統合シミュレーション -->
+    <div style="background:var(--bg);border-radius:8px;padding:16px;border:1px solid var(--rule);">
+      <div style="font-size:11px;font-weight:700;color:var(--ink-sub);letter-spacing:0.1em;margin-bottom:12px;">整合模擬 — 拉動各槓桿後業績如何改變</div>
+      <div class="ch-sm"><canvas id="c-sim"></canvas></div>
+      <div class="g3" style="margin-top:12px;margin-bottom:0;">
+        <div class="ins">
+          <strong>僅N×1.5就可 +24.7M NTD</strong><br>
+          將BCL從14.8萬增加到22.3萬。集中在高轉換管道是關鍵。
+        </div>
+        <div class="ins mint">
+          <strong>僅CV×1.5就可 +24.7M NTD</strong><br>
+          僅靠強化標籤。不需追加成本。是費用效益最高的槓桿。
+        </div>
+        <div class="ins">
+          <strong>N×1.5＋CV×1.5可達 +61.6M NTD</strong><br>
+          同時推動兩者，產生相乘效果，達到目標水準。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="final-card fade-up">
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.22em;opacity:0.6;text-transform:uppercase;margin-bottom:20px;">最終訊息</div>
+    <div class="final-text">
+      <span data-i18n="t_final1">數據瞄準目標。</span><br>
+      <span data-i18n="t_final2">AI創造最佳時機。</span><br>
+      <span data-i18n="t_final3a">但扣下扳機的，</span><em data-i18n="t_final3b">是對媽媽內心的共鳴</em><span data-i18n="t_final3c">。</span><br><br>
+      <span data-i18n="t_final4a">LC8T的彼端，不是數字，</span><br>
+      <span data-i18n="t_final4b">而是一位媽媽與巧虎的相遇。</span><br>
+      <span data-i18n="t_final5a">將那份相遇傳遞出去，</span><em data-i18n="t_final5b">就是我們的工作</em><span data-i18n="t_final5c">。</span>
+    </div>
+    <div class="final-sub"><span data-i18n="final_sub">LC8T — LINE × Community × Super8 × TEL</span></div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const TAG_CVR=[
+  {l:'1-5個',n:139336,r:0.6},{l:'6-10個',n:102938,r:2.0},
+  {l:'11-15個',n:31751,r:5.6},{l:'16-20個',n:13631,r:10.4},
+  {l:'21-30個',n:10445,r:18.6},{l:'31-50個',n:3108,r:38.2},{l:'51個+',n:309,r:52.1}
+];
+const LAYER_CVR=[
+  {l:'SS 0-12M',r:5.3},{l:'S 13-24M',r:8.0},{l:'AA 25-36M',r:10.5},{l:'A 37-60M',r:5.9}
+];
+const COMBO=[
+  {l:'MD＋行為\n（最高溫度）',r:11.1},{l:'行為_のみ',r:9.1},{l:'MD＋點擊',r:7.2},
+  {l:'點擊のみ',r:6.7},{l:'一般\n(タグなし)',r:4.2}
+];
+const MD_TL=[{l:'なし',r:5.4},{l:'1個',r:6.8},{l:'2個',r:8.8},{l:'3個',r:8.0},{l:'4個+',r:12.1}];
+const LP=[
+  {l:'SS 0-12M',nb:3565,hot:2577,pct:72.3},{l:'S 13-24M',nb:20604,hot:13153,pct:63.8},
+  {l:'AA 25-36M',nb:15882,hot:7571,pct:47.7},{l:'A 37-60M',nb:54787,hot:15090,pct:27.5},
+  {l:'B 61M+',nb:164208,hot:12080,pct:7.4}
+];
+const BCL_V=[111,153,131,194,1508,2639,1582,1700,623,660,871,1761,3664,868,981,1522,1160,1395,2014,1506,1900,1843,2131,4263];
+const BCL_I=[33,29,30,45,377,775,375,420,107,133,223,426,916,189,377,493,325,276,407,270,390,308,304,261];
+const BCL_L=['24/04','24/05','24/06','24/07','24/08','24/09','24/10','24/11','24/12','25/01','25/02','25/03','25/04','25/05','25/06','25/07','25/08','25/09','25/10','25/11','25/12','26/01','26/02','26/03'];
+const BIRTH=[
+  {y:'2017',b:11526,c:5.9},{y:'2018',b:15321,c:8.4},{y:'2019',b:20007,c:11.3},
+  {y:'2020',b:23097,c:14.0},{y:'2021',b:24007,c:15.6},{y:'2022',b:21257,c:15.3},
+  {y:'2023',b:12214,c:9.0},{y:'2024',b:11228,c:8.6},{y:'2025',b:6338,c:5.1},{y:'2026',b:3347,c:2.8}
+];
+const SEG_L=['B 61M+','A 37-60M','AA 25-36M','S 13-24M','SS 7-12M','S 0-6M','孕期'];
+const SEG_V=[75666,42860,11630,10723,2687,3180,1603];
+const SEG_C=['#C4B898','#D4C0A8','#A8C5DA','#6AB0D8','#A8D898','#C5B4E3','#F5D4A0'];
+
+const FONT="'Noto Sans JP',sans-serif";
+const INK='#1A1A1A'; const INK2='#555555'; const INK3='#999999';
+const RULE='#C8D8EE';
+const AB='#4A7CC7'; const AS='#7AAEE0'; const AM='#6AB08A';
+const AR='#E07070'; const AL='#F0C050';
+
+Chart.defaults.font.family=FONT;
+Chart.defaults.font.size=11;
+Chart.defaults.color=INK2;
+
+// 出生年別BCL
+new Chart('c-birth',{type:'bar',data:{
+  labels:BIRTH.map(d=>d.y),
+  datasets:[
+    {label:'BCL件數',data:BIRTH.map(d=>d.b),backgroundColor:AS+'88',borderWidth:0,borderRadius:3,yAxisID:'y'},
+    {label:'覆蓋率%',data:BIRTH.map(d=>d.c),type:'line',yAxisID:'y2',borderColor:AR,backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointBackgroundColor:AR,tension:0.3}
+  ]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:true,position:'top',labels:{font:{size:10},padding:8,boxWidth:10,color:INK2}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK3,font:{size:9},maxRotation:0}},
+    y:{grid:{color:RULE},ticks:{color:INK2,callback:v=>(v/1000).toFixed(0)+'K'}},
+    y2:{position:'right',grid:{display:false},min:0,max:20,ticks:{color:AR,callback:v=>v+'%'}}
+  }
+}});
+
+// ドーナツ
+new Chart('c-donut',{type:'doughnut',data:{
+  labels:SEG_L,datasets:[{data:SEG_V,backgroundColor:SEG_C,borderWidth:1,borderColor:'#fff'}]
+},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+  plugins:{legend:{position:'right',labels:{font:{size:10},padding:5,boxWidth:10,color:INK2}}}
+}});
+
+// 月次BCL
+window.chartMonthly = new Chart('c-monthly',{type:'bar',data:{labels:BCL_L,datasets:[
+  {label:'有效',data:BCL_V,backgroundColor:AB+'88',stack:'s',borderWidth:0},
+  {label:'無效（封鎖）',data:BCL_I,backgroundColor:AR+'66',stack:'s',borderWidth:0}
+]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:true,position:'top',labels:{font:{size:10},padding:8,boxWidth:10,color:INK2}}},
+  scales:{
+    x:{stacked:true,grid:{display:false},ticks:{font:{size:9},maxRotation:0,color:INK3}},
+    y:{stacked:true,grid:{color:RULE},ticks:{color:INK2,callback:v=>v>=1000?(v/1000).toFixed(1)+'K':v}}
+  }
+}});
+
+// 月齢層別購買構造（月刊依存度 積み上げ棒）
+window.chartLayerCvr = new Chart('c-layer-cvr',{type:'bar',data:{
+  labels:['SS 0-12M','S 13-24M','AA 25-36M','A 37-60M','B 61M+'],
+  datasets:[
+    {
+      label:'無月刊訂購（新購買）',
+      data:[801,2026,1399,375,61],
+      backgroundColor:AB+'99',
+      borderRadius:0, borderWidth:0, stack:'s'
+    },
+    {
+      label:'有月刊訂購（舊有資產）',
+      data:[326,790,1687,2978,582],
+      backgroundColor:'#E07070bb',
+      borderRadius:0, borderWidth:0, stack:'s'
+    }
+  ]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{
+    legend:{display:true,position:'top',labels:{font:{size:10},padding:10,boxWidth:12,color:INK2}},
+    tooltip:{callbacks:{
+      label: c => {
+        const total = c.chart.data.datasets.reduce((s,d)=>s+(d.data[c.dataIndex]||0),0);
+        const pct = (c.raw/total*100).toFixed(1);
+        return ` ${c.dataset.label}: ${c.raw}件 (${pct}%)`;
+      }
+    }}
+  },
+  scales:{
+    x:{stacked:true,grid:{display:false},ticks:{color:INK2}},
+    y:{stacked:true,grid:{color:RULE},ticks:{color:INK2,callback:v=>v+'件'},
+       title:{display:true,text:'FY25購買件数',color:INK3,font:{size:10}}}
+  }
+}});
+
+// タグバー（カスタム）
+(function(){
+  const c=document.getElementById('tag-bars');
+  const max=52.1;
+  const fills=['#c8d0d8','#b0c8b0','#9aaabb','#6a8aab','#4A7CC7','#2A5CA7','#1A3A7A'];
+  TAG_CVR.forEach((d,i)=>{
+    const pct=(d.r/max*100);
+    const isShort = pct < 12;
+    const row=document.createElement('div');
+    row.className='tag-bar-row';
+    // 短いバーは数字をバー外側に、長いバーは内側に表示
+    const valHtml = isShort
+      ? `</div><span style="font-size:11px;font-weight:700;color:var(--ink-sub);padding-left:6px;white-space:nowrap;">${d.r}%</span>`
+      : `<span class="tag-bar-val">${d.r}%</span></div>`;
+    row.innerHTML=`
+      <div class="tag-bar-lbl">${d.l}</div>
+      <div class="tag-bar-track" style="display:flex;align-items:center;">
+        <div class="tag-bar-fill" style="width:${pct.toFixed(1)}%;min-width:4px;background:${fills[i]};flex-shrink:0;">
+          ${valHtml}
+        </div>
+      </div>
+      <div class="tag-bar-n">${(d.n/1000).toFixed(0)}K人</div>`;
+    c.appendChild(row);
+  });
+})();
+
+// タグ種別ごとの購買率
+new Chart('c-tag-qual',{type:'bar',data:{
+  labels:['購物車\n（カート）','行為_\n（実行動）','MD_\n（商品興味）','有開啟\n（開封）','互動\n（エンゲージ）','點擊\n（クリック）','DB全体\n（基準）'],
+  datasets:[{
+    label:'標籤持有者的購買率',
+    data:[49.5, 17.8, 17.1, 13.2, 11.1, 9.0, 3.1],
+    backgroundColor:['#E07070cc','#4A7CC7cc','#4A7CC7aa','#7AAEE0aa','#7AAEE088','#7AAEE066','#ccc'],
+    borderRadius:4, borderWidth:0,
+  }]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{
+    legend:{display:false},
+    tooltip:{callbacks:{label:c=>` 購買率: ${c.raw}%`}}
+  },
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:10}}},
+    y:{grid:{color:RULE},min:0,max:60,
+      ticks:{color:INK2,callback:v=>v+'%'},
+      title:{display:true,text:'FY25購買率',color:INK3,font:{size:10}}}
+  }
+}});
+
+// 複合タグ×承諾率
+new Chart('c-combo',{type:'bar',data:{
+  labels:COMBO.map(d=>d.l),
+  datasets:[{
+    data:COMBO.map(d=>d.r),
+    backgroundColor:COMBO.map((_,i)=>i===0?AB+'cc':i===4?'#ccc':AS+'66'),
+    borderRadius:4,borderWidth:0
+  }]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` 承諾率: ${c.raw}%`}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:10}}},
+    y:{grid:{color:RULE},min:0,max:14,ticks:{color:INK2,callback:v=>v+'%'}}
+  }
+}});
+
+// MD_×承諾率
+new Chart('c-md',{type:'bar',data:{
+  labels:MD_TL.map(d=>d.l),
+  datasets:[{
+    data:MD_TL.map(d=>d.r),
+    backgroundColor:MD_TL.map((_,i)=>{
+      const cs=['#ddd','#aac8aa','#88b888','#66a866','#4A7CC7cc'];
+      return cs[i];
+    }),
+    borderRadius:4,borderWidth:0
+  }]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` 承諾率: ${c.raw}%`}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2}},
+    y:{grid:{color:RULE},min:0,max:15,ticks:{color:INK2,callback:v=>v+'%'}}
+  }
+}});
+
+// 層別有望バー
+(function(){
+  const c=document.getElementById('layer-bars');
+  const colors=[AM,AB,'#8B9ED4','#C4B898','#999'];
+  LP.forEach((d,i)=>{
+    const isShort = d.pct < 30;
+    const row=document.createElement('div');
+    row.className='layer-row';
+    const valHtml = isShort
+      ? `</div><span style="font-size:11px;font-weight:700;color:var(--ink-sub);padding-left:6px;white-space:nowrap;">${d.hot.toLocaleString()}人</span>`
+      : `<span class="layer-fill-val">${d.hot.toLocaleString()}人</span></div>`;
+    row.innerHTML=`
+      <div class="layer-lbl">${d.l}</div>
+      <div class="layer-track" style="display:flex;align-items:center;">
+        <div class="layer-fill" style="width:${d.pct}%;min-width:4px;background:${colors[i]}bb;flex-shrink:0;">
+          ${valHtml}
+        </div>
+      </div>
+      <div class="layer-pct">${d.pct}%</div>`;
+    c.appendChild(row);
+  });
+})();
+
+// ── O：月齢帯別 實質轉換率バー ──
+(function(){
+  const data = [
+    {l:'0-5M',  bcl:3180,  rate:8.5},
+    {l:'6-11M', bcl:2687,  rate:30.6},
+    {l:'12-17M',bcl:5361,  rate:25.0},
+    {l:'18-23M',bcl:5362,  rate:27.5},
+    {l:'24-29M',bcl:5815,  rate:24.5},
+    {l:'30-35M',bcl:5815,  rate:28.6},
+    {l:'36-41M',bcl:10715, rate:10.9},
+    {l:'42-47M',bcl:10715, rate:9.9},
+    {l:'48-53M',bcl:10715, rate:5.2},
+    {l:'60-71M',bcl:37833, rate:1.1},
+    {l:'72M+',  bcl:37833, rate:0.6},
+  ];
+  const c = document.getElementById('o-bars');
+  const max = 31;
+  data.forEach(d => {
+    const isHigh = d.rate >= 20;
+    const isShort = (d.rate/max*100) < 12;
+    const color = isHigh ? AB+'cc' : d.rate >= 8 ? AS+'88' : '#bbb';
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:5px;';
+    const valHtml = isShort
+      ? `</div><span style="font-size:10px;font-weight:700;color:var(--ink-sub);padding-left:6px;white-space:nowrap;">${d.rate}%</span>`
+      : `<span style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap;">${d.rate}%</span></div>`;
+    row.innerHTML = `
+      <div style="width:52px;font-size:10px;color:var(--ink-sub);flex-shrink:0;">${d.l}</div>
+      <div style="flex:1;height:20px;background:#eef;border-radius:3px;display:flex;align-items:center;">
+        <div style="width:${Math.max((d.rate/max*100),2).toFixed(1)}%;height:100%;background:${color};display:flex;align-items:center;padding-left:6px;border-radius:3px;flex-shrink:0;">
+          ${valHtml}
+        </div>
+      </div>
+      <div style="width:52px;font-size:9px;color:var(--ink-dim);text-align:right;">${(d.bcl/1000).toFixed(0)}K人</div>`;
+    c.appendChild(row);
+  });
+})();
+
+// ── CV：1人あたり期待売上バー ──
+(function(){
+  const data = [
+    {l:'1-5個',  exp:23,   ratio:1.0},
+    {l:'6-10個', exp:91,   ratio:3.9},
+    {l:'11-20個',exp:353,  ratio:15.1},
+    {l:'21-30個',exp:1050, ratio:44.8},
+    {l:'31-50個',exp:2613, ratio:111.6},
+    {l:'51個+',  exp:4916, ratio:209.9},
+  ];
+  const c = document.getElementById('cv-bars');
+  const max = 4916;
+  const fills = ['#bbb','#c0d8b0','#90c080','#60a840','#3a8820',AM+'cc'];
+  data.forEach((d,i) => {
+    const widthPct = Math.max((d.exp/max*100), 2);
+    const isShort = widthPct < 15;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:5px;';
+    const valHtml = isShort
+      ? `</div><span style="font-size:10px;font-weight:700;color:var(--ink-sub);padding-left:6px;white-space:nowrap;">${d.exp.toLocaleString()} NTD</span>`
+      : `<span style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap;">${d.exp.toLocaleString()} NTD</span></div>`;
+    row.innerHTML = `
+      <div style="width:52px;font-size:10px;color:var(--ink-sub);flex-shrink:0;">${d.l}</div>
+      <div style="flex:1;height:20px;background:#eef8ee;border-radius:3px;display:flex;align-items:center;">
+        <div style="width:${widthPct.toFixed(1)}%;height:100%;background:${fills[i]};display:flex;align-items:center;padding-left:6px;border-radius:3px;flex-shrink:0;">
+          ${valHtml}
+        </div>
+      </div>
+      <div style="width:48px;font-size:10px;font-weight:700;color:var(--ac-mint);text-align:right;">${d.ratio}x</div>`;
+    c.appendChild(row);
+  });
+})();
+
+// ── 統合シミュレーション ──
+new Chart('c-sim',{type:'bar',data:{
+  labels:['現状','N×1.5','CV×1.5','O×1.2','N×1.5\n＋CV×1.5','全因子\n改善'],
+  datasets:[{
+    data:[49.3,74.0,74.0,59.2,110.9,133.1],
+    backgroundColor:['#ccc',AS+'88',AM+'88',AB+'44',AB+'cc',AB+'ee'],
+    borderRadius:4,borderWidth:0,
+  }]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>` ${c.raw}M NTD`}}
+  },
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:10}}},
+    y:{grid:{color:RULE},min:0,max:150,
+       ticks:{color:INK2,callback:v=>v+'M'},
+       title:{display:true,text:'業績試算 (NTD)',color:INK3,font:{size:10}}}
+  }
+}});
+
+// ── 商品別クラスターグリッド（CH.05・月齢加味版） ──
+(function(){
+  const prods = [
+    {name:'好情緒EQ',  age:'18-48M', price:2210, buyers:3152, repeat:1445, z5:946,  z4:971,  z3:10126, rev:1434},
+    {name:'英語Plus',  age:'18-48M', price:4808, buyers:1588, repeat:742,  z5:1053, z4:1048, z3:10433, rev:3433},
+    {name:'語彙智育',  age:'12-36M', price:4909, buyers:1127, repeat:777,  z5:831,  z4:1230, z3:11291, rev:3220},
+    {name:'生活好習慣',age:'6-30M',  price:4308, buyers:973,  repeat:717,  z5:724,  z4:1186, z3:10922, rev:2576},
+    {name:'注音2.0',  age:'36-66M', price:3210, buyers:1283, repeat:425,  z5:711,  z4:128,  z3:4390,  rev:1120},
+    {name:'数学套組',  age:'30-60M', price:3247, buyers:887,  repeat:511,  z5:847,  z4:233,  z3:5220,  rev:1409},
+    {name:'点読図鑑',  age:'0-24M',  price:2436, buyers:1145, repeat:845,  z5:421,  z4:776,  z3:8485,  rev:894},
+    {name:'英語進階版',age:'30-60M', price:4500, buyers:1588, repeat:742,  z5:864,  z4:215,  z3:5203,  rev:1971},
+    {name:'点読大冒険',age:'24-54M', price:3014, buyers:613,  repeat:407,  z5:969,  z4:677,  z3:7858,  rev:1781},
+  ];
+
+  const grid = document.getElementById('prod-cluster-grid');
+  prods.forEach(p => {
+    const maxVal = Math.max(p.z5, p.z4);
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg);border:1.5px solid var(--rule);border-radius:8px;padding:12px 14px;';
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink);">${p.name}</div>
+        <div style="font-size:9px;font-weight:700;background:var(--pill-bg);color:var(--ac-blue);padding:2px 7px;border-radius:20px;">適齡 ${p.age}</div>
+      </div>
+      <div style="font-size:10px;color:var(--ink-dim);margin-bottom:8px;">FY25購買 ${p.buyers.toLocaleString()}人 / 單價 ${p.price.toLocaleString()} NTD</div>
+
+      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="font-size:9px;font-weight:700;width:56px;color:var(--ac-rose);flex-shrink:0;">🔥Z5今すぐ</div>
+          <div style="flex:1;height:16px;background:var(--rule-lt);border-radius:3px;display:flex;align-items:center;">
+            <div style="width:${(p.z5/maxVal*100).toFixed(0)}%;min-width:4px;height:100%;background:var(--ac-rose);opacity:0.8;border-radius:3px;display:flex;align-items:center;padding-left:5px;flex-shrink:0;">
+              <span style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap;">${p.z5.toLocaleString()}人</span>
+            </div>
+          </div>
+          <div style="font-size:9px;color:var(--ac-rose);font-weight:700;width:28px;text-align:right;flex-shrink:0;">45%</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="font-size:9px;font-weight:700;width:56px;color:var(--ac-blue);flex-shrink:0;">⭐Z4高溫</div>
+          <div style="flex:1;height:16px;background:var(--rule-lt);border-radius:3px;display:flex;align-items:center;">
+            <div style="width:${(p.z4/maxVal*100).toFixed(0)}%;min-width:4px;height:100%;background:var(--ac-blue);opacity:0.8;border-radius:3px;display:flex;align-items:center;padding-left:5px;flex-shrink:0;">
+              <span style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap;">${p.z4.toLocaleString()}人</span>
+            </div>
+          </div>
+          <div style="font-size:9px;color:var(--ac-blue);font-weight:700;width:28px;text-align:right;flex-shrink:0;">23%</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="font-size:9px;width:56px;color:var(--ink-dim);flex-shrink:0;">●Z3中温</div>
+          <div style="flex:1;height:12px;background:#D8E8F0;border-radius:3px;display:flex;align-items:center;padding-left:5px;">
+            <span style="font-size:9px;color:#555;">${(p.z3/1000).toFixed(1)}K人</span>
+          </div>
+          <div style="font-size:9px;color:var(--ink-dim);width:28px;text-align:right;flex-shrink:0;">12%</div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--white);border-radius:5px;border:1px solid var(--rule);">
+        <div style="font-size:10px;color:var(--ink-sub);">期待業績試算</div>
+        <div style="font-size:13px;font-weight:800;color:var(--ac-blue);">${p.rev.toLocaleString()}K NTD</div>
+      </div>
+      <div style="margin-top:5px;font-size:10px;color:var(--ink-dim);">回購候選 ${p.repeat.toLocaleString()}人</div>
+    `;
+    grid.appendChild(card);
+  });
+})();
+
+// アクティブ
+const pages=document.querySelectorAll('.page');
+const tabs=document.querySelectorAll('.nav-tab');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const i=Array.from(pages).indexOf(e.target);
+      tabs.forEach((t,j)=>t.classList.toggle('on',i===j));
+    }
+  });
+},{threshold:0.3});
+pages.forEach(p=>obs.observe(p));
+
+// フェードイン
+const fo=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>fo.observe(el));
+
+// ── i18n 翻訳辞書 ──
+const LANG = {
+  ja: {
+    t_title:"LC8T 簡報",
+    t_ch00_tag:"TBBS策略的基礎", t_ch00_eye:"基礎",
+    t_ch00_h1a:"台灣分公司的持續成長，", t_ch00_h1b:"靠這個公式驅動。",
+    t_ch00_sub:"在少子化這個不可逆的市場收縮趨勢中，台灣分公司要持續創造利潤的結構，可以用一個公式來表達。",
+    t_ch00_c1t:"O × N × CV × I", t_ch00_c1h:"相互強化",
+    t_ch00_c1d:"N增加，O的機會就增加。CV提升，I的效率就提升。這四個變數並非各自獨立。",
+    t_ch00_c2t:"不增加I，", t_ch00_c2h:"最大化P(LTV)",
+    t_ch00_c2d:"不增加成本，透過推動O、N、CV來提升利潤，這就是台灣分公司的基本策略。",
+    t_ch00_c3t:"什麼是LC8T", t_ch00_c3h:"驅動這個公式的引擎",
+    t_ch00_c3d:"LINE、Community、Super8、TEL四個要素，同時承擔O、N、CV的功能。",
+    t_ch01_tag:"N（母數）的現況", t_ch01_eye:"BCL 資料庫",
+    t_ch01_h1a:"知名度97%的品牌，", t_ch01_h1b:"卻只掌握了市場的9.1%。",
+    t_ch01_sub:"這不是問題，而是機會的大小。91%的家長還不在我們的DB裡。",
+    t_ch01_ins1:"2025年出生（10.8萬人）中，我們只掌握了5.9%。出生年越新，進入DB的比例越低。越是小月齡的孩子，我們越是人手不足。",
+    t_ch01_ins3b:"引擎已經點火了。後半的加速是真實的。維持並加速這個步伐，就是擴大N的核心所在。",
+    t_ch02_tag:"O（機會點）的精準度", t_ch02_eye:"以月齡為基礎的方法",
+    t_ch02_h1a:"從學年單位，進化到月齡單位。", t_ch02_h1b:"傳遞時機的精準度決定成效。",
+    t_ch02_sub:"幼兒的發展不是以年為單位，而是每個月都在改變。數據顯示，每項商品都有「最佳購買月齡」。",
+    t_ch02_old:"舊有的思維", t_ch02_new:"新的思維",
+    t_ch03_tag:"CV（轉換率）的核心", t_ch03_eye:"標籤力量 — 真實數據",
+    t_ch03_h1a:"標籤改變購買率。", t_ch03_h1b:"這不是假設，而是實測數據。",
+    t_ch03_sub:"從30萬人DB計算出的實際數字告訴我們：標籤的數量與品質，決定性地改變了購買機率。",
+    t_ch04_tag:"LC8T的T段：與電銷的連動", t_ch04_eye:"LINE → 電銷 連動",
+    t_ch04_h1a:"標籤決定了電話銷售的成果，", t_ch04_h1b:"而且是在打電話之前就決定了。",
+    t_ch04_sub:"CH.03中看到的ZONE地圖，直接連結到電銷名單的設計。對哪個ZONE的顧客打電話，承諾率最多可以相差2.6倍。",
+    t_ch05_tag:"鎖定高潛力顧客", t_ch05_eye:"高潛力顧客識別",
+    t_ch05_h1a:"高潛力顧客，", t_ch05_h1b:"已經就在DB裡面了。",
+    t_ch05_sub:"不需要新獲客，現有DB中就有高潛力顧客。他們已經在用行動發出信號了。接下來只需要我們察覺並採取行動。",
+    t_ch06_tag:"我們的努力方向", t_ch06_eye:"行動方向",
+    t_ch06_h1a:"P(LTV) = O × N × CV − I", t_ch06_h1b:"數據，決定行動。",
+    t_ch06_sub:"整理CH.01〜05數據所揭示的「下一步行動」。每個行動背後，都有數字作為依據。",
+    t_ch06_o_ttl:"擴大機會點 — 提升「何時傳遞」的精準度", t_ch06_o_pill:"機會 × 時機",
+    t_ch06_n_ttl:"擴大母數 — 壯大下線（0〜36M）的BCL", t_ch06_n_pill:"現況9.1% → 目標20%",
+    t_ch06_cv_ttl:"擴大轉換率 — 累積標籤，對高潛力顧客毫不猶豫地採取行動", t_ch06_cv_pill:"超過30個標籤達DB平均的12倍",
+    t_ch06_i_ttl:"最大化投資效益 — 以品質而非數量來判斷", t_ch06_i_pill:"不增加成本，增加出手機會",
+    t_final1:"數據瞄準目標。", t_final2:"AI創造最佳時機。",
+    t_final3a:"但扣下扳機的，", t_final3b:"是對媽媽內心的共鳴", t_final3c:"。",
+    t_final4a:"LC8T的彼端，不是數字，", t_final4b:"而是一位媽媽與巧虎的相遇。",
+    t_final5a:"將那份相遇傳遞出去，", t_final5b:"就是我們的工作", t_final5c:"。",
+  },
+  zh: {
+    t_title:"LC8T 簡報",
+    t_ch00_tag:"TBBS策略基礎", t_ch00_eye:"基礎",
+    t_ch00_h1a:"台北分公司的永續成長，", t_ch00_h1b:"由這個公式驅動。",
+    t_ch00_sub:"面對少子化這一不可逆的市場萎縮，用一個公式表達台北分公司持續獲利的結構。",
+    t_ch00_c1t:"O × N × CV × I", t_ch00_c1h:"相互強化",
+    t_ch00_c1d:"N增加則O的機會增加。CV提升則I的效率提升。4個變數並非獨立存在。",
+    t_ch00_c2t:"不增加I", t_ch00_c2h:"最大化P(LTV)",
+    t_ch00_c2d:"在不增加成本的前提下，驅動O・N・CV，這是台北分公司的基本戰略。",
+    t_ch00_c3t:"LC8T是什麼", t_ch00_c3h:"驅動這個公式的引擎",
+    t_ch00_c3d:"LINE・Community・Super8・TEL四個要素，同時承擔O・N・CV的功能。",
+    t_ch01_tag:"N（母數）的現實", t_ch01_eye:"BCL 資料庫",
+    t_ch01_h1a:"品牌認知率97%，", t_ch01_h1b:"卻只擁有市場的9.1%。",
+    t_ch01_sub:"這不是問題，而是潛力的大小。91%的媽媽們還不在我們的DB裡。",
+    t_ch01_ins1:"2025年出生（10.8萬人）中僅持有5.9%。出生年越新，越少進入我們的DB。下線層最薄弱。",
+    t_ch01_ins3b:"引擎已開始運轉。後半加速是真實的。維持並加速這個節奏是擴大N的核心。",
+    t_ch02_tag:"O（機會點）的精準度", t_ch02_eye:"月齡別策略",
+    t_ch02_h1a:"從學年單位到月齡單位。", t_ch02_h1b:"「何時傳達」決定了精準度。",
+    t_ch02_sub:"幼兒的發育不是以年為單位，而是每個月都在改變。數據顯示每個商品都有「最佳購買月齡」。",
+    t_ch02_old:"過去的思維", t_ch02_new:"新的思維",
+    t_ch03_tag:"CV（轉換率）的核心", t_ch03_eye:"標籤力量 — 真實數據",
+    t_ch03_h1a:"標籤改變購買率。", t_ch03_h1b:"這不是假設，而是實測數據。",
+    t_ch03_sub:"從30萬人DB計算出的真實數字告訴我們：標籤的數量與品質，決定性地改變了購買機率。",
+    t_ch04_tag:"LC8T的T段：與電銷的連鎖", t_ch04_eye:"LINE → TEL 連結",
+    t_ch04_h1a:"標籤事先決定了", t_ch04_h1b:"電話的成果。",
+    t_ch04_sub:"CH.03的ZONE地圖直接對應電銷名單設計。對哪個ZONE的顧客致電，承諾率最多相差2.6倍。",
+    t_ch05_tag:"有潛力顧客的識別", t_ch05_eye:"潛力顧客識別",
+    t_ch05_h1a:"有潛力的顧客，", t_ch05_h1b:"已經在我們的DB裡。",
+    t_ch05_sub:"不需要新獲取，現有DB中就有潛力顧客。他們已用行動發出信號。我們只需察覺並採取行動。",
+    t_ch06_tag:"我們努力的方向", t_ch06_eye:"行動方向",
+    t_ch06_h1a:"P(LTV) = O × N × CV − I", t_ch06_h1b:"數據，決定行動。",
+    t_ch06_sub:"整理CH.01〜05數據所揭示的「下一步行動」。每個行動都有數字作為依據。",
+    t_ch06_o_ttl:"擴大機會點 — 提升「何時傳達」的精準度", t_ch06_o_pill:"機會 × 時機",
+    t_ch06_n_ttl:"擴大母數 — 加厚下線（0〜36M）的BCL", t_ch06_n_pill:"現況9.1% → 目標20%",
+    t_ch06_cv_ttl:"提升轉換率 — 累積標籤，毫不猶豫地行動", t_ch06_cv_pill:"標籤超過30個達DB平均的12倍",
+    t_ch06_i_ttl:"最大化投資效果 — 以品質而非數量判斷", t_ch06_i_pill:"不增加成本，增加行動方案",
+    t_final1:"數據鎖定目標。", t_final2:"AI創造最佳時機。",
+    t_final3a:"但扣下板機的，", t_final3b:"是對媽媽心靈的共鳴", t_final3c:"。",
+    t_final4a:"LC8T的彼端不是數字，", t_final4b:"而是一位媽媽與巧虎的相遇。",
+    t_final5a:"傳遞這份相遇，", t_final5b:"是我們的工作", t_final5c:"。",
+  }
+};
+
+let currentLang = 'ja';
+function setLang(lang) {
+  currentLang = lang;
+  const dict = LANG[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+  // NAVボタンの見た目を切り替え
+  document.getElementById('btn-ja').style.background = lang==='ja' ? 'var(--ac-blue)' : 'var(--white)';
+  document.getElementById('btn-ja').style.color = lang==='ja' ? '#fff' : 'var(--ink-sub)';
+  document.getElementById('btn-ja').style.borderColor = lang==='ja' ? 'var(--ac-blue)' : 'var(--rule)';
+  document.getElementById('btn-zh').style.background = lang==='zh' ? 'var(--ac-blue)' : 'var(--white)';
+  document.getElementById('btn-zh').style.color = lang==='zh' ? '#fff' : 'var(--ink-sub)';
+  document.getElementById('btn-zh').style.borderColor = lang==='zh' ? 'var(--ac-blue)' : 'var(--rule)';
+}
+</script>
+</body>
+</html>
+// NAV
+function goTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
