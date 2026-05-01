@@ -2142,37 +2142,83 @@ document.getElementById('btn-dl-html').onclick = function(){
   URL.revokeObjectURL(a.href);
 };
 
-document.getElementById('btn-dl-pdf').onclick = function(){
-  const style = document.createElement('style');
-  style.id = 'print-style';
-  style.textContent = `
-    @media print {
-      @page { size: 1280px 720px landscape; margin: 0; }
-      body { margin: 0; }
-      .topbar { display: none !important; }
-      #stage {
-        position: static !important;
-        transform: none !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 1280px !important;
-        height: auto !important;
-        overflow: visible !important;
-      }
-      .slide {
-        display: block !important;
-        position: relative !important;
-        width: 1280px !important;
-        height: 720px !important;
-        page-break-after: always;
-        break-after: page;
-        overflow: hidden;
-      }
+document.getElementById('btn-dl-pdf').onclick = async function(){
+  const btn = this;
+  btn.textContent = '⏳ 生成中...';
+  btn.disabled = true;
+
+  // html2canvas + jsPDF をCDNから動的ロード
+  async function loadScript(src){
+    return new Promise((resolve,reject)=>{
+      if(document.querySelector(`script[src="${src}"]`)){ resolve(); return; }
+      const s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  try {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation:'landscape', unit:'px', format:[1280,720], hotfixes:['px_scaling'] });
+
+    const allSlides = document.querySelectorAll('.slide');
+    const W = 1280, H = 720;
+
+    for(let i = 0; i < allSlides.length; i++){
+      btn.textContent = `⏳ ${i+1}/${allSlides.length}`;
+
+      // 対象スライドだけ表示
+      allSlides.forEach((s,j)=>{
+        s.style.display = j===i ? 'flex' : 'none';
+        s.style.position = j===i ? 'relative' : '';
+        s.style.width = j===i ? W+'px' : '';
+        s.style.height = j===i ? H+'px' : '';
+      });
+
+      // #stageを一時的にフラット化
+      const stage = document.getElementById('stage');
+      const origStyle = stage.getAttribute('style') || '';
+      stage.style.cssText = `position:relative;width:${W}px;height:${H}px;transform:none;left:0;top:0;overflow:visible;`;
+
+      await new Promise(r=>setTimeout(r, 80));
+
+      const canvas = await html2canvas(allSlides[i], {
+        width: W, height: H, scale: 1,
+        useCORS: true, allowTaint: true, backgroundColor: null,
+        logging: false
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      if(i > 0) pdf.addPage([W, H], 'landscape');
+      pdf.addImage(imgData, 'JPEG', 0, 0, W, H);
+
+      // stageを戻す
+      stage.setAttribute('style', origStyle);
     }
-  `;
-  document.head.appendChild(style);
-  window.print();
-  setTimeout(()=>{ const s = document.getElementById('print-style'); if(s) s.remove(); }, 2000);
+
+    // スライド表示を元に戻す
+    allSlides.forEach((s,j)=>{
+      s.style.display = j===0 ? 'flex' : 'none';
+      s.style.position = '';
+      s.style.width = '';
+      s.style.height = '';
+    });
+    // 現在のスライドを再表示
+    goTo(0);
+
+    pdf.save('lc8t_slides.pdf');
+    btn.textContent = '✅ 完了';
+    setTimeout(()=>{ btn.textContent = '🖨 PDF'; btn.disabled = false; }, 2000);
+
+  } catch(err) {
+    console.error(err);
+    btn.textContent = '❌ エラー';
+    btn.disabled = false;
+    alert('PDF生成に失敗しました。コンソールを確認してください。');
+  }
 };
 </script>
 </body>
