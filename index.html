@@ -2147,7 +2147,6 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
   btn.textContent = '⏳ 生成中...';
   btn.disabled = true;
 
-  // html2canvas + jsPDF をCDNから動的ロード
   async function loadScript(src){
     return new Promise((resolve,reject)=>{
       if(document.querySelector(`script[src="${src}"]`)){ resolve(); return; }
@@ -2165,49 +2164,56 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
     const pdf = new jsPDF({ orientation:'landscape', unit:'px', format:[1280,720], hotfixes:['px_scaling'] });
 
     const allSlides = document.querySelectorAll('.slide');
+    const stage = document.getElementById('stage');
     const W = 1280, H = 720;
+
+    // stageのtransformを一時解除してdocument flowに戻す
+    const origBodyOverflow = document.body.style.overflow;
+    const origHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'visible';
+    document.documentElement.style.overflow = 'visible';
+
+    const origStageStyle = stage.getAttribute('style') || '';
+    stage.style.cssText = `position:relative;width:${W}px;height:${H}px;transform:none;left:0;top:0;overflow:hidden;background:#F4F8FF;`;
 
     for(let i = 0; i < allSlides.length; i++){
       btn.textContent = `⏳ ${i+1}/${allSlides.length}`;
 
-      // 対象スライドだけ表示
+      // 対象スライドだけ表示（CSSクラスで制御）
       allSlides.forEach((s,j)=>{
         s.style.display = j===i ? 'flex' : 'none';
-        s.style.position = j===i ? 'relative' : '';
-        s.style.width = j===i ? W+'px' : '';
-        s.style.height = j===i ? H+'px' : '';
       });
 
-      // #stageを一時的にフラット化
-      const stage = document.getElementById('stage');
-      const origStyle = stage.getAttribute('style') || '';
-      stage.style.cssText = `position:relative;width:${W}px;height:${H}px;transform:none;left:0;top:0;overflow:visible;`;
+      // グラフ描画・レイアウト確定を待つ
+      await new Promise(r=>setTimeout(r, 300));
 
-      await new Promise(r=>setTimeout(r, 80));
-
-      const canvas = await html2canvas(allSlides[i], {
-        width: W, height: H, scale: 1,
-        useCORS: true, allowTaint: true, backgroundColor: null,
-        logging: false
+      const canvas = await html2canvas(stage, {
+        width: W,
+        height: H,
+        x: 0,
+        y: 0,
+        scale: 1,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#F4F8FF',
+        logging: false,
+        windowWidth: W,
+        windowHeight: H
       });
 
-      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
       if(i > 0) pdf.addPage([W, H], 'landscape');
       pdf.addImage(imgData, 'JPEG', 0, 0, W, H);
-
-      // stageを戻す
-      stage.setAttribute('style', origStyle);
     }
 
-    // スライド表示を元に戻す
-    allSlides.forEach((s,j)=>{
-      s.style.display = j===0 ? 'flex' : 'none';
-      s.style.position = '';
-      s.style.width = '';
-      s.style.height = '';
-    });
-    // 現在のスライドを再表示
+    // stageとbody/htmlを元に戻す
+    stage.setAttribute('style', origStageStyle);
+    document.body.style.overflow = origBodyOverflow;
+    document.documentElement.style.overflow = origHtmlOverflow;
+
+    // スライド表示を現在のスライドに戻す
     goTo(0);
+    scaleStage();
 
     pdf.save('lc8t_slides.pdf');
     btn.textContent = '✅ 完了';
