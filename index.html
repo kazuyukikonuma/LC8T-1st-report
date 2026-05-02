@@ -216,6 +216,7 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
       <div style="text-align:right;">
         <div style="font-size:14px;font-weight:800;color:var(--ac-blue);letter-spacing:0.12em;">P(LTV) = O × N × CV − I</div>
         <div style="font-size:11px;color:var(--ink-dim);margin-top:3px;">2026 / 05　FY25</div>
+        <div id="last-modified" style="font-size:10px;color:var(--ink-dim);margin-top:2px;letter-spacing:0.06em;"></div>
       </div>
     </div>
 
@@ -2290,6 +2291,15 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
     alert('PDF生成に失敗しました。コンソールを確認してください。');
   }
 };
+
+(function setLastModified(){
+  const el = document.getElementById('last-modified');
+  if(!el) return;
+  const d = new Date(document.lastModified);
+  if(isNaN(d.getTime())) return;
+  const pad = n => String(n).padStart(2,'0');
+  el.textContent = `最終更新: ${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+})();
 </script>
 </body>
 </html>
