@@ -98,6 +98,7 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
 
 /* ── KPI-BOX: Option3スタイル（カラー塗りつぶし） ── */
 .kpi-box{background:var(--ac-blue);border-radius:10px;padding:14px 16px;}
+.kpi-box.blue{background:var(--ac-blue);}
 .kpi-box.coral{background:var(--ac-coral);}
 .kpi-box.aqua{background:var(--ac-aqua);}
 .kpi-box.yellow{background:var(--ac-yellow);}
@@ -470,10 +471,10 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
       <div class="keymsg-sub">這不是問題，而是潛力的大小。91%的媽媽們還不在我們的DB裡。</div>
     </div>
     <div class="g4">
-      <div class="kpi-box"><div class="kpi-lbl">DB總數</div><div class="kpi-val">21.2<small style="font-size:13px;font-weight:500;color:var(--ink-sub);">万人</small></div><div class="kpi-nte">有效＋無效BCL合計</div></div>
-      <div class="kpi-box" style="border-color:var(--ac-sky)"><div class="kpi-lbl">有效BCL</div><div class="kpi-val" style="color:var(--ac-blue)">14.8<small style="font-size:13px;font-weight:500;color:var(--ink-sub);">万人</small></div><div class="kpi-nte">活躍的接觸點</div></div>
-      <div class="kpi-box"><div class="kpi-lbl">潛在市場</div><div class="kpi-val">163<small style="font-size:13px;font-weight:500;color:var(--ink-sub);">万人</small></div><div class="kpi-nte">台灣0〜10歲人口</div></div>
-      <div class="kpi-box" style="border-color:var(--ac-rose)"><div class="kpi-lbl">覆蓋率</div><div class="kpi-val" style="color:var(--ac-rose)">9.1<small style="font-size:13px;font-weight:500;color:var(--ink-sub);">%</small></div><div class="kpi-nte">91%尚未獲取</div></div>
+      <div class="kpi-box blue"><div class="kpi-lbl">DB總數</div><div class="kpi-val">21.2<small style="font-size:13px;font-weight:500;opacity:0.7;">万人</small></div><div class="kpi-nte">有效＋無效BCL合計</div></div>
+      <div class="kpi-box aqua"><div class="kpi-lbl">有效BCL</div><div class="kpi-val">14.8<small style="font-size:13px;font-weight:500;opacity:0.7;">万人</small></div><div class="kpi-nte">活躍的接觸點</div></div>
+      <div class="kpi-box neutral"><div class="kpi-lbl">潛在市場</div><div class="kpi-val">163<small style="font-size:13px;font-weight:500;color:var(--ink-dim);">万人</small></div><div class="kpi-nte">台灣0〜10歲人口</div></div>
+      <div class="kpi-box coral"><div class="kpi-lbl">覆蓋率</div><div class="kpi-val">9.1<small style="font-size:13px;font-weight:500;opacity:0.7;">%</small></div><div class="kpi-nte">91%尚未獲取</div></div>
     </div>
     <div class="g2" style="flex:1;min-height:0;align-items:start;gap:12px;">
       <div class="card" style="display:flex;flex-direction:column;">
@@ -731,122 +732,132 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
     <div class="sec-tag" style="flex-shrink:0;"><div class="sec-num">03</div> 標籤顯示的「與顧客的距離感」— ZONE地圖</div>
     <div style="font-size:14px;color:var(--ink-sub);padding:10px 16px;background:var(--pill-bg);border-radius:8px;flex-shrink:0;"><strong>標籤是「這位媽媽現在在哪裡」的地圖。</strong>對ZONE1打電話，成交率很低；對ZONE5打電話，每兩人就有一人購買。LC8T就是自動持續更新這張地圖的系統。</div>
 
-    <div style="flex:1;min-height:0;display:grid;grid-template-columns:1fr 440px;gap:12px;">
+    <!-- 列ヘッダー（右テーブル分のみ、左に合わせてオフセット） -->
+    <div style="flex-shrink:0;display:flex;gap:12px;align-items:center;">
+      <div style="width:24px;flex-shrink:0;"></div>
+      <div style="flex:1;"></div>
+      <div style="width:430px;flex-shrink:0;display:grid;grid-template-columns:44px repeat(5,1fr) 70px;padding:0 12px;">
+        <div></div>
+        <div style="font-size:13px;font-weight:700;color:var(--ac-aqua);text-align:right;">SS</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ac-blue);text-align:right;">S</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ac-lav);text-align:right;">AA</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ac-grey);text-align:right;">A</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink-dim);text-align:right;">B</div>
+        <div style="font-size:13px;font-weight:800;color:var(--ink);text-align:right;">合計</div>
+      </div>
+    </div>
 
-      <!-- 左：ZONEカード縦並び（温度計ライン付き） -->
-      <div style="display:flex;gap:10px;min-height:0;">
-        <!-- 温度計 -->
-        <div style="width:32px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px 0;flex-shrink:0;">
-          <div style="font-size:11px;color:var(--ink-dim);text-align:center;line-height:1.5;">🌡️<br>遠</div>
-          <div style="flex:1;width:3px;background:linear-gradient(to bottom,#C8D8EE 0%,#7AAEE0 30%,#4A7CC7 55%,#E0A04A 75%,#E07070 100%);border-radius:2px;margin:6px 0;"></div>
-          <div style="font-size:11px;color:var(--ac-rose);text-align:center;font-weight:700;line-height:1.5;">🔥<br>近</div>
-        </div>
-        <!-- ZONEカード -->
-        <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
-          <div style="flex:1;padding:8px 14px;background:var(--bg);border-radius:8px;border-left:5px solid #C8D8EE;">
-            <div style="font-size:13px;font-weight:800;color:var(--ink-dim);">ZONE 1　BCL登錄後不久　<span style="font-weight:500;color:#aaa;">購買率 ~2%</span></div>
-            <div style="font-size:13px;color:var(--ink-dim);margin-top:3px;">→ 「只是認識了巧虎」的狀態。從這裡開始累積標籤，縮短距離。</div>
-          </div>
-          <div style="flex:1;padding:8px 14px;background:var(--bg);border-radius:8px;border-left:5px solid var(--ac-sky);">
-            <div style="font-size:13px;font-weight:800;color:var(--ac-sky);">ZONE 2　開封並瀏覽訊息　<span style="font-weight:500;">購買率 ~10%</span></div>
-            <div style="font-size:13px;color:var(--ink-dim);margin-top:3px;">→ 開始產生興趣。傳遞商品別內容，培育成MD_標籤的階段。</div>
-          </div>
-          <div style="flex:1;padding:8px 14px;background:#F0F5FF;border-radius:8px;border-left:5px solid var(--ac-blue);">
-            <div style="font-size:13px;font-weight:800;color:var(--ac-blue);">ZONE 3　對特定商品有反應　<span style="font-weight:500;">購買率 25%　⭐ Super8培育的重要區域</span></div>
-            <div style="font-size:13px;color:var(--ink-sub);margin-top:3px;">MD_LINE選單學習館（~30%）、行為_MA學習館點擊（46%）→ 一旦有點擊的行為標籤，距離就一口氣縮短。</div>
-          </div>
-          <div style="flex:1;padding:8px 14px;background:#FFF8ED;border-radius:8px;border-left:5px solid #E0A04A;">
-            <div style="font-size:13px;font-weight:800;color:#C07020;">ZONE 4　主動行動　<span style="font-weight:500;">購買率 40%</span></div>
-            <div style="font-size:13px;color:var(--ink-sub);margin-top:3px;">點選轉接真人（59%）、先行通知希望（47%）、有興趣_語彙套組預購（64%）→ 對在聊天中按「想說話」的人打電話，結果截然不同。</div>
-          </div>
-          <div style="flex:1;padding:8px 14px;background:#FFF0F0;border-radius:8px;border-left:5px solid var(--ac-rose);">
-            <div style="font-size:13px;font-weight:800;color:var(--ac-rose);">ZONE 5　購買前夕・已購買者　<span style="font-weight:500;">購買率 56%　🔥 立刻行動</span></div>
-            <div style="font-size:13px;color:var(--ac-rose);margin-top:3px;">購物車未結帳（49.5%）・主動問詢（64%）・已購買→下個商品點擊（66.5%）→ 現在就應該行動的顧客。</div>
-          </div>
-        </div>
+    <div style="flex:1;min-height:0;display:flex;gap:12px;">
+
+      <!-- 温度計 -->
+      <div style="width:24px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="font-size:10px;color:var(--ink-dim);text-align:center;line-height:1.3;">🌡<br>遠</div>
+        <div style="flex:1;width:3px;background:linear-gradient(to bottom,var(--rule) 0%,var(--ac-blue) 45%,var(--ac-yellow) 72%,var(--ac-coral) 100%);border-radius:2px;margin:4px 0;"></div>
+        <div style="font-size:10px;color:var(--ac-coral);text-align:center;font-weight:700;line-height:1.3;">🔥<br>近</div>
       </div>
 
-      <!-- 右：月齢層×ZONE人数マトリクス -->
-      <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
-        <div class="ctitle">各ZONE人數分布　（出典：LINE標籤表 實測）</div>
-        <table style="width:100%;border-collapse:collapse;font-size:12px;flex:1;">
-          <thead>
-            <tr>
-              <th style="text-align:left;padding:5px 6px;font-weight:700;color:var(--ink-dim);border-bottom:2px solid var(--rule);">ZONE</th>
-              <th style="text-align:right;padding:5px 4px;font-weight:700;color:var(--ac-mint);border-bottom:2px solid var(--rule);">SS</th>
-              <th style="text-align:right;padding:5px 4px;font-weight:700;color:var(--ac-sky);border-bottom:2px solid var(--rule);">S</th>
-              <th style="text-align:right;padding:5px 4px;font-weight:700;color:var(--ac-lav);border-bottom:2px solid var(--rule);">AA</th>
-              <th style="text-align:right;padding:5px 4px;font-weight:700;color:var(--ac-grey);border-bottom:2px solid var(--rule);">A</th>
-              <th style="text-align:right;padding:5px 4px;font-weight:700;color:var(--ink-dim);border-bottom:2px solid var(--rule);">B</th>
-              <th style="text-align:right;padding:5px 6px;font-weight:800;color:var(--ink);border-bottom:2px solid var(--rule);">合計</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="background:var(--bg);">
-              <td style="padding:7px 6px;font-weight:700;color:var(--ink-dim);border-radius:4px 0 0 4px;">ZONE1</td>
-              <td style="padding:7px 4px;text-align:right;color:#aaa;">203</td>
-              <td style="padding:7px 4px;text-align:right;color:#aaa;">1,709</td>
-              <td style="padding:7px 4px;text-align:right;color:#aaa;">2,706</td>
-              <td style="padding:7px 4px;text-align:right;color:#aaa;">13,999</td>
-              <td style="padding:7px 4px;text-align:right;color:#aaa;">75,212</td>
-              <td style="padding:7px 6px;text-align:right;font-weight:800;color:var(--ink-dim);border-radius:0 4px 4px 0;">93,829</td>
-            </tr>
-            <tr style="height:4px;"><td colspan="7"></td></tr>
-            <tr style="background:#EEF6FF;">
-              <td style="padding:7px 6px;font-weight:700;color:var(--ac-sky);">ZONE2</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-sky);">2,311</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-sky);">11,229</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-sky);">10,139</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-sky);">39,960</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-sky);">87,134</td>
-              <td style="padding:7px 6px;text-align:right;font-weight:800;color:var(--ac-blue);">150,773</td>
-            </tr>
-            <tr style="height:4px;"><td colspan="7"></td></tr>
-            <tr style="background:#E8F0FF;">
-              <td style="padding:7px 6px;font-weight:700;color:var(--ac-blue);">ZONE3</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-blue);">1,112</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-blue);">8,174</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-blue);">4,154</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-blue);">3,888</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-blue);">3,465</td>
-              <td style="padding:7px 6px;text-align:right;font-weight:800;color:var(--ac-blue);">20,793</td>
-            </tr>
-            <tr style="height:4px;"><td colspan="7"></td></tr>
-            <tr style="background:#FFF4E0;">
-              <td style="padding:7px 6px;font-weight:700;color:#C07020;">ZONE4</td>
-              <td style="padding:7px 4px;text-align:right;color:#C07020;">61</td>
-              <td style="padding:7px 4px;text-align:right;color:#C07020;">874</td>
-              <td style="padding:7px 4px;text-align:right;color:#C07020;">486</td>
-              <td style="padding:7px 4px;text-align:right;color:#C07020;">118</td>
-              <td style="padding:7px 4px;text-align:right;color:#C07020;">37</td>
-              <td style="padding:7px 6px;text-align:right;font-weight:800;color:#C07020;">1,576</td>
-            </tr>
-            <tr style="height:4px;"><td colspan="7"></td></tr>
-            <tr style="background:#FFE8E8;">
-              <td style="padding:7px 6px;font-weight:700;color:var(--ac-rose);">ZONE5🔥</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-rose);">78</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-rose);">399</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-rose);">264</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-rose);">268</td>
-              <td style="padding:7px 4px;text-align:right;color:var(--ac-rose);">337</td>
-              <td style="padding:7px 6px;text-align:right;font-weight:800;color:var(--ac-rose);">1,346</td>
-            </tr>
-            <tr style="height:4px;"><td colspan="7"></td></tr>
-            <tr style="border-top:2px solid var(--rule);">
-              <td style="padding:7px 6px;font-weight:800;color:var(--ink);">合計</td>
-              <td style="padding:7px 4px;text-align:right;font-weight:700;">3,765</td>
-              <td style="padding:7px 4px;text-align:right;font-weight:700;">22,385</td>
-              <td style="padding:7px 4px;text-align:right;font-weight:700;">17,749</td>
-              <td style="padding:7px 4px;text-align:right;font-weight:700;">58,233</td>
-              <td style="padding:7px 4px;text-align:right;font-weight:700;">169,185</td>
-              <td style="padding:7px 6px;text-align:right;font-weight:800;color:var(--ac-blue);">270,317</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="ins mint" style="font-size:12px;flex-shrink:0;"><strong>ZONE4+5立即行動對象：2,922人。</strong>S層（13-24M）在ZONE3〜4最為集中。MD_＋行為_標籤齊備的瞬間，正是電銷的最佳時機。</div>
+      <!-- 左：ZONEカード列 -->
+      <div style="flex:1;display:flex;flex-direction:column;gap:5px;min-height:0;">
+
+        <div style="flex:1;background:var(--bg);border-radius:8px;border-left:5px solid var(--rule);display:flex;align-items:stretch;overflow:hidden;">
+          <div style="flex-shrink:0;width:200px;background:#B0BED0;padding:8px 14px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:14px;font-weight:800;color:rgba(255,255,255,0.9);">ZONE 1　BCL登錄後不久</div>
+            <div style="font-size:26px;font-weight:900;color:#fff;line-height:1.1;">~2%<span style="font-size:14px;font-weight:500;margin-left:4px;opacity:0.85;">購買率</span></div>
+          </div>
+          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ink-dim);line-height:1.55;">「只是認識了巧虎」的狀態。從這裡開始累積標籤，縮短距離。</div>
+        </div>
+
+        <div style="flex:1;background:var(--blue-lt);border-radius:8px;border-left:5px solid var(--ac-sky);display:flex;align-items:stretch;overflow:hidden;">
+          <div style="flex-shrink:0;width:200px;background:var(--ac-sky);padding:8px 14px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:14px;font-weight:800;color:rgba(255,255,255,0.9);">ZONE 2　開封並瀏覽訊息</div>
+            <div style="font-size:26px;font-weight:900;color:#fff;line-height:1.1;">~10%<span style="font-size:14px;font-weight:500;margin-left:4px;opacity:0.85;">購買率</span></div>
+          </div>
+          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ink-sub);line-height:1.55;">開始產生興趣。傳遞商品別內容，培育成MD_標籤的階段。</div>
+        </div>
+
+        <div style="flex:1;background:#E8F0FF;border-radius:8px;border-left:5px solid var(--ac-blue);display:flex;align-items:stretch;overflow:hidden;">
+          <div style="flex-shrink:0;width:200px;background:var(--ac-blue);padding:8px 14px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:14px;font-weight:800;color:rgba(255,255,255,0.9);">ZONE 3　對特定商品有反應 ⭐</div>
+            <div style="font-size:26px;font-weight:900;color:#fff;line-height:1.1;">25%<span style="font-size:14px;font-weight:500;margin-left:4px;opacity:0.85;">購買率</span></div>
+          </div>
+          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ink-sub);line-height:1.55;">MD_LINE選單學習館（~30%）、行為_MA學習館點擊（46%）→ 一旦有行為標籤，距離就一口氣縮短。</div>
+        </div>
+
+        <div style="flex:1;background:var(--yellow-lt);border-radius:8px;border-left:5px solid var(--ac-yellow);display:flex;align-items:stretch;overflow:hidden;">
+          <div style="flex-shrink:0;width:200px;background:var(--ac-yellow);padding:8px 14px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:14px;font-weight:800;color:rgba(60,40,0,0.8);">ZONE 4　主動行動</div>
+            <div style="font-size:26px;font-weight:900;color:#3A2800;line-height:1.1;">40%<span style="font-size:14px;font-weight:500;margin-left:4px;opacity:0.7;">購買率</span></div>
+          </div>
+          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ink-sub);line-height:1.55;">點選轉接真人（59%）、先行通知希望（47%）、有興趣_語彙套組預購（64%）→ 對在聊天中按「想說話」的人打電話，結果截然不同。</div>
+        </div>
+
+        <div style="flex:1;background:var(--coral-lt);border-radius:8px;border-left:5px solid var(--ac-coral);display:flex;align-items:stretch;overflow:hidden;">
+          <div style="flex-shrink:0;width:200px;background:var(--ac-coral);padding:8px 14px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:14px;font-weight:800;color:rgba(255,255,255,0.9);">ZONE 5　購買前夕・已購買者 🔥</div>
+            <div style="font-size:26px;font-weight:900;color:#fff;line-height:1.1;">56%<span style="font-size:14px;font-weight:500;margin-left:4px;opacity:0.85;">購買率</span></div>
+          </div>
+          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ac-coral);line-height:1.55;font-weight:600;">購物車未結帳（49.5%）・主動問詢（64%）・已購買→下個商品點擊（66.5%）→ 現在就應該行動。</div>
+        </div>
+
+      </div>
+
+      <!-- 右：ZONEごとの人数データ列（ヘッダーなし・縦位置完全一致） -->
+      <div style="width:430px;flex-shrink:0;display:flex;flex-direction:column;gap:5px;min-height:0;">
+
+        <div style="flex:1;background:var(--bg);border-radius:8px;border-left:5px solid var(--rule);display:grid;grid-template-columns:44px repeat(5,1fr) 70px;align-items:center;padding:0 12px;">
+          <div style="font-size:13px;font-weight:700;color:var(--ink-dim);">Z1</div>
+          <div style="font-size:15px;text-align:right;color:#aaa;">203</div>
+          <div style="font-size:15px;text-align:right;color:#aaa;">1,709</div>
+          <div style="font-size:15px;text-align:right;color:#aaa;">2,706</div>
+          <div style="font-size:15px;text-align:right;color:#aaa;">13,999</div>
+          <div style="font-size:15px;text-align:right;color:#aaa;">75,212</div>
+          <div style="font-size:16px;font-weight:800;text-align:right;color:var(--ink-dim);">93,829</div>
+        </div>
+
+        <div style="flex:1;background:var(--blue-lt);border-radius:8px;border-left:5px solid var(--ac-sky);display:grid;grid-template-columns:44px repeat(5,1fr) 70px;align-items:center;padding:0 12px;">
+          <div style="font-size:13px;font-weight:700;color:var(--ac-blue);">Z2</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">2,311</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">11,229</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">10,139</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">39,960</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">87,134</div>
+          <div style="font-size:16px;font-weight:800;text-align:right;color:var(--ac-blue);">150,773</div>
+        </div>
+
+        <div style="flex:1;background:#E8F0FF;border-radius:8px;border-left:5px solid var(--ac-blue);display:grid;grid-template-columns:44px repeat(5,1fr) 70px;align-items:center;padding:0 12px;">
+          <div style="font-size:13px;font-weight:700;color:var(--ac-blue);">Z3</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">1,112</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">8,174</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">4,154</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">3,888</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-blue);">3,465</div>
+          <div style="font-size:16px;font-weight:800;text-align:right;color:var(--ac-blue);">20,793</div>
+        </div>
+
+        <div style="flex:1;background:var(--yellow-lt);border-radius:8px;border-left:5px solid var(--ac-yellow);display:grid;grid-template-columns:44px repeat(5,1fr) 70px;align-items:center;padding:0 12px;">
+          <div style="font-size:13px;font-weight:700;color:#9A6010;">Z4</div>
+          <div style="font-size:15px;text-align:right;color:#9A6010;">61</div>
+          <div style="font-size:15px;text-align:right;color:#9A6010;">874</div>
+          <div style="font-size:15px;text-align:right;color:#9A6010;">486</div>
+          <div style="font-size:15px;text-align:right;color:#9A6010;">118</div>
+          <div style="font-size:15px;text-align:right;color:#9A6010;">37</div>
+          <div style="font-size:16px;font-weight:800;text-align:right;color:#9A6010;">1,576</div>
+        </div>
+
+        <div style="flex:1;background:var(--coral-lt);border-radius:8px;border-left:5px solid var(--ac-coral);display:grid;grid-template-columns:44px repeat(5,1fr) 70px;align-items:center;padding:0 12px;">
+          <div style="font-size:13px;font-weight:700;color:var(--ac-coral);">Z5 🔥</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-coral);">78</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-coral);">399</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-coral);">264</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-coral);">268</div>
+          <div style="font-size:15px;text-align:right;color:var(--ac-coral);">337</div>
+          <div style="font-size:16px;font-weight:800;text-align:right;color:var(--ac-coral);">1,346</div>
+        </div>
+
       </div>
 
     </div>
+
   </div>
 </div>
 
@@ -1773,7 +1784,7 @@ const titles = [
   ['CH.06','O 行動'],['CH.06','AOV擴大'],['CH.06','N 行動'],['CH.06','CV 行動'],['CH.06','I 行動'],['CH.06','最終訊息']
 ];
 const chDots = document.getElementById('ch-dots');
-const dotColors = {'CH.00':'#4A7CC7','CH.01':'#7AAEE0','CH.02':'#6AB08A','CH.03':'#8B9ED4','CH.04':'#E07070','CH.05':'#F0C050','CH.06':'#C4B898'};
+const dotColors = {'CH.00':'#4A7CC7','CH.01':'#4A7CC7','CH.02':'#3AAFA0','CH.03':'#3AAFA0','CH.04':'#E07060','CH.05':'#E8B840','CH.06':'#2B3A6B'};
 const uniqueChs = [...new Set(titles.map(t=>t[0]))];
 uniqueChs.forEach(ch=>{
   const d=document.createElement('div');
@@ -2222,6 +2233,20 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
       allSlides.forEach((s,j)=>{
         s.style.display = j===i ? 'flex' : 'none';
       });
+
+      // topbarをそのスライドのch/titleに更新
+      if(typeof titles !== 'undefined' && titles[i]){
+        const [ch, title] = titles[i];
+        const tbarCh = document.getElementById('tbar-ch');
+        const tbarTitle = document.getElementById('tbar-title');
+        const counter = document.getElementById('slide-counter');
+        if(tbarCh) tbarCh.textContent = ch;
+        if(tbarTitle) tbarTitle.textContent = title;
+        if(counter) counter.textContent = `${i+1} / ${allSlides.length}`;
+        document.querySelectorAll('.ch-dot').forEach(d=>{
+          d.style.opacity = d.getAttribute('data-ch')===ch ? '1' : '0.35';
+        });
+      }
 
       // グラフ描画・レイアウト確定を待つ
       await new Promise(r=>setTimeout(r, 300));
