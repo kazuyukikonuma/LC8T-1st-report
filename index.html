@@ -1994,7 +1994,7 @@ new Chart('c-birth',{type:'bar',data:{
     {type:'bar',label:'BCL保有数',data:[18200,16800,17900,18600,16400,14200,6400],backgroundColor:AB+'88',yAxisID:'y',borderRadius:3},
     {type:'line',label:'覆蓋率%',data:[12.1,11.8,12.8,13.4,13.1,9.8,5.9],borderColor:AR,backgroundColor:AR+'33',yAxisID:'y2',tension:0.3,pointRadius:3}
   ]
-},options:{responsive:true,maintainAspectRatio:false,
+},options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
   plugins:{legend:{display:true,position:'top',labels:{font:{size:9},boxWidth:10,padding:6}}},
   scales:{
     x:{grid:{display:false},ticks:{color:INK2,font:{size:9}}},
@@ -2010,7 +2010,7 @@ new Chart('c-layer-cvr',{type:'bar',data:{
     {label:'月刊経験あり',data:[12,45,38,52,61],backgroundColor:AB+'cc',borderRadius:3},
     {label:'月刊経験なし',data:[88,55,62,48,39],backgroundColor:AS+'66',borderRadius:3}
   ]
-},options:{responsive:true,maintainAspectRatio:false,
+},options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
   plugins:{legend:{display:true,position:'top',labels:{font:{size:9},boxWidth:10,padding:6}}},
   scales:{
     x:{stacked:true,grid:{display:false},ticks:{color:INK2,font:{size:9}}},
@@ -2031,7 +2031,7 @@ new Chart('c-layer-cvr',{type:'bar',data:{
       {type:'bar',label:'新顧客',data:newC,backgroundColor:AB+'99',borderRadius:2,stack:'s'},
       {type:'line',label:'新顧客比率%',data:newRatio,borderColor:AM,backgroundColor:'transparent',yAxisID:'y2',tension:0.3,pointRadius:3}
     ]
-  },options:{responsive:true,maintainAspectRatio:false,
+  },options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
     plugins:{legend:{display:true,position:'top',labels:{font:{size:9},boxWidth:10,padding:4}}},
     scales:{
       x:{stacked:true,grid:{display:false},ticks:{color:INK2,font:{size:8}}},
@@ -2049,7 +2049,7 @@ new Chart('c-tag-qual',{type:'bar',data:{
     backgroundColor:[RULE,RULE,AS+'88',AB+'66',AB+'99',AM+'88',AR+'cc',AB+'cc'],
     borderRadius:4
   }]
-},options:{responsive:true,maintainAspectRatio:false,
+},options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},
   scales:{
     x:{grid:{display:false},ticks:{color:INK2,font:{size:8}}},
@@ -2065,7 +2065,7 @@ new Chart('c-combo',{type:'bar',data:{
     backgroundColor:[AS+'66',AS+'88',AB+'cc',AR+'cc'],
     borderRadius:4
   }]
-},options:{responsive:true,maintainAspectRatio:false,
+},options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},
   scales:{
     x:{grid:{display:false},ticks:{color:INK2,font:{size:9}}},
@@ -2081,7 +2081,7 @@ new Chart('c-md',{type:'bar',data:{
     backgroundColor:[RULE,AS+'88',AB+'77',AB+'99',AB+'cc'],
     borderRadius:4
   }]
-},options:{responsive:true,maintainAspectRatio:false,
+},options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},
   scales:{
     x:{grid:{display:false},ticks:{color:INK2,font:{size:9}}},
@@ -2403,7 +2403,7 @@ window.addEventListener('resize',scaleStage);
       backgroundColor:[RULE,AB+'99',AM+'99','#8A6AB0cc'],
       borderRadius:4,borderWidth:0
     }]
-  },options:{responsive:true,maintainAspectRatio:false,
+  },options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`NT$${c.raw.toLocaleString()}`}}},
     scales:{
       x:{grid:{display:false},ticks:{color:INK2,font:{size:9}}},
@@ -2419,7 +2419,7 @@ window.addEventListener('resize',scaleStage);
       backgroundColor:[AB+'55',AM+'99',AM+'cc',AM+'ff'],
       borderRadius:4,borderWidth:0
     }]
-  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.toLocaleString()}人`}}},
     scales:{
       x:{grid:{color:RULE},ticks:{color:INK2,font:{size:9}}},
@@ -2435,7 +2435,7 @@ window.addEventListener('resize',scaleStage);
       {label:'2SKU',data:[25.7,27.9],backgroundColor:AB+'88',borderRadius:0},
       {label:'3SKU以上',data:[17.8,27.9],backgroundColor:AB+'cc',borderRadius:0},
     ]
-  },options:{responsive:true,maintainAspectRatio:false,
+  },options:{responsive:true,maintainAspectRatio:false,devicePixelRatio:2,
     plugins:{legend:{display:true,position:'bottom',labels:{font:{size:9},boxWidth:10,padding:4}}},
     scales:{
       x:{stacked:true,grid:{display:false},ticks:{color:INK2,font:{size:10}}},
