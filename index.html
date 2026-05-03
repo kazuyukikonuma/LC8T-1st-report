@@ -180,20 +180,98 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
 .pill-o{background:#FFF3E0;color:#C07820;} .pill-n{background:var(--blue-lt);color:var(--ac-blue);}
 .pill-cv{background:var(--aqua-lt);color:var(--ac-aqua);} .pill-i{background:#F5F0F8;color:#7A5A9A;}
 
-/* ── 日本語表示時のレイアウト調整 ── */
-body[data-lang="ja"] .keymsg-txt{font-size:28px;}
-body[data-lang="ja"] .keymsg-sub{font-size:15px;}
-body[data-lang="ja"] .slide-inner{gap:8px;}
-body[data-lang="ja"] .ins{font-size:14px;line-height:1.65;}
-body[data-lang="ja"] .action-body{font-size:15px;}
-body[data-lang="ja"] .hot-lbl{font-size:15px;}
-body[data-lang="ja"] .hot-sub{font-size:13px;}
-body[data-lang="ja"] .slide:first-of-type [style*="font-size:22px"]{font-size:18px !important;}
-body[data-lang="ja"] .slide:first-of-type [style*="font-size:19px"]{font-size:15px !important;}
-body[data-lang="ja"] .g3 .card,
-body[data-lang="ja"] .g2 .card{font-size:14px;line-height:1.6;}
-body[data-lang="ja"] .sec-tag{font-size:14px;}
-body[data-lang="ja"] .kpi-val{font-size:inherit;}
+/* =============================================
+   日本語表示：stage全体をscaleで縮小
+   ============================================= */
+
+body[data-lang="ja"] #stage {
+  transform: scale(0.87);
+  transform-origin: top left;
+  width: calc(1280px / 0.87);
+  height: calc(720px / 0.87);
+}
+
+body[data-lang="ja"] {
+  overflow: hidden;
+}
+
+/* インラインfont-sizeを属性セレクタで上書き */
+body[data-lang="ja"] [style*="font-size:19px"],
+body[data-lang="ja"] [style*="font-size: 19px"] {
+  font-size: 16px !important;
+}
+body[data-lang="ja"] [style*="font-size:18px"],
+body[data-lang="ja"] [style*="font-size: 18px"] {
+  font-size: 15px !important;
+}
+body[data-lang="ja"] [style*="font-size:17px"],
+body[data-lang="ja"] [style*="font-size: 17px"] {
+  font-size: 14px !important;
+}
+body[data-lang="ja"] [style*="font-size:16px"],
+body[data-lang="ja"] [style*="font-size: 16px"] {
+  font-size: 14px !important;
+}
+body[data-lang="ja"] [style*="font-size:15px"],
+body[data-lang="ja"] [style*="font-size: 15px"] {
+  font-size: 13px !important;
+}
+body[data-lang="ja"] [style*="font-size:14px"],
+body[data-lang="ja"] [style*="font-size: 14px"] {
+  font-size: 12px !important;
+}
+
+/* keymsg系 */
+body[data-lang="ja"] .keymsg-txt {
+  font-size: 26px !important;
+  line-height: 1.2 !important;
+}
+body[data-lang="ja"] .keymsg-sub {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+body[data-lang="ja"] .keymsg-eye {
+  font-size: 11px !important;
+}
+
+/* kpi-val（数値）は縮小しない */
+body[data-lang="ja"] .kpi-val {
+  font-size: clamp(20px, 3vw, 32px) !important;
+}
+
+/* slide-innerのgapを詰める */
+body[data-lang="ja"] .slide-inner {
+  gap: 7px !important;
+}
+
+/* ins（インサイトボックス） */
+body[data-lang="ja"] .ins {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  padding: 8px 12px !important;
+}
+
+/* hot-row（ZONE行） */
+body[data-lang="ja"] .hot-row {
+  padding: 7px 12px !important;
+}
+
+/* g3グリッドのgapを詰める */
+body[data-lang="ja"] .g3 {
+  gap: 8px !important;
+}
+
+/* Slide15 SKUカード見切れ対応 */
+body[data-lang="ja"] .g3 > div,
+body[data-lang="ja"] .g3 > .card {
+  overflow: visible !important;
+  min-height: 0 !important;
+}
+
+/* sec-tag */
+body[data-lang="ja"] .sec-tag {
+  font-size: 13px !important;
+}
 </style>
 </head>
 <body>
@@ -242,15 +320,15 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- ①現状報告 -->
     <div style="flex-shrink:0;background:var(--blue-lt);border-left:4px solid var(--ac-blue);border-radius:0 8px 8px 0;padding:14px 20px;">
       <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;color:var(--ac-blue);margin-bottom:6px;" data-ja="① 現在位置の確認">① 現在位置確認</div>
-      <div style="font-size:22px;font-weight:900;color:var(--topbar-bg);margin-bottom:6px;" data-ja="FY25のデータでTBBS・LC8T戦略の現在位置を確認した。">FY25的數據已確認TBBS・LC8T戰略的現在位置。</div>
-      <div style="font-size:19px;color:var(--ink-sub);line-height:1.75;" data-ja="BCL母数・購入転換率・電話販売効率・高ポテンシャル顧客分布——主要データはすべて整理済みです。P(LTV) = O × N × CV − I のフレームワークにより、各変数の現状と改善余地を明確に把握しました。">BCL母數・購買轉換率・電銷效率・高潛力顧客分布——所有關鍵數據已整理完畢。P(LTV) = O × N × CV − I 框架讓我們清楚掌握每個變數的現狀與改善空間。</div>
+      <div style="font-size:22px;font-weight:900;color:var(--topbar-bg);margin-bottom:6px;" data-ja="FY25のデータが、私たちの現在地を証明した。">FY25的數據已確認TBBS・LC8T戰略的現在位置。</div>
+      <div style="font-size:19px;color:var(--ink-sub);line-height:1.75;" data-ja="BCL母数・購入転換率・電話販売効率・高ポテンシャル顧客分布——主要データはすべて整理済み。P(LTV) = O × N × CV − I のフレームワークで、各変数の現状と改善余地を明確に把握できている。">BCL母數・購買轉換率・電銷效率・高潛力顧客分布——所有關鍵數據已整理完畢。P(LTV) = O × N × CV − I 框架讓我們清楚掌握每個變數的現狀與改善空間。</div>
     </div>
 
     <!-- ②課題 -->
     <div style="flex-shrink:0;background:#FFFBF0;border-left:4px solid #E0A020;border-radius:0 8px 8px 0;padding:14px 20px;">
       <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;color:var(--ac-yellow);margin-bottom:6px;" data-ja="② 目下まだ完了していないこと">② 目前尚未完成的事</div>
-      <div style="font-size:22px;font-weight:900;color:var(--topbar-bg);margin-bottom:6px;" data-ja="AIが読み取るための「行動情報」の整備がまだ完了していない。">讓AI讀取的「行動資訊」尚未整備完成。</div>
-      <div style="font-size:19px;color:var(--ink-sub);line-height:1.75;" data-ja="データは蓄積中ですが、<strong style=&quot;color:var(--ac-yellow);&quot;>商品情報・業務行動・システム運用</strong>の行動データはまだAI可読形式に整備されていません。各担当者の業務コンテキストも未整備で、AIの力を十分に発揮できていません。">數據雖在累積，但<strong style="color:var(--ac-yellow);">商品資訊・業務行為・業務系統運用</strong>等行動數據尚未整理成AI可讀取的形式。各負責人的業務情境（AI深度諮詢所需的前提資訊）也未整備，導致無法充分發揮AI的力量。</div>
+      <div style="font-size:22px;font-weight:900;color:var(--topbar-bg);margin-bottom:6px;" data-ja="AIに読ませるべき「行動情報」が、まだ揃っていない。">讓AI讀取的「行動資訊」尚未整備完成。</div>
+      <div style="font-size:19px;color:var(--ink-sub);line-height:1.75;" data-ja="データは蓄積中だが、<strong style=&quot;color:var(--ac-yellow);&quot;>商品情報・業務行動・システム運用</strong>の行動データはまだAI可読形式に整備されていない。各担当者の業務コンテキストも未整備で、AIの力を十分に発揮できていない。">數據雖在累積，但<strong style="color:var(--ac-yellow);">商品資訊・業務行為・業務系統運用</strong>等行動數據尚未整理成AI可讀取的形式。各負責人的業務情境（AI深度諮詢所需的前提資訊）也未整備，導致無法充分發揮AI的力量。</div>
     </div>
 
     <!-- ③行動方針 -->
@@ -258,19 +336,19 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
       <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;color:var(--ac-aqua);flex-shrink:0;" data-ja="③ 行動方針">③ 行動方針</div>
       <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;min-height:0;">
         <div style="background:var(--aqua-lt);border:1.5px solid #90D0B0;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-size:11px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;" data-ja="行動データ整備">行動數據整備</div>
+          <div style="font-size:11px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;" data-ja="データを整える">行動數據整備</div>
           <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);line-height:1.4;" data-ja="全社でデータを整備し、担当者がデータ整理に時間を取られない状態にする">全公司整備數據，讓負責人不花時間在數據整理上</div>
-          <div style="font-size:15px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="商品情報・業務行動・業務システム運用をデータ化します。結果データと突合し、ROI視点の改善サイクルを構築します。">將商品資訊・業務行為・業務系統運用數據化。與結果數據比對，建構ROI觀點的改善循環。</div>
+          <div style="font-size:15px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="商品情報・業務行動・業務システム運用をデータ化する。結果データと突合し、ROI視点の改善サイクルを構築する。">將商品資訊・業務行為・業務系統運用數據化。與結果數據比對，建構ROI觀點的改善循環。</div>
         </div>
         <div style="background:var(--aqua-lt);border:1.5px solid #90D0B0;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-size:11px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;" data-ja="業務コンテキスト整備">業務情境整備</div>
+          <div style="font-size:11px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;" data-ja="AIと深く話せるようになる">業務情境整備</div>
           <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);line-height:1.4;" data-ja="各担当者がAIと深く対話できる業務コンテキストを構築する">各負責人建構能與AI深度溝通的業務情境</div>
-          <div style="font-size:15px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="言語化力を強化し、業務・意図・判断基準をAIが理解できる形に整理します。AIを思考のパートナーとして、その潜在力を最大限に引き出します。">強化語言化能力，將業務・意圖・判斷基準整理成AI能理解的形式。以AI作為思考夥伴，充分發揮其潛力。</div>
+          <div style="font-size:15px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="言語化力を強化し、業務・意図・判断基準をAIが理解できる形に整理する。AIを思考のパートナーとして、その潜在力を最大限に引き出す。">強化語言化能力，將業務・意圖・判斷基準整理成AI能理解的形式。以AI作為思考夥伴，充分發揮其潛力。</div>
         </div>
         <div style="background:var(--aqua-lt);border:1.5px solid #90D0B0;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-size:11px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;" data-ja="フレームワークの全社浸透">框架全社浸透</div>
+          <div style="font-size:11px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;" data-ja="全員が同じ地図を持つ">框架全社浸透</div>
           <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);line-height:1.4;" data-ja="TBBS・LC8T・P(LTV)のフレームワークで全員が同じ方向を向く">TBBS・LC8T・P(LTV)框架讓全員朝向同一方向</div>
-          <div style="font-size:15px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="各担当者がP(LTV)で自身の業務を分解し、AIを活用して企画・立案・執行を行い、利益に直結する組織へ転換します。">讓各負責人以P(LTV)分解自己的工作，活用AI進行企劃・立案・執行，轉型為直接連結利益的組織。</div>
+          <div style="font-size:15px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="各担当者がP(LTV)で自身の業務を分解し、AIを活用して企画・立案・執行を行い、利益に直結する組織へ転換する。">讓各負責人以P(LTV)分解自己的工作，活用AI進行企劃・立案・執行，轉型為直接連結利益的組織。</div>
         </div>
       </div>
     </div>
@@ -285,8 +363,8 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- キーメッセージ -->
     <div class="keymsg" style="flex-shrink:0;padding:16px 24px;">
       <div class="keymsg-eye" data-ja="基礎">基礎</div>
-      <div class="keymsg-txt" style="font-size:36px;" data-ja="台北支社の持続的成長は、この公式が駆動する。">台北分公司的永續成長，由這個公式驅動。</div>
-      <div class="keymsg-sub" style="font-size:15px;margin-top:8px;" data-ja="少子化という不可逆な市場縮小に対し、台北支社が持続的に利益を生む構造を一つの公式で表します。">面對少子化這一不可逆的市場萎縮，用一個公式表達台北分公司持續獲利的結構。</div>
+      <div class="keymsg-txt" style="font-size:36px;" data-ja="台北支社の成長は、この公式一つで動いている。">台北分公司的永續成長，由這個公式驅動。</div>
+      <div class="keymsg-sub" style="font-size:15px;margin-top:8px;" data-ja="少子化という不可逆な市場縮小に対し、台北支社が持続的に利益を生む構造を一つの公式で表す。">面對少子化這一不可逆的市場萎縮，用一個公式表達台北分公司持續獲利的結構。</div>
     </div>
 
     <!-- 公式 + 変数解説 -->
@@ -380,7 +458,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- MARKET INSIGHT -->
     <div style="background:linear-gradient(135deg,var(--topbar-bg),#2A6090);border-radius:10px;padding:16px 28px;color:#fff;flex-shrink:0;">
       <div style="font-size:11px;letter-spacing:0.18em;opacity:0.7;margin-bottom:6px;">MARKET INSIGHT</div>
-      <div style="font-size:26px;font-weight:800;line-height:1.3;" data-ja="子どもは減ったが、一人ひとりにかける金額は<em style=&quot;font-style:normal;color:var(--ac-lemon);&quot;>減っていない。</em>">孩子變少了，但每個孩子身上花的錢<em style="font-style:normal;color:var(--ac-lemon);">沒有減少。</em></div>
+      <div style="font-size:26px;font-weight:800;line-height:1.3;" data-ja="子どもは減った。でも一人にかける金額は、<em style=&quot;font-style:normal;color:var(--ac-lemon);&quot;>減っていない。</em>">孩子變少了，但每個孩子身上花的錢<em style="font-style:normal;color:var(--ac-lemon);">沒有減少。</em></div>
       <div style="font-size:15px;opacity:0.9;line-height:1.65;margin-top:8px;" data-ja="台湾の出生数は13.4万人まで減少（2024年・過去最低）。母子向け市場の年商は<strong>850億NTD</strong>に達し、前年比+8.5%。少子化 ≠ 市場縮小——むしろ<strong>一人の顧客価値が高まっている</strong>。">台灣出生數降至13.4萬（2024年歷史新低）。母嬰市場年產值仍達<strong>850億元</strong>，年增8.5%。少子化 ≠ 市場縮小——而是<strong>每一個顧客的價值更高</strong>。</div>
     </div>
 
@@ -419,7 +497,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
               <span style="font-size:13px;background:#BDD8FF;color:#003080;padding:3px 10px;border-radius:20px;font-weight:700;" data-ja="✅ 主戦場">✅ 主要戰場</span>
             </div>
           </div>
-          <div style="padding:8px 16px;font-size:14px;color:var(--ink-sub);" data-ja="FY25自社実績4.93億NTD ≒ 市場の3〜5%。<strong>認知度97%のブランドが、なぜシェアはこれほど小さいのか？——これこそ LC8T が解くべき本丸の課題です。</strong>">FY25自家業績4.93億元 ≒ 市場的3〜5%。<strong>知名度97%的品牌，為何份額這麼小？——這正是LC8T要解決的核心問題。</strong></div>
+          <div style="padding:8px 16px;font-size:14px;color:var(--ink-sub);" data-ja="FY25自社実績4.93億NTD ≒ 市場の3〜5%。<strong>認知度97%のブランドが、なぜシェアはこれほど小さいのか？——これこそ LC8T が解くべき本丸の課題だ。</strong>">FY25自家業績4.93億元 ≒ 市場的3〜5%。<strong>知名度97%的品牌，為何份額這麼小？——這正是LC8T要解決的核心問題。</strong></div>
         </div>
 
         <div style="border-radius:8px;border:1.5px solid var(--ac-lav);overflow:hidden;">
@@ -471,7 +549,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
           </div>
         </div>
         <!-- insights -->
-        <div class="ins" style="font-size:16px;" data-ja="<strong>市場の99.5%にはまだ届いていない。</strong>認知度97%のブランドが、市場ではわずか0.5%——これは危機ではなく、<strong>LTV×共創SKU戦略の最も強い根拠だ。</strong>"><strong>99.5%的市場尚未被我們觸及。</strong>知名度97%的品牌，只佔市場的0.5%——這不是危機，而是<strong>LTV×共創SKU策略最有力的根據。</strong></div>
+        <div class="ins" style="font-size:16px;" data-ja="<strong>99.5%の市場に、まだ届いていない。</strong>97%が知っているのに0.5%しか取れていない——これは危機じゃない。<strong>伸びしろだ。</strong>"><strong>99.5%的市場尚未被我們觸及。</strong>知名度97%的品牌，只佔市場的0.5%——這不是危機，而是<strong>LTV×共創SKU策略最有力的根據。</strong></div>
         <div class="ins mint" style="font-size:16px;" data-ja="<strong>少子化 ≠ 市場縮小。</strong>子ども一人あたりに親が投じる金額は増えている。「育児の高付加価値化」時代こそ、LC8T の核心となる機会だ。"><strong>少子化 ≠ 市場縮小。</strong>每個孩子的父母將投入更多。這是「精緻化育兒」時代LC8T的核心機會。</div>
       </div>
 
@@ -487,8 +565,8 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div class="sec-tag" data-ja="<div class=&quot;sec-num&quot;>01</div> N（母数）の現状 — BCLデータベース"><div class="sec-num">01</div> N（母數）的現況 — BCL 資料庫</div>
     <div class="keymsg">
       <div class="keymsg-eye" data-ja="BCL データベース">BCL 資料庫</div>
-      <div class="keymsg-txt" data-ja="ブランド認知率97%、しかし市場の9.1%しか保有していない。">品牌認知率97%，卻只擁有市場的9.1%。</div>
-      <div class="keymsg-sub" data-ja="これは問題ではなく、潜在力の大きさだ。91%のお母さんはまだ我々のDBにいない。">這不是問題，而是潛力的大小。91%的媽媽們還不在我們的DB裡。</div>
+      <div class="keymsg-txt" data-ja="97%が知っている。なのに9.1%しか持っていない。">品牌認知率97%，卻只擁有市場的9.1%。</div>
+      <div class="keymsg-sub" data-ja="問題じゃない。91%のお母さんが、まだ外にいる。それだけの話だ。">這不是問題，而是潛力的大小。91%的媽媽們還不在我們的DB裡。</div>
     </div>
     <div class="g4">
       <div class="kpi-box blue"><div class="kpi-lbl" data-ja="DB総数">DB總數</div><div class="kpi-val">21.2<small style="font-size:13px;font-weight:500;opacity:0.7;">万人</small></div><div class="kpi-nte" data-ja="有効＋無効BCL合計">有效＋無效BCL合計</div></div>
@@ -571,12 +649,12 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div style="flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       <div style="background:linear-gradient(135deg,var(--blue-lt),#E0EAFF);border-radius:12px;border-left:5px solid var(--ac-blue);padding:14px 18px;">
         <div style="font-size:11px;font-weight:700;color:var(--ac-blue);letter-spacing:0.1em;margin-bottom:6px;" data-ja="① 新規顧客獲得 × 低月齢でのエントリー">① 新顧客獲取 × 低月齡進入</div>
-        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px;" data-ja="妊娠期・乳児期から多様なSKUを継続販売し、<br>LTVを最大化する">從孕期・嬰兒期開始，<br>持續銷售多元SKU，最大化LTV</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px;" data-ja="妊娠期から始めて、ずっと関係を続ける。<br>それがLTVを最大化する唯一の道だ。">從孕期・嬰兒期開始，<br>持續銷售多元SKU，最大化LTV</div>
         <div style="font-size:13px;color:var(--ink-sub);line-height:1.65;" data-ja="新規BCL獲得を拡大 → 低月齢層をDBに取り込む<br>0M から月齢にあった商品を提供 → 継続購入 → LTV向上<br><span style=&quot;color:var(--ac-blue);font-weight:700;&quot;>月齢精度 × LC8T = 最も効率的な新規顧客育成</span>">擴大新BCL獲取 → 低月齡層進入DB<br>從0M起提供適齡商品 → 持續購買 → LTV提升<br><span style="color:var(--ac-blue);font-weight:700;">月齡精準度 × LC8T = 最高效率的新客育成</span></div>
       </div>
       <div style="background:linear-gradient(135deg,#FFF4F0,#FFE8E0);border-radius:12px;border-left:5px solid var(--ac-rose);padding:14px 18px;">
         <div style="font-size:11px;font-weight:700;color:var(--ac-rose);letter-spacing:0.1em;margin-bottom:6px;" data-ja="② 既存顧客 × オンライン商品の提案">② 既有顧客 × 上線商品提案</div>
-        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px;" data-ja="37M以上は重要資産。<br>ステージショー・オンライン商品が継続購買を生む">37M以上是重要資產，<br>舞台劇・上線商品持續創造購買</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px;" data-ja="37M以上は、終わりじゃない。<br>ステージショーとオンライン商品が、次の購買を生む。">37M以上是重要資產，<br>舞台劇・上線商品持續創造購買</div>
         <div style="font-size:13px;color:var(--ink-sub);line-height:1.65;" data-ja="A・B層は月刊終了後も購買ポテンシャルあり<br>36M以上のSKU・ステージショーを積極的に提案<br><span style=&quot;color:var(--ac-rose);font-weight:700;&quot;>既存DB = いま即動かせる即戦力資産</span>">A・B層月刊結束後仍有購買潛力<br>積極提案36M以上的SKU・舞台劇<br><span style="color:var(--ac-rose);font-weight:700;">既有DB = 現在就能立即行動的即戰力資產</span></div>
       </div>
     </div>
@@ -611,7 +689,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div class="sec-tag" style="flex-shrink:0;" data-ja="<div class=&quot;sec-num&quot;>02</div> BCL アクティベーション設計 vs 実購入月齢"><div class="sec-num">02</div> BCL活化設計 vs 實際購買月齡</div>
     <!-- 説明 + 凡例 を1行に統合 -->
     <div style="flex-shrink:0;display:flex;align-items:center;gap:16px;padding:8px 14px;background:var(--pill-bg);border-radius:6px;font-size:12px;">
-      <div style="color:var(--ink-sub);flex:1;" data-ja="<strong>アクティベーション設計M</strong>と<strong>実購入月齢（WEB・TM・KOL）</strong>の比較。ギャップ = 機会損失。"><strong>活化設計M</strong>與<strong>實際購買月齡（WEB・TM・KOL）</strong>的比較。落差 = 機會損失。</div>
+      <div style="color:var(--ink-sub);flex:1;" data-ja="設計と現実のズレが、そのまま機会損失になっている。"><strong>活化設計M</strong>與<strong>實際購買月齡（WEB・TM・KOL）</strong>的比較。落差 = 機會損失。</div>
       <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
         <div style="display:flex;align-items:center;gap:4px;"><div style="width:16px;height:0;border-top:2px dashed var(--ac-rose);"></div><span style="font-size:11px;" data-ja="設計M">設計M</span></div>
         <div style="display:flex;align-items:center;gap:4px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--ac-blue);"></div><span style="font-size:11px;">WEB</span></div>
@@ -638,7 +716,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div class="sec-tag" style="flex-shrink:0;" data-ja="<div class=&quot;sec-num&quot;>03</div> CV（転換率）の核心 — タグの力"><div class="sec-num">03</div> CV（轉換率）的核心 — 標籤力量</div>
     <div class="keymsg" style="flex-shrink:0;padding:14px 22px;">
       <div class="keymsg-eye" data-ja="タグの力 — 実データ">標籤力量 — 真實數據</div>
-      <div class="keymsg-txt" style="font-size:30px;" data-ja="タグが購入率を変える。これは仮説ではなく実測データだ。">標籤改變購買率。這不是假設，而是實測數據。</div>
+      <div class="keymsg-txt" style="font-size:30px;" data-ja="タグが購買率を変える。仮説じゃない、30万人の実測だ。">標籤改變購買率。這不是假設，而是實測數據。</div>
       <div class="keymsg-sub" style="font-size:14px;margin-top:6px;" data-ja="30万人DBから算出した実数値が示すこと：タグの数量と品質が、購入確率を決定的に変える。">從30萬人DB計算出的真實數字告訴我們：標籤的數量與品質，決定性地改變了購買機率。</div>
     </div>
 
@@ -728,7 +806,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
         <div class="ctitle" data-ja="タグ数 × 購入率（全層統合）">標籤數量 × 購買率（全層整合）</div>
         <div id="tag-bars" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;padding:4px 0;overflow:hidden;"></div>
         <div class="g2" style="margin-top:8px;gap:8px;">
-          <div class="ins" data-ja="<strong>タグ1〜5個：0.6% → タグ31〜50個：38.2%</strong><br>30個を超えると、購入率はDB平均の<strong>12倍</strong>に達する。"><strong>標籤1〜5個：0.6% → 標籤31〜50個：38.2%</strong><br>超過30個標籤，購買率就達到DB平均的<strong>12倍</strong>。</div>
+          <div class="ins" data-ja="タグ1〜5個なら0.6%。30個を超えると38.2%。タグを積むことが、そのまま購買率を上げることだ。"><strong>標籤1〜5個：0.6% → 標籤31〜50個：38.2%</strong><br>超過30個標籤，購買率就達到DB平均的<strong>12倍</strong>。</div>
           <div class="ins" data-ja="<strong>タグ51個以上：52.1%</strong><br>2人に1人以上が購入。タグの蓄積はそのまま購入確率の上昇につながる。"><strong>標籤51個以上：52.1%</strong><br>超過每兩人就有一人購買。累積標籤，就等於提升購買機率。</div>
         </div>
       </div>
@@ -736,7 +814,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
         <div class="ctitle" data-ja="タグ種類別の購入率（DB全体保有者ベース）">標籤種類別購買率（以DB全體持有者計算）</div>
         <div class="ch" style="flex:1;min-height:150px;"><canvas id="c-tag-qual"></canvas></div>
         <div class="g2" style="margin-top:8px;gap:8px;">
-          <div class="ins" data-ja="<strong>カートタグ保有：49.5%（DB平均の17倍）</strong><br>711人がまだ購入未完了——いま追跡すべき。"><strong>持有購物車標籤：49.5%（DB平均的17倍）</strong><br>711人仍未完成購買——現在就應該追蹤。</div>
+          <div class="ins" data-ja="カートに入れて止まった人が711人いる。購買率49.5%。今すぐ動くべき層だ。"><strong>持有購物車標籤：49.5%（DB平均的17倍）</strong><br>711人仍未完成購買——現在就應該追蹤。</div>
           <div class="ins mint" data-ja="<strong>MD_タグ（商品別関心）は積み上がるほど購入率が加速：</strong><br>0個 2.6% → 1個 14% → 2個 25.9% → 3個 <strong>50%</strong> → 4個+ <strong>87.5%</strong>"><strong>MD_標籤（商品別興趣）累積越多，購買率加速越快：</strong><br>無2.6% → 1個14% → 2個25.9% → 3個<strong>50%</strong> → 4個+<strong>87.5%</strong></div>
         </div>
       </div>
@@ -750,7 +828,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
 <div class="slide" data-ch="03" data-title="距離地圖 — ZONE定義">
   <div class="slide-inner" style="gap:10px;">
     <div class="sec-tag" style="flex-shrink:0;" data-ja="<div class=&quot;sec-num&quot;>03</div> タグが示す「顧客との距離感」— ZONE マップ"><div class="sec-num">03</div> 標籤顯示的「與顧客的距離感」— ZONE地圖</div>
-    <div style="font-size:14px;color:var(--ink-sub);padding:10px 16px;background:var(--pill-bg);border-radius:8px;flex-shrink:0;" data-ja="<strong>タグは「このお母さんが今どこにいるか」を示す地図だ。</strong>ZONE1 に電話しても成約率は低いが、ZONE5 に電話すれば2人に1人が購入する。LC8T はこの地図を自動で更新し続けるシステムだ。"><strong>標籤是「這位媽媽現在在哪裡」的地圖。</strong>對ZONE1打電話，成交率很低；對ZONE5打電話，每兩人就有一人購買。LC8T就是自動持續更新這張地圖的系統。</div>
+    <div style="font-size:14px;color:var(--ink-sub);padding:10px 16px;background:var(--pill-bg);border-radius:8px;flex-shrink:0;" data-ja="ZONE1に電話しても2%しか取れない。ZONE5なら2人に1人が買う。LC8Tはこの地図を自動で更新し続けるシステムだ。"><strong>標籤是「這位媽媽現在在哪裡」的地圖。</strong>對ZONE1打電話，成交率很低；對ZONE5打電話，每兩人就有一人購買。LC8T就是自動持續更新這張地圖的系統。</div>
 
     <!-- 列ヘッダー（右テーブル分のみ、左に合わせてオフセット） -->
     <div style="flex-shrink:0;display:flex;gap:12px;align-items:center;">
@@ -784,7 +862,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
             <div style="font-size:14px;font-weight:800;color:rgba(255,255,255,0.9);" data-ja="ZONE 1　BCL登録直後">ZONE 1　BCL登錄後不久</div>
             <div style="font-size:26px;font-weight:900;color:#fff;line-height:1.1;">~2%<span style="font-size:14px;font-weight:500;margin-left:4px;opacity:0.85;" data-ja="購入率">購買率</span></div>
           </div>
-          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ink-dim);line-height:1.55;" data-ja="「しまじろうを知っただけ」の状態。ここからタグを積み上げて距離を縮めていく。">「只是認識了巧虎」的狀態。從這裡開始累積標籤，縮短距離。</div>
+          <div style="flex:1;padding:8px 14px;display:flex;align-items:center;font-size:15px;color:var(--ink-dim);line-height:1.55;" data-ja="「巧虎を知っただけ」の状態。ここからタグを積んで、距離を縮めていく。">「只是認識了巧虎」的狀態。從這裡開始累積標籤，縮短距離。</div>
         </div>
 
         <div style="flex:1;background:var(--blue-lt);border-radius:8px;border-left:5px solid var(--ac-sky);display:flex;align-items:stretch;overflow:hidden;">
@@ -921,7 +999,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
             <div style="width:46px;font-size:11px;color:var(--ink-dim);text-align:right;flex-shrink:0;">21人</div>
           </div>
         </div>
-        <div class="ins mint" style="font-size:12px;flex-shrink:0;" data-ja="MD_が増えるほど購入確率は<strong>非線形に急上昇</strong>する。3個で 80.4%。">MD_越多，購買確率呈<strong>非線性急速上升</strong>。3個→80.4%。</div>
+        <div class="ins mint" style="font-size:12px;flex-shrink:0;" data-ja="MD_タグが3個あれば、8割が買う。線形じゃない、一気に跳ね上がる。">MD_越多，購買確率呈<strong>非線性急速上升</strong>。3個→80.4%。</div>
       </div>
 
       <!-- 中：組み合わせヒートマップ -->
@@ -996,7 +1074,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
           <div style="text-align:center;background:#FFAC98;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#A02020;">61.9%</div>
           <div style="text-align:center;background:#FFBCAC;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#C03030;">41.5%</div>
         </div>
-        <div class="ins mint" style="flex-shrink:0;font-size:12px;" data-ja="<strong>A層×ZONE4：90.7%。</strong>A層であってもMD_＋行動_タグを保有していれば9割が購入。タグの深さは月齢層の差を超えて効く。"><strong>A層×ZONE4：90.7%。</strong>即使是A層，有MD_＋行為_標籤就有9成購買。標籤的深度能超越月齡層的差異。</div>
+        <div class="ins mint" style="flex-shrink:0;font-size:12px;" data-ja="A層でもZONE4まで育てれば9割が買う。月齢の差を、タグの深さが超える。"><strong>A層×ZONE4：90.7%。</strong>即使是A層，有MD_＋行為_標籤就有9成購買。標籤的深度能超越月齡層的差異。</div>
       </div>
 
     </div>
@@ -1011,7 +1089,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div class="sec-tag" style="flex-shrink:0;" data-ja="<div class=&quot;sec-num&quot;>04</div> LC8T の T 段：電話販売との接続 — LINE → TEL"><div class="sec-num">04</div> LC8T的T段：與電銷的連結 — LINE → TEL</div>
     <div class="keymsg" style="flex-shrink:0;padding:10px 20px;">
       <div class="keymsg-eye" data-ja="LINE → TEL 連動">LINE → TEL 連結</div>
-      <div class="keymsg-txt" style="font-size:26px;" data-ja="タグが事前に電話の成果を決定する。">標籤事先決定了電話的成果。</div>
+      <div class="keymsg-txt" style="font-size:26px;" data-ja="電話をかける前に、勝負はついている。タグがそれを決めている。">標籤事先決定了電話的成果。</div>
       <div class="keymsg-sub" style="font-size:13px;margin-top:4px;" data-ja="CH.03 の ZONE マップは電話販売リスト設計に直結する。どの ZONE の顧客に電話するかで、承諾率は最大2.6倍違う。">CH.03的ZONE地圖直接對應電銷名單設計。對哪個ZONE的顧客致電，承諾率最多相差2.6倍。</div>
     </div>
 
@@ -1048,7 +1126,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
             <div style="font-size:14px;color:#C07020;font-weight:900;white-space:nowrap;" data-ja="<strong>+3.3倍</strong>"><strong>+3.3倍</strong></div>
           </div>
         </div>
-        <div class="ins" style="flex-shrink:0;font-size:13px;" data-ja="<strong>ZONE5（商品別高意欲）に電話すれば、承諾率は3.3倍にまで上がる。</strong>リスト作成前に ZONE を確認することが、電話販売チームの生産性を根本から変える。"><strong>對ZONE5（商品別高意願）打電話，承諾率高達3.3倍。</strong>在建立名單前確認ZONE，從根本改變電銷團隊的生產力。</div>
+        <div class="ins" style="flex-shrink:0;font-size:13px;" data-ja="ZONE5に電話すれば承諾率は3.3倍。リストを作る前にZONEを確認する。それだけでTMの生産性が根本から変わる。"><strong>對ZONE5（商品別高意願）打電話，承諾率高達3.3倍。</strong>在建立名單前確認ZONE，從根本改變電銷團隊的生產力。</div>
       </div>
 
       <!-- 右：漏斗 -->
@@ -1101,7 +1179,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
         <div class="ins mint" style="margin-top:10px;" data-ja="<strong>再現性のある高承諾率リスト：</strong><br>バイリンガル指読_高意欲購入：13.8%<br>算数セット-A級：12.8%<br>インタラクションあり：11.2% / クリックあり：10.0%"><strong>可重現的高承諾率名單來源：</strong><br>雙語點讀_高意願購買：13.8%<br>數學套組-A級：12.8%<br>有互動：11.2% / 有點擊：10.0%</div>
       </div>
     </div>
-    <div class="ins" style="font-size:13px;padding:12px 16px;flex-shrink:0;" data-ja="<strong>Super8 で MD_×行動_ タグを育てれば、TM の生産性が直接上がる。タグを積み上げることが、次の電話を成功させる鍵だ。</strong>">
+    <div class="ins" style="font-size:13px;padding:12px 16px;flex-shrink:0;" data-ja="<strong>Super8でタグを育てることが、次の電話を成功させる。タグを積む＝TMが勝てるリストを作ることだ。</strong>">
       <strong>在Super8中培育MD_×行為_標籤，直接提升TM的生產力。累積標籤，就是讓下一通電話成功的關鍵。</strong>
     </div>
   </div>
@@ -1115,7 +1193,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div class="sec-tag" style="flex-shrink:0;" data-ja="<div class=&quot;sec-num&quot;>05</div> 高ポテンシャル顧客の特定 — 高ポテンシャル顧客の識別"><div class="sec-num">05</div> 鎖定高潛力顧客 — 高潛力顧客識別</div>
     <div class="keymsg" style="flex-shrink:0;padding:10px 20px;">
       <div class="keymsg-eye" data-ja="ポテンシャル顧客の識別">潛力顧客識別</div>
-      <div class="keymsg-txt" style="font-size:26px;" data-ja="ポテンシャルのある顧客は、すでに我々のDBにいる。">有潛力的顧客，已經在我們的DB裡。</div>
+      <div class="keymsg-txt" style="font-size:26px;" data-ja="動いてくれる顧客は、すでにDBの中にいる。外に探しに行く必要はない。">有潛力的顧客，已經在我們的DB裡。</div>
       <div class="keymsg-sub" style="font-size:13px;margin-top:4px;" data-ja="新規獲得は不要。既存DBの中にポテンシャル顧客がいる。彼らは行動でシグナルを出している。我々はそれに気づいて動くだけだ。">不需要新獲取，現有DB中就有潛力顧客。他們已用行動發出信號。我們只需察覺並採取行動。</div>
     </div>
 
@@ -1175,7 +1253,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
           <div class="hot-n red">711<small style="font-size:12px;">人</small></div>
           <div><div class="hot-lbl" style="font-size:15px;" data-ja="カートタグ（カートに入れて止まった）">購物車標籤（加了購物車卻停下來）</div><div class="hot-sub" data-ja="最優先・いま追跡すべき顧客">最優先・現在就應該追蹤的顧客</div></div>
         </div>
-        <div class="ins rose" style="flex-shrink:0;font-size:13px;" data-ja="新規獲得は不要。<strong>DB内に6.5万人の行動シグナル保有者</strong>がおり、うち1,161人は承諾率11.1%、711人はカート放棄——彼らは我々のアクションを待っている。">不需要新獲客。<strong>DB內已有6.5萬人持有行動信號</strong>，其中1,161人承諾率11.1%、711人購物車放棄——他們在等著我們採取行動。</div>
+        <div class="ins rose" style="flex-shrink:0;font-size:13px;" data-ja="新規獲得はいらない。1,161人が電話を待っている。711人がカートで止まっている。今すぐ動くべき相手が、DBの中にいる。">不需要新獲客。<strong>DB內已有6.5萬人持有行動信號</strong>，其中1,161人承諾率11.1%、711人購物車放棄——他們在等著我們採取行動。</div>
       </div>
 
     </div>
@@ -1193,7 +1271,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
       <div class="card" style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;">
         <div class="ctitle" style="flex-shrink:0;" data-ja="月齢層別 高ポテンシャル未購入層（行動タグ保有率）">依月齡層別 高潛力未購買層（行動標籤持有率）</div>
         <div style="flex:1;min-height:0;" id="layer-bars"></div>
-        <div class="ins mint" style="flex-shrink:0;font-size:13px;" data-ja="<strong>SS・S層は未購入者の63〜72%超が行動シグナル保有。</strong>購買期待が最も高い月齢層が、最もホットな状態にある。"><strong>SS、S層超過63〜72%的未購買者持有行動信號。</strong>購買期待最高的月齡層，正處於最熱的狀態。</div>
+        <div class="ins mint" style="flex-shrink:0;font-size:13px;" data-ja="SS・S層の未購入者の7割が、すでにシグナルを出している。一番熱い層が、今一番動ける状態にある。"><strong>SS、S層超過63〜72%的未購買者持有行動信號。</strong>購買期待最高的月齡層，正處於最熱的狀態。</div>
       </div>
       <!-- 右：3つのKPIカード -->
       <div class="card" style="display:flex;flex-direction:column;gap:0;padding:12px 14px;">
@@ -1215,7 +1293,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
             <div style="font-size:13px;color:var(--ink-sub);margin-top:5px;" data-ja="クロス事業購入：9,931 NTD　vs　学習のみ：5,245 NTD">跨事業購買：9,931 NTD　vs　僅學習：5,245 NTD</div>
           </div>
         </div>
-        <div class="ins" style="flex-shrink:0;margin-top:8px;font-size:13px;" data-ja="<strong>クロス事業購入で LTV が1.9倍になる。</strong>高ポテンシャル顧客は外だけでなく、すでに購入してくれた人の中にもいる。"><strong>跨事業購買使LTV達到1.9倍。</strong>高潛力顧客不只在外面，已經購買過的人當中也有。</div>
+        <div class="ins" style="flex-shrink:0;margin-top:8px;font-size:13px;" data-ja="クロス購入でLTVは1.9倍になる。次のターゲットは外にいない。すでに買ってくれた人の中にいる。"><strong>跨事業購買使LTV達到1.9倍。</strong>高潛力顧客不只在外面，已經購買過的人當中也有。</div>
       </div>
     </div>
   </div>
@@ -1238,7 +1316,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
       </div>
     </div>
     <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;" id="prod-cluster-grid"></div>
-    <div class="ins" style="flex-shrink:0;" data-ja="<strong>月齢条件で絞り込んだ真の高ポテンシャル層：Z5 合計7,366人・Z4 合計6,464人。</strong>期待実績合計17,837K NTD。月齢データ未登録が25.6%含まれるため、実際の高ポテンシャル層はさらに多い。"><strong>加入月齡條件篩選後的真正高潛力層：Z5合計7,366人・Z4合計6,464人。</strong>期待業績合計17,837K NTD。月齡數據未登錄的佔25.6%，因此實際的高潛力層還更多。</div>
+    <div class="ins" style="flex-shrink:0;" data-ja="今すぐ動ける層はZ5で7,366人、Z4で6,464人。期待売上は17,837K NTD。月齢未登録が25.6%いるから、実際はもっと多い。"><strong>加入月齡條件篩選後的真正高潛力層：Z5合計7,366人・Z4合計6,464人。</strong>期待業績合計17,837K NTD。月齡數據未登錄的佔25.6%，因此實際的高潛力層還更多。</div>
   </div>
 </div>
 
@@ -1251,7 +1329,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
 
     <div class="keymsg" style="flex-shrink:0;padding:10px 20px;">
       <div class="keymsg-eye" data-ja="機会点 = SKU × 対話設計">機會點 = SKU × 對話設計</div>
-      <div class="keymsg-txt" style="font-size:22px;" data-ja="機会点 = 「提案できるSKU」×「継続的に売り続ける設計」×「対話タイミング」">機會點 = 「可提案的SKU」×「持續賣下去的設計」×「對話時機」</div>
+      <div class="keymsg-txt" style="font-size:22px;" data-ja="機会点＝「出せるSKU」×「売り続ける仕組み」×「話しかけるタイミング」">機會點 = 「可提案的SKU」×「持續賣下去的設計」×「對話時機」</div>
       <div class="keymsg-sub" style="font-size:13px;margin-top:4px;" data-ja="まず SKU があって、対話の題材が生まれる。各 SKU を長期で売り続ける一方、月齢別の対話でタグを積み上げる。N の拡大 × O の設計、どちらも欠かせない。">先有SKU，才有對話的題材。讓每一個SKU長期持續銷售，同時透過月齡別對話累積標籤。N的擴大 × O的設計，兩者缺一不可。</div>
     </div>
 
@@ -1279,7 +1357,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
           <div style="font-size:11px;color:#C07020;font-weight:700;margin-bottom:3px;" data-ja="⚠️ 新商品依存ではない">⚠️ 不只依賴新商品</div>
           <div style="font-size:11px;color:var(--ink-sub);line-height:1.6;" data-ja="英語Plus：FY24 発売年3,949件→FY25は1,223件。配信設計が整えば、FY25の新商品も FY26・FY27 で売り続けられる。">英語Plus：FY24發售年3,949件→FY25為1,223件。若配信設計到位，FY25的新商品也能在FY26、FY27持續銷售。</div>
         </div>
-        <div class="ins mint" style="font-size:12px;flex-shrink:0;" data-ja="普遍的な課題 × 月齢別の精緻配信 = 年々再現できる機会点">普遍性課題 × 月齡精準配信 = 年年可重複的機會點</div>
+        <div class="ins mint" style="font-size:12px;flex-shrink:0;" data-ja="どの子にも来る成長課題×月齢精度の高い配信＝毎年繰り返せる機会点。これが私たちの強みだ。">普遍性課題 × 月齡精準配信 = 年年可重複的機會點</div>
       </div>
 
       <!-- 中：SKU拡大 -->
@@ -1352,7 +1430,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- keymsg -->
     <div style="flex-shrink:0;background:linear-gradient(135deg,#2A4A2A,#3A7A4A);border-radius:12px;padding:9px 22px;color:#fff;">
       <div style="font-size:10px;font-weight:700;opacity:0.7;letter-spacing:0.1em;margin-bottom:2px;" data-ja="少子化時代の成長戦略">少子化時代的增長策略</div>
-      <div style="font-size:20px;font-weight:900;line-height:1.3;" data-ja="新規獲得に加え、<span style=&quot;color:#7EFFC0;&quot;>既存顧客一人ひとり</span>により多く、より長く買ってもらう。">獲取新顧客之外，讓<span style="color:#7EFFC0;">每一位現有顧客</span>買得更多、買得更久。</div>
+      <div style="font-size:20px;font-weight:900;line-height:1.3;" data-ja="新規を獲るだけじゃ足りない。<span style=&quot;color:#7EFFC0;&quot;>今いる顧客に</span>、もっと多く、もっと長く買ってもらう。">獲取新顧客之外，讓<span style="color:#7EFFC0;">每一位現有顧客</span>買得更多、買得更久。</div>
       <div style="font-size:12px;opacity:0.85;margin-top:4px;" data-ja="複合購入 AOV（NT$4,883）は単品（NT$3,773）の<strong style=&quot;color:#7EFFC0;&quot;>1.3倍</strong>。3カテゴリ同時購入の AOV は<strong style=&quot;color:#7EFFC0;&quot;>NT$6,022</strong>に達する。">複合購買AOV（NT$4,883）是單品（NT$3,773）的<strong style="color:#7EFFC0;">1.3倍</strong>。3種跨類別同購AOV達<strong style="color:#7EFFC0;">NT$6,022</strong>。</div>
     </div>
 
@@ -1425,8 +1503,8 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
 
     </div>
 
-    <div style="flex-shrink:0;padding:6px 16px;background:linear-gradient(135deg,#EEFAF4,var(--blue-lt));border-radius:8px;border:1.5px solid var(--ac-sky);font-size:12px;color:var(--ink-sub);" data-ja="以上のアイデアをどう具体的な施策に落とし込むかは、<strong style=&quot;color:var(--ac-blue);&quot;>皆さんの仕事</strong>です。データはここに、アイデアは皆さんに。">
-      以上的想法，要怎麼具體化成施策，<strong style="color:var(--ac-blue);">是大家的工作</strong>。數據在這裡，創意在你們身上。
+    <div style="flex-shrink:0;padding:6px 16px;background:linear-gradient(135deg,#EEFAF4,var(--blue-lt));border-radius:8px;border:1.5px solid var(--ac-sky);font-size:12px;color:var(--ink-sub);" data-ja="データはここにある。それをどう施策に落とすかは、<strong style=&quot;color:var(--ac-blue);&quot;>私たちの仕事</strong>だ。">
+      數據在這裡，創意在我們身上。
     </div>
   </div>
 </div>
@@ -1441,8 +1519,8 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- 感情的keymsg -->
     <div style="flex-shrink:0;background:linear-gradient(135deg,#1A3A7A,#2A5CB8);border-radius:12px;padding:14px 24px;color:#fff;">
       <div style="font-size:11px;font-weight:700;opacity:0.7;letter-spacing:0.1em;margin-bottom:4px;" data-ja="今年のアクション = 来年の実績基盤">今年的行動 = 明年的業績基礎</div>
-      <div style="font-size:24px;font-weight:900;line-height:1.3;" data-ja="今年獲得した1人ひとりの BCL は、<br>来年、確実に収益を生んでくれる。">今年獲得的每一個BCL，<br>都會在明年為我們創造收益。</div>
-      <div style="margin-top:8px;font-size:13px;opacity:0.85;line-height:1.6;" data-ja="FY24 獲得の BCL は、FY25 で <strong style=&quot;font-size:16px;color:#7EB8FF;&quot;>NT$1,117万（22.4%）</strong>を貢献。<br>FY25 の新規 BCL は、FY26 で <strong style=&quot;font-size:16px;color:#7EB8FF;&quot;>NT$706万</strong>を生む見込み——この金額はすでに積み上がりつつある。">FY24獲得的BCL，在FY25貢獻了 <strong style="font-size:16px;color:#7EB8FF;">NT$1,117萬（22.4%）</strong>。<br>FY25的新規BCL，預測將在FY26貢獻 <strong style="font-size:16px;color:#7EB8FF;">NT$706萬</strong>——這筆錢已經在累積中。</div>
+      <div style="font-size:24px;font-weight:900;line-height:1.3;" data-ja="今年獲ったBCLが、来年の売上を作る。<br>1人ひとりが、来年の数字だ。">今年獲得的每一個BCL，<br>都會在明年為我們創造收益。</div>
+      <div style="margin-top:8px;font-size:13px;opacity:0.85;line-height:1.6;" data-ja="FY24で獲ったBCLが、FY25で<strong style=&quot;font-size:16px;color:#7EB8FF;&quot;>1,117万NTD</strong>稼いだ。<br>FY25の新規BCLはすでに、FY26の<strong style=&quot;font-size:16px;color:#7EB8FF;&quot;>706万NTD</strong>を積み上げている。">FY24獲得的BCL，在FY25貢獻了 <strong style="font-size:16px;color:#7EB8FF;">NT$1,117萬（22.4%）</strong>。<br>FY25的新規BCL，預測將在FY26貢獻 <strong style="font-size:16px;color:#7EB8FF;">NT$706萬</strong>——這筆錢已經在累積中。</div>
     </div>
 
     <!-- 3つのKPI目標（大きく） -->
@@ -1544,8 +1622,8 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- 感情的keymsg -->
     <div style="flex-shrink:0;background:linear-gradient(135deg,#1A5A3A,var(--ac-aqua));border-radius:12px;padding:10px 22px;color:#fff;">
       <div style="font-size:10px;font-weight:700;opacity:0.7;letter-spacing:0.1em;margin-bottom:3px;" data-ja="お母さんの心を動かす × タグの精緻な捕捉">讓媽媽心動 × 精準捕捉標籤</div>
-      <div style="font-size:20px;font-weight:900;line-height:1.3;" data-ja="モノを売るだけでは足りない。お母さんに本当に「<span style=&quot;color:#7EFFC0;&quot;>なぜ今この子にこれが必要なのか</span>」を実感してもらう。">光是賣東西不夠。要讓媽媽真正感受到「<span style="color:#7EFFC0;">為什麼現在這個孩子需要這個</span>」。</div>
-      <div style="margin-top:5px;font-size:12px;opacity:0.85;line-height:1.5;" data-ja="AI により、我々は初めて「<strong style=&quot;font-size:13px;color:#7EFFC0;&quot;>何をしたら数字が動いたか</strong>」を知ることができる。シナリオ・LP・タグの精度を、毎回前回より引き上げていく。これが LC8T の真の進化だ。">有了AI，我們第一次能夠知道「<strong style="font-size:13px;color:#7EFFC0;">做了什麼讓數字動了</strong>」。劇本・LP・標籤的精準度，每一次都比上一次更好。這就是LC8T真正的進化。</div>
+      <div style="font-size:20px;font-weight:900;line-height:1.3;" data-ja="単に物売りではいけない。「<span style=&quot;color:#7EFFC0;&quot;>なぜ今この子にこれが必要なのか</span>」をお母さんに本当に感じてもらうことが、私たちの仕事だ。">光是賣東西不夠。要讓媽媽真正感受到「<span style="color:#7EFFC0;">為什麼現在這個孩子需要這個</span>」。</div>
+      <div style="margin-top:5px;font-size:12px;opacity:0.85;line-height:1.5;" data-ja="AIのおかげで初めて「<strong style=&quot;font-size:13px;color:#7EFFC0;&quot;>何をしたら数字が動いたか</strong>」がわかる。毎回、前回より精度を上げる。それがLC8Tの本当の進化だ。">有了AI，我們第一次能夠知道「<strong style="font-size:13px;color:#7EFFC0;">做了什麼讓數字動了</strong>」。劇本・LP・標籤的精準度，每一次都比上一次更好。這就是LC8T真正的進化。</div>
     </div>
 
     <!-- 根拠データ3つ -->
@@ -1632,7 +1710,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <!-- keymsg -->
     <div style="flex-shrink:0;background:linear-gradient(135deg,#1A2A5A,#2A4A8A);border-radius:12px;padding:10px 22px;color:#fff;">
       <div style="font-size:10px;font-weight:700;opacity:0.7;letter-spacing:0.1em;margin-bottom:3px;" data-ja="黒字化・ブランド持続の最後のピース">黑字化・品牌永續的最後一塊拼圖</div>
-      <div style="font-size:19px;font-weight:900;line-height:1.3;" data-ja="事業利益<span style=&quot;color:#7EB8FF;&quot;>NT$82.1M</span>、共通費<span style=&quot;color:#FF9999;&quot;>▲NT$91.6M</span>、営業利益<span style=&quot;color:#FFD97E;&quot;>▲NT$9.4M</span>（JPY ▲8M）。">事業利益<span style="color:#7EB8FF;">NT$82.1M</span>，共通費<span style="color:#FF9999;">▲NT$91.6M</span>，營業利益<span style="color:#FFD97E;">▲NT$9.4M</span>（JPY▲8M）。</div>
+      <div style="font-size:19px;font-weight:900;line-height:1.3;" data-ja="事業では<span style=&quot;color:#7EB8FF;&quot;>82.1M</span>稼いでいる。共通費<span style=&quot;color:#FF9999;&quot;>91.6M</span>がそれを食っている。ここを変えれば、<span style=&quot;color:#FFD97E;&quot;>黒字になる</span>。">事業利益<span style="color:#7EB8FF;">NT$82.1M</span>，共通費<span style="color:#FF9999;">▲NT$91.6M</span>，營業利益<span style="color:#FFD97E;">▲NT$9.4M</span>（JPY▲8M）。</div>
       <div style="margin-top:5px;font-size:12px;opacity:0.9;line-height:1.5;" data-ja="TBBS・LC8T 戦略で売上を強化すると同時に、<strong style=&quot;color:#7EB8FF;&quot;>事業コストの ROI 管理</strong>＋<strong style=&quot;color:#FFD97E;&quot;>共通費のゼロベース削減</strong>で、持続経営の基盤を構築する。">TBBS・LC8T戰略強化銷售的同時，<strong style="color:#7EB8FF;">事業成本ROI管控</strong>＋<strong style="color:#FFD97E;">共通費零基礎削減</strong>，建立永續經營的基礎。</div>
     </div>
 
@@ -1772,7 +1850,7 @@ body[data-lang="ja"] .kpi-val{font-size:inherit;}
     <div class="sec-tag" data-ja="<div class=&quot;sec-num&quot;>06</div> 最終メッセージ"><div class="sec-num">06</div> 最終訊息</div>
     <div class="final-card" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
       <div style="font-size:10px;font-weight:700;letter-spacing:0.22em;opacity:0.6;text-transform:uppercase;margin-bottom:14px;" data-ja="最終メッセージ">最終訊息</div>
-      <div class="final-text" data-ja="データが目標を定める。<br>AI が最良のタイミングを創る。<br>しかし引き金を引くのは、<em>お母さんの心への共鳴</em>だ。<br><br>LC8T の向こう側にあるのは数字ではなく、<br>一人のお母さんとしまじろうの出会いだ。<br>その出会いを届けることが、<em>私たちの仕事</em>だ。">
+      <div class="final-text" data-ja="データが狙いを定める。<br>AIがタイミングを作る。<br>でも引き金を引くのは、<em>お母さんの心に響いたかどうか</em>だ。<br><br>LC8Tの向こうにあるのは数字じゃない。<br>一人のお母さんと巧虎の出会いだ。<br>その出会いを届けることが、<em>私たちの仕事</em>だ。">
         數據鎖定目標。<br>
         AI創造最佳時機。<br>
         但扣下板機的，<em>是對媽媽心靈的共鳴</em>。<br><br>
