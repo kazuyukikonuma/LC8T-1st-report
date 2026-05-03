@@ -181,43 +181,44 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
 .pill-cv{background:var(--aqua-lt);color:var(--ac-aqua);} .pill-i{background:#F5F0F8;color:#7A5A9A;}
 
 /* =============================================
-   日本語表示：stage全体をscaleで縮小
+   日本語表示：slide-innerのみfont-size縮小
+   #stageには一切手を触れない
+   繁体字表示には影響しない
    ============================================= */
 
-body[data-lang="ja"] #stage {
-  transform: scale(0.87);
-  transform-origin: top left;
-  width: calc(1280px / 0.87);
-  height: calc(720px / 0.87);
+/* 基本フォントサイズ縮小 */
+body[data-lang="ja"] .slide-inner {
+  font-size: 15px;
+  gap: 7px !important;
 }
 
-body[data-lang="ja"] {
-  overflow: hidden;
+/* インラインstyleのfont-sizeを属性セレクタで上書き */
+body[data-lang="ja"] .slide-inner [style*="font-size:22px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 22px"] {
+  font-size: 18px !important;
 }
-
-/* インラインfont-sizeを属性セレクタで上書き */
-body[data-lang="ja"] [style*="font-size:19px"],
-body[data-lang="ja"] [style*="font-size: 19px"] {
+body[data-lang="ja"] .slide-inner [style*="font-size:19px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 19px"] {
   font-size: 16px !important;
 }
-body[data-lang="ja"] [style*="font-size:18px"],
-body[data-lang="ja"] [style*="font-size: 18px"] {
+body[data-lang="ja"] .slide-inner [style*="font-size:18px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 18px"] {
   font-size: 15px !important;
 }
-body[data-lang="ja"] [style*="font-size:17px"],
-body[data-lang="ja"] [style*="font-size: 17px"] {
+body[data-lang="ja"] .slide-inner [style*="font-size:17px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 17px"] {
   font-size: 14px !important;
 }
-body[data-lang="ja"] [style*="font-size:16px"],
-body[data-lang="ja"] [style*="font-size: 16px"] {
+body[data-lang="ja"] .slide-inner [style*="font-size:16px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 16px"] {
   font-size: 14px !important;
 }
-body[data-lang="ja"] [style*="font-size:15px"],
-body[data-lang="ja"] [style*="font-size: 15px"] {
+body[data-lang="ja"] .slide-inner [style*="font-size:15px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 15px"] {
   font-size: 13px !important;
 }
-body[data-lang="ja"] [style*="font-size:14px"],
-body[data-lang="ja"] [style*="font-size: 14px"] {
+body[data-lang="ja"] .slide-inner [style*="font-size:14px"],
+body[data-lang="ja"] .slide-inner [style*="font-size: 14px"] {
   font-size: 12px !important;
 }
 
@@ -239,11 +240,6 @@ body[data-lang="ja"] .kpi-val {
   font-size: clamp(20px, 3vw, 32px) !important;
 }
 
-/* slide-innerのgapを詰める */
-body[data-lang="ja"] .slide-inner {
-  gap: 7px !important;
-}
-
 /* ins（インサイトボックス） */
 body[data-lang="ja"] .ins {
   font-size: 13px !important;
@@ -251,19 +247,36 @@ body[data-lang="ja"] .ins {
   padding: 8px 12px !important;
 }
 
-/* hot-row（ZONE行） */
+/* hot-row（ZONE行）のpadding縮小 */
 body[data-lang="ja"] .hot-row {
   padding: 7px 12px !important;
+  margin-bottom: 4px !important;
 }
 
-/* g3グリッドのgapを詰める */
+/* g3グリッドのgap縮小 */
 body[data-lang="ja"] .g3 {
   gap: 8px !important;
 }
+body[data-lang="ja"] .g2 {
+  gap: 10px !important;
+}
+
+/* Slide1表紙：インラインdivのfont-size対応 */
+body[data-lang="ja"] .slide:first-of-type [style*="font-size:22px"] {
+  font-size: 17px !important;
+}
+body[data-lang="ja"] .slide:first-of-type [style*="font-size:19px"] {
+  font-size: 15px !important;
+}
+body[data-lang="ja"] .slide:first-of-type [style*="font-size:18px"] {
+  font-size: 15px !important;
+}
+body[data-lang="ja"] .slide:first-of-type [style*="font-size:15px"] {
+  font-size: 13px !important;
+}
 
 /* Slide15 SKUカード見切れ対応 */
-body[data-lang="ja"] .g3 > div,
-body[data-lang="ja"] .g3 > .card {
+body[data-lang="ja"] .g3 > div {
   overflow: visible !important;
   min-height: 0 !important;
 }
@@ -271,6 +284,17 @@ body[data-lang="ja"] .g3 > .card {
 /* sec-tag */
 body[data-lang="ja"] .sec-tag {
   font-size: 13px !important;
+}
+
+/* card内padding縮小 */
+body[data-lang="ja"] .card {
+  padding: 10px 14px !important;
+}
+
+/* action-item */
+body[data-lang="ja"] .action-body {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
 }
 </style>
 </head>
