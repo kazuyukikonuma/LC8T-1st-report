@@ -179,6 +179,21 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
 .action-pill{font-size:14px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:0.06em;white-space:nowrap;}
 .pill-o{background:#FFF3E0;color:#C07820;} .pill-n{background:var(--blue-lt);color:var(--ac-blue);}
 .pill-cv{background:var(--aqua-lt);color:var(--ac-aqua);} .pill-i{background:#F5F0F8;color:#7A5A9A;}
+
+/* ── 日本語表示時のレイアウト調整 ── */
+body[data-lang="ja"] .keymsg-txt{font-size:28px;}
+body[data-lang="ja"] .keymsg-sub{font-size:15px;}
+body[data-lang="ja"] .slide-inner{gap:8px;}
+body[data-lang="ja"] .ins{font-size:14px;line-height:1.65;}
+body[data-lang="ja"] .action-body{font-size:15px;}
+body[data-lang="ja"] .hot-lbl{font-size:15px;}
+body[data-lang="ja"] .hot-sub{font-size:13px;}
+body[data-lang="ja"] .slide:first-of-type [style*="font-size:22px"]{font-size:18px !important;}
+body[data-lang="ja"] .slide:first-of-type [style*="font-size:19px"]{font-size:15px !important;}
+body[data-lang="ja"] .g3 .card,
+body[data-lang="ja"] .g2 .card{font-size:14px;line-height:1.6;}
+body[data-lang="ja"] .sec-tag{font-size:14px;}
+body[data-lang="ja"] .kpi-val{font-size:inherit;}
 </style>
 </head>
 <body>
@@ -235,7 +250,7 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
     <div style="flex-shrink:0;background:#FFFBF0;border-left:4px solid #E0A020;border-radius:0 8px 8px 0;padding:14px 20px;">
       <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;color:var(--ac-yellow);margin-bottom:6px;" data-ja="② 目下まだ完了していないこと">② 目前尚未完成的事</div>
       <div style="font-size:22px;font-weight:900;color:var(--topbar-bg);margin-bottom:6px;" data-ja="AIが読み取るための「行動情報」の整備がまだ完了していない。">讓AI讀取的「行動資訊」尚未整備完成。</div>
-      <div style="font-size:19px;color:var(--ink-sub);line-height:1.75;" data-ja="データは蓄積されつつありますが、<strong style=&quot;color:var(--ac-yellow);&quot;>商品情報・業務行動・業務システム運用</strong>といった行動データはまだAIが読み取れる形に整理されていません。各担当者の業務コンテキスト（AIと深く対話するための前提情報）も未整備で、AIの力を十分に発揮できていない状況です。">數據雖在累積，但<strong style="color:var(--ac-yellow);">商品資訊・業務行為・業務系統運用</strong>等行動數據尚未整理成AI可讀取的形式。各負責人的業務情境（AI深度諮詢所需的前提資訊）也未整備，導致無法充分發揮AI的力量。</div>
+      <div style="font-size:19px;color:var(--ink-sub);line-height:1.75;" data-ja="データは蓄積中ですが、<strong style=&quot;color:var(--ac-yellow);&quot;>商品情報・業務行動・システム運用</strong>の行動データはまだAI可読形式に整備されていません。各担当者の業務コンテキストも未整備で、AIの力を十分に発揮できていません。">數據雖在累積，但<strong style="color:var(--ac-yellow);">商品資訊・業務行為・業務系統運用</strong>等行動數據尚未整理成AI可讀取的形式。各負責人的業務情境（AI深度諮詢所需的前提資訊）也未整備，導致無法充分發揮AI的力量。</div>
     </div>
 
     <!-- ③行動方針 -->
@@ -1367,7 +1382,7 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
       <div style="background:var(--bg);border-radius:8px;padding:8px 12px;border-left:4px solid var(--ac-blue);overflow:hidden;">
         <div style="font-size:12px;font-weight:800;color:var(--ac-blue);margin-bottom:4px;" data-ja="🛒 AOV① 同時購入レコメンド">🛒 AOV① 同購推薦</div>
         <div style="font-size:11px;color:var(--ink-dim);margin-bottom:5px;" data-ja="クロスカテゴリ購入率 14.6% → <strong style=&quot;color:var(--ac-blue);&quot;>18.3%</strong>（+3.7pt）">跨類別購買率 14.6%→<strong style="color:var(--ac-blue);">18.3%</strong>（+3.7pt）</div>
-        <div style="font-size:12px;color:var(--ink-sub);line-height:1.6;" data-ja="・購入直後「次のおすすめ」を LINE で自動配信<br>・月齢別セット提案 LP の設計<br>・TM 承諾後のアップセル販売スクリプト<br>・タグ × 購入済 → 未購入の組み合わせ配信<br>・LP 上で「よく一緒に購入される商品」を表示<br>・季節キャンペーン × 複数商品セット企画<br>・誕生日1か月前の複数商品提案<br>・ステージショー会場でのセット割販売">
+        <div style="font-size:12px;color:var(--ink-sub);line-height:1.6;" data-ja="・購入直後「次の一品」LINE自動配信<br>・月齢別セット提案LP<br>・TM承諾後アップセル<br>・タグ×購入済→未購入の配信<br>・LP「よく一緒に購入」表示<br>・季節×複数商品セット企画<br>・誕生日1か月前の複数提案<br>・ステージ会場でのセット割">
           ・購買直後「下一件推薦」LINE自動配信<br>
           ・月齡別套組提案LP設計<br>
           ・TM承諾後的加購銷售腳本<br>
@@ -1383,7 +1398,7 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
       <div style="background:var(--bg);border-radius:8px;padding:8px 12px;border-left:4px solid var(--ac-mint);overflow:hidden;">
         <div style="font-size:12px;font-weight:800;color:var(--ac-mint);margin-bottom:4px;" data-ja="🔄 AOV② Mirafeel リピート促進">🔄 AOV② Mirafeel回購促進</div>
         <div style="font-size:11px;color:var(--ink-dim);margin-bottom:5px;" data-ja="※ 子どものおむつ卒業後は需要消失 → <strong style=&quot;color:var(--ac-mint);&quot;>0-24M 層（1,648人）にターゲットを絞る</strong>">※ 孩子離開尿布期後需求消失 → <strong style="color:var(--ac-mint);">鎖定0-24M層（1,648人）</strong></div>
-        <div style="font-size:12px;color:var(--ink-sub);line-height:1.6;" data-ja="・SS・S 層の加入時に即 Welcome シナリオへ投入<br>・試供品 → 定期購入への転換 LINE シナリオ強化<br>・ステージショー会場でサンプル配布 → QR 購入動線<br>・多子家庭への再訴求<br>・産婦人科・小児科とのタッチポイント設計<br>・学習購入者 × 0-24M タグへの精緻配信">
+        <div style="font-size:12px;color:var(--ink-sub);line-height:1.6;" data-ja="・SS・S層加入時に即Welcomeシナリオ<br>・試供品→定期購入のLINEシナリオ強化<br>・ステージ会場でサンプル配布→QR<br>・多子家庭への再訴求<br>・産婦人科・小児科との接点設計<br>・学習購入者×0-24Mタグ配信">
           ・SS・S層加入時即納入Welcome劇本<br>
           ・試用包→定期購買轉換LINE劇本強化<br>
           ・舞台劇現場試用品發放→QR購買動線<br>
@@ -1397,7 +1412,7 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
       <div style="background:var(--bg);border-radius:8px;padding:8px 12px;border-left:4px solid #8A6AB0;overflow:hidden;">
         <div style="font-size:12px;font-weight:800;color:#8A6AB0;margin-bottom:4px;" data-ja="📦 AOV③ SKU×月齢設計">📦 AOV③ SKU×月齡設計</div>
         <div style="font-size:11px;color:var(--ink-dim);margin-bottom:5px;" data-ja="平均 SKU 1.80 → <strong style=&quot;color:#8A6AB0;&quot;>2.23</strong>（+0.43）　1SKU のみ：44%">平均SKU 1.80→<strong style="color:#8A6AB0;">2.23</strong>（+0.43）　僅1SKU：44%</div>
-        <div style="font-size:12px;color:var(--ink-sub);line-height:1.6;" data-ja="・新商品発売 → 既存購入者へ即時通知<br>・「成長ステージのアップグレード通知」（月齢タグで自動トリガー）<br>・注音購入者 → 算数セットへの「学習ロードマップ」<br>・「○歳の必須3点セット」コンセプト LP 設計<br>・卒業 → 次ステージへの継続提案設計<br>・ゲーミフィケーション（3商品コンプリートでバッジ獲得）<br>・改訂新品を既存購入者に優先通知">
+        <div style="font-size:12px;color:var(--ink-sub);line-height:1.6;" data-ja="・新商品発売→既存購入者へ即時通知<br>・成長ステージUP通知（月齢タグ自動）<br>・注音購入者→算数セット学習ロードマップ<br>・「○歳の必須3点セット」LP<br>・卒業→次ステージ継続提案<br>・ゲーミフィケーション（3商品でバッジ）<br>・改訂新品を既存購入者に優先通知">
           ・新商品發售→即時通知既有購買者<br>
           ・「成長階段升級通知」（月齡標籤自動觸發）<br>
           ・注音購買者→數學套組的「學習路線圖」<br>
@@ -1731,19 +1746,19 @@ body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="background:var(--bg);border-radius:8px;padding:8px 12px;border-left:4px solid var(--ac-blue);flex:1;">
           <div style="font-size:13px;font-weight:800;color:var(--ac-blue);" data-ja="A 商品販売の I 最適化">A 商品銷售的I最適化</div>
-          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="SKU 原価率を下げ、粗利構造を改善する。Meta 広告・キャンペーン費は実行ごとに<strong>AI で即時に ROI を算出</strong>・記録する。全社でデータを統一整備し、担当者は業務に集中、<strong>経験 × AI</strong>で投資判断の精度を継続的に高める。ROI 改善は単なるコスト削減ではなく——<strong>同じコストでより多くの売上を生む</strong>ことも目標である。">降低SKU原價率，提升毛利結構。Meta廣告・活動費每次執行後以<strong>AI立即計算ROI</strong>並記錄結果。公司整體統一整理數據，讓負責人專注業務，以<strong>經驗×AI</strong>持續提升投資判斷精度。ROI改善不只是削減成本——<strong>同樣成本創造更高銷售</strong>同樣是目標。</div>
+          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="SKU原価率を下げ、粗利を改善。Meta広告・キャンペーン費は実行ごとに<strong>AIで即時ROIを算出</strong>・記録。<strong>経験×AI</strong>で投資判断の精度を継続的に高め、<strong>同じコストでより多くの売上</strong>を生む。">降低SKU原價率，提升毛利結構。Meta廣告・活動費每次執行後以<strong>AI立即計算ROI</strong>並記錄結果。公司整體統一整理數據，讓負責人專注業務，以<strong>經驗×AI</strong>持續提升投資判斷精度。ROI改善不只是削減成本——<strong>同樣成本創造更高銷售</strong>同樣是目標。</div>
         </div>
         <div style="background:var(--bg);border-radius:8px;padding:8px 12px;border-left:4px solid #C04040;flex:1;">
           <div style="font-size:13px;font-weight:800;color:#C04040;" data-ja="B ステージショーの I 最適化">B 舞台劇的I最適化</div>
-          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="制作費 NT$28.2M（81%）は固定費。<strong>完売率が高いほど利益率が高い</strong>、売れ残ったチケットは同額の損失となる。BCL 告知力の強化（コスト最小）；ステージショー関連タグの収集機構（MD_・行動タグ・<strong>都市別エリアデータ</strong>）の整備；N×CV 拡大を軸に推進する。">制作費NT$28.2M（81%）為固定成本。<strong>完售率越高利益率越高</strong>，未售出的票就是等額損失。強化BCL告知力（成本最小）；建立舞台劇相關標籤收集機制（MD_・行動標籤・<strong>都市別地區數據</strong>）；以N×CV擴大為核心推進。</div>
+          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="制作費NT$28.2M（81%）は固定費。<strong>完売率が高いほど利益率が高い</strong>。BCL告知力強化（コスト最小）、ステージ関連タグ収集（MD_・行動タグ・<strong>都市別データ</strong>）、N×CV拡大を軸に推進。">制作費NT$28.2M（81%）為固定成本。<strong>完售率越高利益率越高</strong>，未售出的票就是等額損失。強化BCL告知力（成本最小）；建立舞台劇相關標籤收集機制（MD_・行動標籤・<strong>都市別地區數據</strong>）；以N×CV擴大為核心推進。</div>
         </div>
         <div style="background:var(--bg);border-radius:8px;padding:8px 12px;border-left:4px solid var(--ac-mint);flex:1;">
           <div style="font-size:13px;font-weight:800;color:var(--ac-mint);" data-ja="C IP ライセンスの I 最適化">C IP授權的I最適化</div>
-          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="原価 NT$1.9M・利益率77%。既存契約の継続が安定収益の基盤。単純なライセンス案件は持続性に限界があるため、<strong>ゲーム施設2号店・共創商品売上への参画</strong>など継続収益モデルへ転換する。リレーション維持と IP 価値向上が最優先課題。">原價NT$1.9M・利益率77%。既有合約的持續是穩定收益的基礎。單純授權金案件持續性有限，轉向<strong>遊戲設施2號店・共創商品銷售參與</strong>等持續性收益模型。維護關係與提升IP價值是最優先課題。</div>
+          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="原価NT$1.9M・利益率77%。既存契約の継続が安定収益の基盤。単純ライセンスは持続性に限界があり、<strong>ゲーム施設2号店・共創商品売上への参画</strong>など継続収益モデルへ転換する。">原價NT$1.9M・利益率77%。既有合約的持續是穩定收益的基礎。單純授權金案件持續性有限，轉向<strong>遊戲設施2號店・共創商品銷售參與</strong>等持續性收益模型。維護關係與提升IP價值是最優先課題。</div>
         </div>
         <div style="background:#FFF0EE;border-radius:8px;padding:8px 12px;border-left:4px solid #B03030;flex:1;">
           <div style="font-size:13px;font-weight:800;color:#B03030;" data-ja="共通費（▲NT$91.6M）：ゼロベース削減">共通費（▲NT$91.6M）：零基礎削減</div>
-          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="人件費 NT$28.0M 以外の<strong style=&quot;color:#B03030;&quot;>NT$63.6M</strong>（一般管理費 NT$46.6M＋販管費 NT$24.6M）をゼロベースで見直す。<strong>業務委託など内製化できる業務は自分たちで完結させ</strong>、削減分は従業員の給与へ還元する。削減額はそのまま EBITDA を押し上げる。">人件費NT$28.0M以外的<strong style="color:#B03030;">NT$63.6M</strong>（一般管理費NT$46.6M＋販管費NT$24.6M）為零基礎檢視對象。<strong>業務委託等能內製化的業務由自己完成</strong>，削減的部分還原為員工薪資。削減額直接提升EBITDA。</div>
+          <div style="font-size:12px;color:var(--ink-sub);margin-top:3px;line-height:1.6;" data-ja="人件費NT$28.0M以外の<strong style=&quot;color:#B03030;&quot;>NT$63.6M</strong>（一般管理費46.6M＋販管費24.6M）をゼロベース見直し。<strong>業務委託など内製化できる業務は自分たちで完結</strong>させ、削減分はEBITDAへ直結。">人件費NT$28.0M以外的<strong style="color:#B03030;">NT$63.6M</strong>（一般管理費NT$46.6M＋販管費NT$24.6M）為零基礎檢視對象。<strong>業務委託等能內製化的業務由自己完成</strong>，削減的部分還原為員工薪資。削減額直接提升EBITDA。</div>
         </div>
       </div>
     </div>
@@ -1834,6 +1849,7 @@ function goTo(n){
 
 function switchLang(lang){
   if(lang===currentLang) return;
+  document.body.setAttribute('data-lang', lang);
   document.querySelectorAll('[data-ja]').forEach(el=>{
     if(lang==='ja'){
       if(!el.hasAttribute('data-zh')) el.setAttribute('data-zh', el.innerHTML);
