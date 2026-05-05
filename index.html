@@ -2468,6 +2468,14 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
     });
   }
 
+  // エラー時にも復元するため、try/finally で参照する状態をここで宣言
+  let origChartAnim = null;
+  let chartRestores = [];
+  let origStageStyle = null;
+  let stageRef = null;
+  let origBodyOverflowOuter = null;
+  let origHtmlOverflowOuter = null;
+
   try {
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
@@ -2477,16 +2485,33 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
 
     const allSlides = document.querySelectorAll('.slide');
     const stage = document.getElementById('stage');
+    stageRef = stage;
     const W = 1280, H = 720;
 
     // stageのtransformを一時解除してdocument flowに戻す
-    const origBodyOverflow = document.body.style.overflow;
-    const origHtmlOverflow = document.documentElement.style.overflow;
+    origBodyOverflowOuter = document.body.style.overflow;
+    origHtmlOverflowOuter = document.documentElement.style.overflow;
     document.body.style.overflow = 'visible';
     document.documentElement.style.overflow = 'visible';
 
-    const origStageStyle = stage.getAttribute('style') || '';
+    origStageStyle = stage.getAttribute('style') || '';
     stage.style.cssText = `position:relative;width:${W}px;height:${H}px;transform:none;left:0;top:0;overflow:hidden;background:#F4F8FF;`;
+
+    // PDF生成中だけChart.jsのアニメを停止（最終状態を即時描画させるため）
+    // 通常閲覧には影響しないよう、終了時に必ず復元する
+    if(typeof Chart !== 'undefined'){
+      origChartAnim = Chart.defaults.animation;
+      Chart.defaults.animation = false;
+      document.querySelectorAll('canvas').forEach(c=>{
+        const inst = Chart.getChart(c);
+        if(!inst) return;
+        chartRestores.push({ inst, prev: inst.options.animation });
+        inst.options.animation = false;
+      });
+    }
+
+    // フォント読み込み完了を待つ（最初の1回のみ）
+    if(document.fonts && document.fonts.ready){ await document.fonts.ready; }
 
     for(let i = 0; i < allSlides.length; i++){
       btn.textContent = `⏳ ${i+1}/${allSlides.length}`;
@@ -2510,8 +2535,17 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
         });
       }
 
-      // グラフ描画・レイアウト確定を待つ
-      await new Promise(r=>setTimeout(r, 300));
+      // 表示中スライド内のチャートを最終状態で即時再描画
+      if(typeof Chart !== 'undefined'){
+        allSlides[i].querySelectorAll('canvas').forEach(c=>{
+          const inst = Chart.getChart(c);
+          if(inst){ inst.resize(); inst.update('none'); }
+        });
+      }
+
+      // レイアウト確定を待つ（描画フレーム×2 + 余白500ms）
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      await new Promise(r=>setTimeout(r, 500));
 
       const canvas = await html2canvas(stage, {
         width: W,
@@ -2532,15 +2566,6 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
       pdf.addImage(imgData, 'JPEG', 0, 0, W, H);
     }
 
-    // stageとbody/htmlを元に戻す
-    stage.setAttribute('style', origStageStyle);
-    document.body.style.overflow = origBodyOverflow;
-    document.documentElement.style.overflow = origHtmlOverflow;
-
-    // スライド表示を現在のスライドに戻す
-    goTo(0);
-    scaleStage();
-
     pdf.save('lc8t_slides.pdf');
     btn.textContent = '✅ 完了';
     setTimeout(()=>{ btn.textContent = '🖨 PDF'; btn.disabled = false; }, 2000);
@@ -2550,6 +2575,21 @@ document.getElementById('btn-dl-pdf').onclick = async function(){
     btn.textContent = '❌ エラー';
     btn.disabled = false;
     alert('PDF生成に失敗しました。コンソールを確認してください。');
+  } finally {
+    // 成功・失敗どちらでも必ず復元する（通常閲覧のアニメを守る）
+    try {
+      if(typeof Chart !== 'undefined'){
+        if(origChartAnim !== null) Chart.defaults.animation = origChartAnim;
+        chartRestores.forEach(({inst, prev})=>{ inst.options.animation = prev; });
+      }
+      if(stageRef && origStageStyle !== null){
+        stageRef.setAttribute('style', origStageStyle);
+      }
+      if(origBodyOverflowOuter !== null) document.body.style.overflow = origBodyOverflowOuter;
+      if(origHtmlOverflowOuter !== null) document.documentElement.style.overflow = origHtmlOverflowOuter;
+      if(typeof goTo === 'function') goTo(cur);
+      if(typeof scaleStage === 'function') scaleStage();
+    } catch(_){}
   }
 };
 
