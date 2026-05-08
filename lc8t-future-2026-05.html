@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC8T 證明的未來 — 2026/05 全社プレゼン</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+:root {
+  --bg:#FAFAF7; --white:#FFFFFF; --ink:#1A1A1A; --ink-sub:#555; --ink-dim:#999;
+  --rule:#D0D8E8; --rule-lt:#E8EEF8;
+  --ac-blue:#4A7CC7; --ac-coral:#E07060; --ac-aqua:#3AAFA0; --ac-yellow:#E8B840;
+  --ac-sky:#7AAEE0; --ac-mint:#3AAFA0;
+  --ac-lav:#8B9ED4; --ac-rose:#E07060; --ac-lemon:#E8B840; --ac-grey:#C4B898;
+  --blue-lt:#EEF3FC; --coral-lt:#FEF0ED; --aqua-lt:#E8F7F5; --yellow-lt:#FEF9EC;
+  --pill-bg:#EEF3FC; --font:'Noto Sans JP',sans-serif;
+  --topbar-bg:#2B3A6B; --topbar-logo:#FFD87A; --topbar-text:#B8C8F0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#1E2A48;}
+body{color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.7;}
+#stage{position:fixed;top:0;left:0;width:1280px;height:720px;transform-origin:top left;background:var(--bg);overflow:hidden;}
+.slide{display:none;position:absolute;inset:0;overflow:hidden;padding:44px 0 0;}
+.slide.active{display:flex;flex-direction:column;}
+.slide-inner{flex:1;overflow:hidden;padding:18px 44px 16px;display:flex;flex-direction:column;gap:10px;}
+.topbar{position:absolute;top:0;left:0;right:0;height:44px;z-index:100;background:var(--topbar-bg);display:flex;align-items:center;justify-content:space-between;padding:0 28px;}
+.tbar-logo{font-size:15px;font-weight:900;letter-spacing:0.18em;color:var(--topbar-logo);}
+.tbar-mid{display:flex;align-items:center;gap:12px;font-size:14px;}
+.tbar-ch{font-weight:700;color:#fff;font-size:15px;}
+.tbar-title{color:var(--topbar-text);}
+.tbar-nav{display:flex;align-items:center;gap:8px;}
+.btn-arr{width:32px;height:32px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.1);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#fff;transition:all 0.15s;font-family:var(--font);}
+.btn-arr:hover{background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.5);}
+.slide-counter{font-size:14px;color:var(--topbar-text);min-width:56px;text-align:center;}
+.ch-dots{display:flex;gap:3px;}
+.ch-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:background 0.15s;}
+.ch-dot.active{background:var(--topbar-logo);}
+#btn-lang:hover{background:rgba(255,255,255,0.25)!important;border-color:rgba(255,255,255,0.5)!important;}
+
+.sec-tag{display:inline-flex;align-items:center;gap:8px;padding:4px 14px 4px 6px;background:var(--pill-bg);border-radius:5px;font-size:16px;font-weight:700;color:var(--ac-blue);letter-spacing:0.06em;}
+.sec-num{width:24px;height:24px;border-radius:4px;background:var(--ac-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;}
+
+.keymsg{padding:18px 26px;border-radius:10px;background:var(--blue-lt);border-left:5px solid var(--ac-blue);}
+.keymsg.coral{background:var(--coral-lt);border-left-color:var(--ac-coral);}
+.keymsg.aqua{background:var(--aqua-lt);border-left-color:var(--ac-aqua);}
+.keymsg.yellow{background:var(--yellow-lt);border-left-color:var(--ac-yellow);}
+.keymsg.dark{background:var(--topbar-bg);border-left-color:var(--topbar-logo);color:#fff;}
+.keymsg-eye{font-size:13px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--ac-blue);margin-bottom:6px;}
+.keymsg.coral .keymsg-eye{color:var(--ac-coral);}
+.keymsg.aqua .keymsg-eye{color:var(--ac-aqua);}
+.keymsg.yellow .keymsg-eye{color:#A07000;}
+.keymsg.dark .keymsg-eye{color:var(--topbar-logo);}
+.keymsg-txt{font-size:34px;font-weight:900;line-height:1.25;}
+.keymsg-sub{font-size:18px;margin-top:8px;color:var(--ink-sub);line-height:1.65;}
+.keymsg.dark .keymsg-sub{color:rgba(255,255,255,0.85);}
+
+.card{background:var(--white);border:1px solid var(--rule);border-top:5px solid var(--ac-blue);border-radius:0 0 10px 10px;padding:16px 20px;}
+.card.coral{border-top-color:var(--ac-coral);}
+.card.aqua{border-top-color:var(--ac-aqua);}
+.card.yellow{border-top-color:var(--ac-yellow);}
+.ctitle{font-size:14px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-sub);margin-bottom:10px;}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+
+.kpi-box{background:var(--ac-blue);border-radius:10px;padding:16px 18px;color:#fff;}
+.kpi-box.coral{background:var(--ac-coral);}
+.kpi-box.aqua{background:var(--ac-aqua);}
+.kpi-box.yellow{background:var(--ac-yellow);color:#3A2800;}
+.kpi-box.neutral{background:var(--white);border:1px solid var(--rule);border-top:5px solid var(--ac-blue);border-radius:0 0 10px 10px;color:var(--ink);}
+.kpi-lbl{font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:6px;}
+.kpi-box.neutral .kpi-lbl{color:var(--ink-sub);}
+.kpi-box.yellow .kpi-lbl{color:rgba(60,40,0,0.7);}
+.kpi-val{font-size:38px;font-weight:900;line-height:1;margin-bottom:5px;}
+.kpi-box.neutral .kpi-val{color:var(--ac-blue);}
+.kpi-nte{font-size:14px;color:rgba(255,255,255,0.78);line-height:1.5;}
+.kpi-box.neutral .kpi-nte{color:var(--ink-dim);}
+.kpi-box.yellow .kpi-nte{color:rgba(60,40,0,0.7);}
+
+.ch{position:relative;width:100%;height:100%;}
+.ins{padding:11px 16px;border-radius:8px;font-size:16px;line-height:1.7;background:var(--blue-lt);}
+.ins strong{color:var(--ac-blue);}
+.ins.mint{background:var(--aqua-lt);} .ins.mint strong{color:var(--ac-aqua);}
+.ins.rose{background:var(--coral-lt);} .ins.rose strong{color:var(--ac-coral);}
+.ins.yellow{background:var(--yellow-lt);} .ins.yellow strong{color:var(--ac-yellow);}
+
+.dt{width:100%;border-collapse:collapse;font-size:16px;}
+.dt th{font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-sub);padding:8px 12px;border-bottom:1.5px solid var(--rule);text-align:right;}
+.dt th:first-child{text-align:left;}
+.dt td{padding:7px 12px;border-bottom:1px solid var(--rule);text-align:right;font-variant-numeric:tabular-nums;}
+.dt td:first-child{text-align:left;font-weight:500;}
+.hi-row td{background:var(--blue-lt);font-weight:700;}
+.neg{color:var(--ac-coral);font-weight:700;} .pos{color:var(--ac-aqua);font-weight:700;} .hi{color:var(--ac-blue);font-weight:700;}
+
+.final-card{background:var(--topbar-bg);color:#fff;border-radius:14px;padding:36px 48px;text-align:center;}
+.final-text{font-size:30px;line-height:1.9;font-weight:300;max-width:760px;margin:0 auto 16px;}
+.final-text em{font-style:normal;font-weight:900;color:var(--topbar-logo);}
+
+/* === act flow visualization (slide 15) === */
+.act-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:stretch;}
+.act-card{background:var(--white);border:1.5px solid var(--rule);border-radius:10px;padding:14px 16px;position:relative;}
+.act-card.a{border-top:5px solid var(--ac-yellow);}
+.act-card.c{border-top:5px solid var(--ac-aqua);}
+.act-card.t{border-top:5px solid var(--ac-blue);}
+.act-card.s{border-top:5px solid var(--ac-coral);}
+.act-letter{font-size:38px;font-weight:900;line-height:1;}
+.act-card.a .act-letter{color:var(--ac-yellow);}
+.act-card.c .act-letter{color:var(--ac-aqua);}
+.act-card.t .act-letter{color:var(--ac-blue);}
+.act-card.s .act-letter{color:var(--ac-coral);}
+.act-name{font-size:14px;font-weight:700;letter-spacing:0.1em;color:var(--ink-sub);margin-top:4px;text-transform:uppercase;}
+.act-desc{font-size:14px;color:var(--ink-sub);line-height:1.55;margin-top:8px;}
+
+/* slide 1 cover */
+.cover-bg{width:100%;height:100%;background:linear-gradient(135deg,#2B3A6B 0%,#4A7CC7 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 80px;position:relative;}
+.cover-eye{font-size:13px;font-weight:800;letter-spacing:0.32em;color:var(--topbar-logo);margin-bottom:18px;}
+.cover-title{font-size:62px;font-weight:900;line-height:1.15;letter-spacing:0.02em;margin-bottom:24px;}
+.cover-title em{font-style:normal;color:var(--topbar-logo);}
+.cover-sub{font-size:24px;font-weight:300;color:rgba(255,255,255,0.85);line-height:1.6;max-width:880px;}
+.cover-meta{position:absolute;bottom:36px;left:80px;right:80px;display:flex;justify-content:space-between;align-items:flex-end;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:0.14em;}
+
+/* japanese font tweaks */
+body[data-lang="ja"] .slide-inner{font-size:15px;gap:8px!important;}
+body[data-lang="ja"] .keymsg-txt{font-size:26px!important;line-height:1.25!important;}
+body[data-lang="ja"] .keymsg-sub{font-size:14px!important;line-height:1.6!important;}
+body[data-lang="ja"] .keymsg-eye{font-size:11px!important;}
+body[data-lang="ja"] .kpi-val{font-size:32px!important;}
+body[data-lang="ja"] .kpi-lbl{font-size:11px!important;}
+body[data-lang="ja"] .kpi-nte{font-size:12px!important;}
+body[data-lang="ja"] .ins{font-size:13px!important;line-height:1.6!important;padding:9px 14px!important;}
+body[data-lang="ja"] .cover-title{font-size:48px!important;}
+body[data-lang="ja"] .cover-sub{font-size:19px!important;}
+body[data-lang="ja"] .final-text{font-size:24px!important;line-height:1.85!important;}
+body[data-lang="ja"] .sec-tag{font-size:13px!important;}
+body[data-lang="ja"] .act-desc{font-size:12px!important;}
+body[data-lang="ja"] .ctitle{font-size:12px!important;}
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+<div class="topbar">
+  <div class="tbar-logo" data-ja="LC8Tが証明する未来">LC8T 證明的未來</div>
+  <div class="tbar-mid">
+    <div class="tbar-ch" id="tbar-ch"></div>
+    <div class="tbar-title" id="tbar-title"></div>
+  </div>
+  <div class="tbar-nav">
+    <div class="ch-dots" id="ch-dots"></div>
+    <button class="btn-arr" id="btn-prev">◀</button>
+    <div class="slide-counter" id="slide-counter"></div>
+    <button class="btn-arr" id="btn-next">▶</button>
+    <button id="btn-lang" title="言語切替 / 切換語言" style="margin-left:8px;padding:4px 10px;font-size:11px;font-weight:700;background:rgba(255,255,255,0.1);color:#fff;border:1.5px solid rgba(255,255,255,0.25);border-radius:5px;cursor:pointer;letter-spacing:0.05em;font-family:var(--font);">🇯🇵 日本語</button>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 1: Cover ═══════ -->
+<div class="slide active" data-ch="00" data-title="表紙">
+  <div class="cover-bg">
+    <div class="cover-eye" data-ja="BENESSE TAIWAN ｜ 全社プレゼン ｜ 2026.05">BENESSE TAIWAN ｜ 全社簡報 ｜ 2026.05</div>
+    <div class="cover-title" data-ja="LC8Tが証明した、<br>私たちの<em>未来</em>。">LC8T 證明的，<br>我們的<em>未來</em>。</div>
+    <div class="cover-sub" data-ja="出生数は減っている。それは事実。<br>でも、減るパイの中で勝てる側に、私たちは変わりつつある。<br>その証拠は、すでにデータに現れている。">出生數正在減少。這是事實。<br>但即使在縮小的市場中，我們正在變成贏的那一邊。<br>證據，已經出現在數據裡。</div>
+    <div class="cover-meta">
+      <div data-ja="2026年5月8日　｜　台北分公司">2026年5月8日　｜　台北分公司</div>
+      <div data-ja="P(LTV) = O × N × CV − I">P(LTV) = O × N × CV − I</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 2: Agenda ═══════ -->
+<div class="slide" data-ch="00" data-title="今天要談的事">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;" data-ja="<div class=&quot;sec-num&quot;>00</div> アジェンダ"><div class="sec-num">00</div> 議程</div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="本日のストーリー">今天的故事</div>
+      <div class="keymsg-txt" data-ja="7つの章で、希望の根拠を示す。">用 7 個章節，告訴你希望的根據。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;">
+      <div class="card"><div class="ctitle" data-ja="第1章">CH.01</div><div style="font-size:18px;font-weight:800;" data-ja="出生数は減る。それは事実。">出生數正在減少。這是事實。</div></div>
+      <div class="card aqua"><div class="ctitle" data-ja="第2章">CH.02</div><div style="font-size:18px;font-weight:800;" data-ja="でも我々は、月刊から脱皮した。">但我們，已經從月刊脫皮。</div></div>
+      <div class="card aqua"><div class="ctitle" data-ja="第3章">CH.03</div><div style="font-size:18px;font-weight:800;" data-ja="何かが、すでに起きている。">某件事，已經正在發生。</div></div>
+      <div class="card"><div class="ctitle" data-ja="第4章">CH.04</div><div style="font-size:18px;font-weight:800;" data-ja="数字で見る、加速の証拠。">數字證明：我們正在加速。</div></div>
+      <div class="card yellow"><div class="ctitle" data-ja="第5章">CH.05</div><div style="font-size:18px;font-weight:800;" data-ja="正直に診断する。我々の弱点。">誠實診斷。我們的弱點。</div></div>
+      <div class="card coral"><div class="ctitle" data-ja="第6章">CH.06</div><div style="font-size:18px;font-weight:800;" data-ja="ACTSが起動する瞬間。">當 ACTS 啟動的瞬間。</div></div>
+    </div>
+    <div class="ins yellow" style="flex-shrink:0;font-size:18px;text-align:center;font-weight:700;" data-ja="<strong>第7章｜終結</strong>： Lだけで過去最高なら、C・8・Tが回ればどこまで?"><strong>第7章｜終結</strong>： L 已經帶來歷史新高，那 C・8・T 啟動之後呢?</div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 3: 出生数の事実 ═══════ -->
+<div class="slide" data-ch="01" data-title="台灣出生數">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--coral-lt);color:var(--ac-coral);"><div class="sec-num" style="background:var(--ac-coral);">01</div> <span data-ja="不都合な現実">不便的現實</span></div>
+    <div class="keymsg coral" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="まずは事実から">先從事實開始</div>
+      <div class="keymsg-txt" data-ja="台湾の出生数は、8年で 41% 減少した。">台灣出生數，8年內減少 41%。</div>
+      <div class="keymsg-sub" data-ja="そして 2025 年は、たった1年で −20% という記録的な急落。">而且 2025 年單一年急降 −20%，創下歷史紀錄。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1.4fr 1fr;gap:14px;min-height:0;">
+      <div class="card coral" style="display:flex;flex-direction:column;"><div class="ctitle" data-ja="台湾出生数 (2018-2025)">台灣出生數 (2018-2025)</div><div class="ch" style="flex:1;min-height:0;"><canvas id="c-birth"></canvas></div></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box coral"><div class="kpi-lbl" data-ja="2018年出生数">2018年出生數</div><div class="kpi-val">181,601</div></div>
+        <div class="kpi-box neutral"><div class="kpi-lbl" data-ja="2024年出生数">2024年出生數</div><div class="kpi-val">134,856</div><div class="kpi-nte" data-ja="2018比 −26%">vs 2018 −26%</div></div>
+        <div class="kpi-box coral"><div class="kpi-lbl" data-ja="2025年出生数">2025年出生數</div><div class="kpi-val">107,812</div><div class="kpi-nte" data-ja="2024比 −20.1%（蛇年効果＋経済不安）">vs 2024 −20.1%（蛇年效應＋經濟焦慮）</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 4: 認める ═══════ -->
+<div class="slide" data-ch="01" data-title="正面回應">
+  <div class="slide-inner" style="justify-content:center;">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--coral-lt);color:var(--ac-coral);"><div class="sec-num" style="background:var(--ac-coral);">01</div> <span data-ja="正面から認める">正面回應</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 20px;">
+      <div style="background:var(--white);border:2px dashed var(--rule);border-radius:14px;padding:24px 32px;text-align:center;">
+        <div style="font-size:14px;font-weight:700;color:var(--ink-dim);letter-spacing:0.18em;margin-bottom:10px;" data-ja="社員の本音">員工的真心話</div>
+        <div style="font-size:32px;font-weight:900;color:var(--topbar-bg);font-style:italic;" data-ja="「また出生数が減った。大丈夫か?」">「又少子化了，沒問題嗎?」</div>
+      </div>
+      <div class="keymsg" style="font-size:24px;line-height:1.7;background:var(--blue-lt);">
+        <div class="keymsg-eye" data-ja="正直に答える">誠實回答</div>
+        <div style="font-size:26px;font-weight:800;line-height:1.5;" data-ja="はい、市場は縮小している。<br>これからも縮小する。<br>しかし、これは <strong style=&quot;color:var(--ac-blue);&quot;>全員が同じ条件</strong>で戦っているということ。">是的，市場正在縮小。<br>而且還會繼續縮小。<br>但這代表，<strong style="color:var(--ac-blue);">所有公司都在同樣條件下競爭</strong>。</div>
+      </div>
+      <div class="keymsg aqua" style="background:var(--aqua-lt);">
+        <div class="keymsg-eye" data-ja="そしてもう一つの事実">還有另一個事實</div>
+        <div style="font-size:26px;font-weight:900;line-height:1.45;color:var(--topbar-bg);" data-ja="減るパイの中でも、<strong style=&quot;color:var(--ac-aqua);&quot;>勝つ側</strong>と<strong style=&quot;color:var(--ac-coral);&quot;>負ける側</strong>に分かれる。<br>そして我々は、勝つ側に変わりつつある。">在縮小的餅當中，會分成<strong style="color:var(--ac-aqua);">贏的一邊</strong>跟<strong style="color:var(--ac-coral);">輸的一邊</strong>。<br>而我們，正在變成贏的那一邊。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 5: 月刊終了→FY25 +5% ═══════ -->
+<div class="slide" data-ch="02" data-title="月刊脱皮">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--aqua-lt);color:var(--ac-aqua);"><div class="sec-num" style="background:var(--ac-aqua);">02</div> <span data-ja="月刊から脱皮した">月刊脫皮</span></div>
+    <div class="keymsg aqua" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="第一の証拠">第一個證據</div>
+      <div class="keymsg-txt" data-ja="月刊が無くても、学習商品は前年を超えた。">沒有月刊，學習商品依然超越前年。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:0;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card" style="padding:12px 18px;">
+          <div class="ctitle" data-ja="2025年3月、月刊終了">2025年3月，月刊終結</div>
+          <div style="font-size:17px;line-height:1.6;color:var(--ink-sub);" data-ja="《巧連智》月刊サブスクリプションは、2025年3月の最終号で正式に終了。<br>主力商品は学習套組（書籍・玩具・映像・舞台劇）に転換した。">《巧連智》月刊訂閱制，於 2025年3月最後一期正式結束。<br>主力商品轉為學習套組（書籍・玩具・影像・舞台劇）。</div>
+        </div>
+        <div class="kpi-box aqua"><div class="kpi-lbl" data-ja="FY24 学習商品売上">FY24 學習商品營收</div><div class="kpi-val">NT$ 55.62M</div><div class="kpi-nte" data-ja="月刊あり 12ヶ月間">含月刊的 12 個月</div></div>
+        <div class="kpi-box neutral"><div class="kpi-lbl" data-ja="FY25 学習商品売上">FY25 學習商品營收</div><div class="kpi-val" style="color:var(--ac-aqua);">NT$ 58.43M</div><div class="kpi-nte" data-ja="月刊ゼロ → 套組のみ → +5.05% YoY">月刊歸零 → 純套組 → +5.05% YoY</div></div>
+      </div>
+      <div class="card aqua" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="学習商品 FY24 vs FY25 月別">學習商品 FY24 vs FY25 月別</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-pl-yoy"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 6: 移行/新規 ═══════ -->
+<div class="slide" data-ch="02" data-title="移行 + 新規">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--aqua-lt);color:var(--ac-aqua);"><div class="sec-num" style="background:var(--ac-aqua);">02</div> <span data-ja="顧客基盤の構造">顧客基盤的結構</span></div>
+    <div class="keymsg aqua" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="第二の証拠">第二個證據</div>
+      <div class="keymsg-txt" data-ja="月刊客の慣性ではない。新たな顧客基盤を作っている。">這不是月刊客戶的慣性。是建立全新的顧客基盤。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1.2fr;gap:14px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div class="ctitle" data-ja="FY25 套組客 内訳">FY25 套組客戶結構</div>
+        <div class="ch" style="width:100%;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;"><canvas id="c-migration"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box aqua"><div class="kpi-lbl" data-ja="FY25 套組購入客 合計">FY25 套組購買客戶 合計</div><div class="kpi-val">7,895 人</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="kpi-box neutral"><div class="kpi-lbl" style="color:var(--ac-blue);" data-ja="移行成功">移行成功</div><div class="kpi-val">4,427</div><div class="kpi-nte" data-ja="56% — 巧連智経験あり">56% — 有巧連智經驗</div></div>
+          <div class="kpi-box neutral" style="border-top-color:var(--ac-coral);"><div class="kpi-lbl" style="color:var(--ac-coral);" data-ja="新規獲得">新規獲得</div><div class="kpi-val" style="color:var(--ac-coral);">3,468</div><div class="kpi-nte" data-ja="44% — 巧連智経験なし">44% — 從未訂過巧連智</div></div>
+        </div>
+        <div class="ins mint" style="font-size:17px;line-height:1.7;" data-ja="月刊終了で失った収入を <strong>ほぼ半分は新規客が埋めた</strong>。これは月刊客の余韻ではなく、まさに「新しい顧客との関係」が始まっている証拠。">月刊終結造成的營收損失，<strong>幾乎一半由全新客戶填補</strong>。這不是月刊客戶的餘韻，而是「全新顧客關係」正在誕生。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 7: 巨大な伸び代 ═══════ -->
+<div class="slide" data-ch="02" data-title="伸び代">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--aqua-lt);color:var(--ac-aqua);"><div class="sec-num" style="background:var(--ac-aqua);">02</div> <span data-ja="巨大な伸び代">巨大的成長空間</span></div>
+    <div class="keymsg aqua" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="第三の事実">第三個事實</div>
+      <div class="keymsg-txt" data-ja="38万BCLのうち、套組客はまだ2%。98%が伸び代。">38萬 BCL 中，套組客戶僅佔 2%。98% 是成長空間。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:0;">
+      <div class="kpi-box neutral"><div class="kpi-lbl" data-ja="現在の BCL 総数">目前 BCL 總人數</div><div class="kpi-val">390,759</div><div class="kpi-nte" data-ja="LINE好友 + 巧連智会員 + SHOPLINE会員 統合">LINE 好友 + 巧連智會員 + SHOPLINE 會員 整合</div></div>
+      <div class="kpi-box yellow"><div class="kpi-lbl" data-ja="うち FY25 套組購入客">其中 FY25 套組購買客戶</div><div class="kpi-val">7,895</div><div class="kpi-nte" data-ja="比率：2.0%">比率：2.0%</div></div>
+      <div class="kpi-box aqua"><div class="kpi-lbl" data-ja="未獲得 BCL">未開發 BCL</div><div class="kpi-val">382,864</div><div class="kpi-nte" data-ja="この群が次の成長エンジン">這群人就是下一個成長引擎</div></div>
+      <div class="card aqua" style="display:flex;flex-direction:column;justify-content:center;">
+        <div class="ctitle" data-ja="メッセージ">關鍵訊息</div>
+        <div style="font-size:23px;font-weight:800;line-height:1.5;color:var(--topbar-bg);" data-ja="少子化で「市場」は縮むが、<br>我々の<strong style=&quot;color:var(--ac-aqua);&quot;>未開拓BCL</strong>は<br>38万人もある。">少子化讓「市場」縮小，<br>但我們的<strong style="color:var(--ac-aqua);">未開發BCL</strong>，<br>還有 38 萬人。</div>
+        <div style="margin-top:8px;font-size:15px;color:var(--ink-sub);line-height:1.55;" data-ja="この内側の市場こそ、LC8Tが攻めるべき場所。">這個內部市場，就是 LC8T 要攻擊的地方。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 8: WEB買い手 99% LINE綁定済 ═══════ -->
+<div class="slide" data-ch="03" data-title="WEB是 LINE 中心">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--blue-lt);color:var(--ac-blue);"><div class="sec-num">03</div> <span data-ja="何かが起きている">某件事正在發生</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="発見①">發現①</div>
+      <div class="keymsg-txt" data-ja="WEB買い手の <strong style=&quot;color:var(--ac-blue);&quot;>99%</strong> は、LINE綁定済客。">WEB 購買者中，<strong style="color:var(--ac-blue);">99%</strong> 是 LINE 綁定客戶。</div>
+      <div class="keymsg-sub" data-ja="つまり「WEBの売上」とは、ほぼ全部「LINE経由の売上」のこと。">換言之，「WEB 營收」幾乎等於「LINE 帶來的營收」。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1.4fr 1fr;gap:14px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="WEB買い手 LINE綁定済比率（月別）">WEB 購買者中 LINE 綁定者比率（月別）</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-line-rate"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box"><div class="kpi-lbl" data-ja="24ヶ月平均">24個月平均</div><div class="kpi-val">98.1%</div><div class="kpi-nte" data-ja="WEB買い手の LINE綁定率">WEB 購買者的 LINE 綁定率</div></div>
+        <div class="ins" style="font-size:17px;line-height:1.7;" data-ja="つまり <strong>L（LINE）は既に完成</strong>している。LC8T の最初の段は、もう仕事を終えた。">換言之，<strong>L（LINE）已經完成</strong>。LC8T 的第一段，工作已經結束。</div>
+        <div class="ins mint" style="font-size:17px;line-height:1.7;" data-ja="残るは <strong>C・8・T</strong> ── これが起動した瞬間に、何が起きるか?">剩下的是 <strong>C・8・T</strong> ── 當它們啟動的瞬間，會發生什麼?</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 9: タグ急増 ═══════ -->
+<div class="slide" data-ch="03" data-title="標籤累積開始啟動">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--blue-lt);color:var(--ac-blue);"><div class="sec-num">03</div> <span data-ja="2025年9月、何かが始まった">2025年9月，某件事開始了</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="発見②">發現②</div>
+      <div class="keymsg-txt" data-ja="WEB買い手の平均タグ数が、半年で <strong style=&quot;color:var(--ac-blue);&quot;>14倍</strong> になった。">WEB 購買者的平均標籤數，半年內成長 <strong style="color:var(--ac-blue);">14倍</strong>。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1.5fr 1fr;gap:14px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="WEB買い手 1人あたり 平均タグ数 (月別)">WEB 購買者 平均每人 標籤數 (月別)</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-tag-avg"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="kpi-box neutral"><div class="kpi-lbl" data-ja="202508 (転換点直前)">202508（轉折點之前）</div><div class="kpi-val">0.95</div><div class="kpi-nte" data-ja="ほぼ"接触ログ"レベル">幾乎只是「接觸記錄」</div></div>
+        <div class="kpi-box"><div class="kpi-lbl" data-ja="202603 (直近)">202603（最近）</div><div class="kpi-val">14.09</div><div class="kpi-nte" data-ja="人物像が見え始める粒度">已經能描繪人物輪廓的細度</div></div>
+        <div class="ins" style="font-size:16px;line-height:1.65;" data-ja="LINE綁定客に対する <strong>本格的なタグ付与</strong> が、202509 から始まっている。これは <strong>C・8 段</strong>の準備が水面下で進んでいる証拠。">針對 LINE 綁定客戶的 <strong>實質標籤建設</strong>，從 202509 開始。這是 <strong>C・8 段</strong>在水面下推進的證據。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 10: WEB買い手数 ═══════ -->
+<div class="slide" data-ch="03" data-title="買い手数も過去最高">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--blue-lt);color:var(--ac-blue);"><div class="sec-num">03</div> <span data-ja="買い手数も同時に伸びている">購買人數同時成長</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="発見③">發現③</div>
+      <div class="keymsg-txt" data-ja="同じ時期、WEB月別買い手数も<strong style=&quot;color:var(--ac-blue);&quot;>過去24ヶ月最高</strong>へ。">同一時期，WEB 月別購買人數也創下<strong style="color:var(--ac-blue);">24個月最高</strong>。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1.4fr 1fr;gap:14px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="WEB月別買い手数 (202404-202603)">WEB 月別購買人數 (202404-202603)</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-web-buyers"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box neutral"><div class="kpi-lbl" data-ja="202404〜202508 平均">202404〜202508 平均</div><div class="kpi-val">210 人</div><div class="kpi-nte" data-ja="月平均（17ヶ月）">17 個月平均</div></div>
+        <div class="kpi-box"><div class="kpi-lbl" data-ja="202509〜202603 平均">202509〜202603 平均</div><div class="kpi-val">302 人</div><div class="kpi-nte" data-ja="+44% 増加">+44% 增加</div></div>
+        <div class="kpi-box coral"><div class="kpi-lbl" data-ja="202603 単月（直近）">202603 單月（最近）</div><div class="kpi-val">550 人</div><div class="kpi-nte" data-ja="24ヶ月で過去最高">24個月歷史最高</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 11: WEB売上推移 ═══════ -->
+<div class="slide" data-ch="04" data-title="WEB營收創新高">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--coral-lt);color:var(--ac-coral);"><div class="sec-num" style="background:var(--ac-coral);">04</div> <span data-ja="数字で見る加速">用數字看加速</span></div>
+    <div class="keymsg coral" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="加速の証拠①">加速證據①</div>
+      <div class="keymsg-txt" data-ja="WEB月次売上が、過去最高を更新した。">WEB 月營收，創下歷史新高。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1.4fr 1fr;gap:14px;min-height:0;">
+      <div class="card coral" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="学習商品 WEB売上 月別 (202404-202603)">學習商品 WEB 月營收 (202404-202603)</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-web-rev"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box coral"><div class="kpi-lbl" data-ja="202603 WEB売上">202603 WEB 營收</div><div class="kpi-val">NT$ 2.89M</div><div class="kpi-nte" data-ja="単月で過去24ヶ月最高">單月 24個月歷史最高</div></div>
+        <div class="kpi-box"><div class="kpi-lbl" data-ja="FY25 WEB 全年">FY25 WEB 全年</div><div class="kpi-val">NT$ 15.83M</div><div class="kpi-nte" data-ja="vs FY24 12.84M（+23.3%）">vs FY24 12.84M（+23.3%）</div></div>
+        <div class="ins rose" style="font-size:16px;line-height:1.7;" data-ja="WEB は学習商品の <strong>明確な成長エンジン</strong>。電銷（TM）が成熟（−7%）する中、WEB が会社を引っ張っている。">WEB 已是學習商品的 <strong>明確成長引擎</strong>。在電銷（TM）成熟（−7%）的同時，WEB 拉著公司前進。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 12: Q4加速 ═══════ -->
+<div class="slide" data-ch="04" data-title="Q4 加速">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--coral-lt);color:var(--ac-coral);"><div class="sec-num" style="background:var(--ac-coral);">04</div> <span data-ja="直近Q4の数字">最近 Q4 的數字</span></div>
+    <div class="keymsg coral" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="加速の証拠②">加速證據②</div>
+      <div class="keymsg-txt" data-ja="2026年1-3月（Q4）、加速が始まっている。">2026年1-3月（Q4），加速正在發生。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;min-height:0;">
+      <div class="kpi-box coral" style="display:flex;flex-direction:column;justify-content:center;"><div class="kpi-lbl" data-ja="Q4 学習商品 WEB+TEL">Q4 學習商品 WEB+TEL</div><div class="kpi-val" style="font-size:48px;">+68%</div><div class="kpi-nte" data-ja="Q4 (Jan-Mar 26) vs 前年 Q4">Q4 (Jan-Mar 26) vs 前年 Q4</div></div>
+      <div class="kpi-box" style="display:flex;flex-direction:column;justify-content:center;"><div class="kpi-lbl" data-ja="Q4 WEB 単独">Q4 WEB 單獨</div><div class="kpi-val" style="font-size:48px;">+163%</div><div class="kpi-nte" data-ja="WEB チャネルだけで2.6倍">WEB 通路單獨成長 2.6倍</div></div>
+      <div class="kpi-box yellow" style="display:flex;flex-direction:column;justify-content:center;"><div class="kpi-lbl" data-ja="Q4 単月最大 (202603)">Q4 單月最高 (202603)</div><div class="kpi-val" style="font-size:48px;">5.66M</div><div class="kpi-nte" data-ja="WEB+TEL 学習商品 単月、202503 比 +162%">WEB+TEL 學習商品 單月，vs 202503 +162%</div></div>
+    </div>
+    <div class="keymsg dark" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="言いたいこと">想說的事</div>
+      <div style="font-size:24px;font-weight:800;line-height:1.55;" data-ja="我々は「生き残った」のではない。<br><strong style=&quot;color:var(--topbar-logo);&quot;>加速している</strong>。">我們不是「活下來」。<br>而是<strong style="color:var(--topbar-logo);">正在加速</strong>。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 13: タグ診断 ═══════ -->
+<div class="slide" data-ch="05" data-title="誠實診斷 — 標籤現況">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--yellow-lt);color:#A07000;"><div class="sec-num" style="background:var(--ac-yellow);color:#3A2800;">05</div> <span data-ja="正直に診断する">誠實診斷</span></div>
+    <div class="keymsg yellow" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="でも、忘れてはいけない事実">但不能忘記的事實</div>
+      <div class="keymsg-txt" data-ja="現状のタグは <strong>"接触ログ"</strong> 中心。<strong style=&quot;color:#A07000;&quot;>"興趣"はまだ存在しない</strong>。">現在的標籤都是「接觸記錄」。<strong style="color:#A07000;">「興趣」幾乎不存在</strong>。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:0;">
+      <div class="card yellow" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="LINE標籤の質的内訳（電銷接觸客 38,511人）">LINE 標籤的質的結構（電銷接觸客戶 38,511人）</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-tag-cmp"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box neutral" style="border-top-color:var(--ac-aqua);"><div class="kpi-lbl" style="color:var(--ac-aqua);" data-ja="行為タグ あり">行為標籤 有</div><div class="kpi-val" style="color:var(--ac-aqua);">99.3%</div><div class="kpi-nte" data-ja="38,242 / 38,511 — 配信を受けた、開封した、等">38,242 / 38,511 — 收到訊息、開信等</div></div>
+        <div class="kpi-box yellow"><div class="kpi-lbl" data-ja="興趣タグ あり">興趣標籤 有</div><div class="kpi-val">0.5%</div><div class="kpi-nte" data-ja="193 / 38,511 — 何に興味あるかが分かる客は、ほぼいない">193 / 38,511 — 我們幾乎不知道客戶喜歡什麼</div></div>
+        <div class="ins yellow" style="font-size:16px;line-height:1.7;" data-ja="つまり今のタグは <strong>"何度も配信を受け取った"</strong> 記録ばかり。<strong>"何に興味があるのか"</strong> はまだ把握できていない。">換言之，現在的標籤都是 <strong>「收過幾次訊息」</strong>。<strong>「對什麼有興趣」</strong> 還無法掌握。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 14: L だけが完成 ═══════ -->
+<div class="slide" data-ch="05" data-title="LだけでこのGAP">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--yellow-lt);color:#A07000;"><div class="sec-num" style="background:var(--ac-yellow);color:#3A2800;">05</div> <span data-ja="LC8T の現在地">LC8T 的現在位置</span></div>
+    <div class="keymsg yellow" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="LC8Tの実態">LC8T 的實況</div>
+      <div class="keymsg-txt" data-ja="今動いているのは、L と T だけ。 C・8 はまだ起動していない。">目前在運轉的，只有 L 跟 T。C・8 還沒啟動。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;min-height:0;">
+      <div class="card aqua" style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--aqua-lt);">
+        <div style="font-size:64px;font-weight:900;color:var(--ac-aqua);line-height:1;margin-bottom:6px;">L</div>
+        <div style="font-size:16px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.1em;margin-bottom:8px;">LINE</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.55;flex:1;" data-ja="WEB買い手の99%が綁定済。BCL基盤完成。">WEB 購買者 99% 綁定。BCL 基礎完成。</div>
+        <div style="margin-top:8px;padding:4px 12px;background:var(--ac-aqua);color:#fff;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.12em;" data-ja="✓ 完成">✓ 完成</div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--yellow-lt);border-top-color:var(--ac-yellow);">
+        <div style="font-size:64px;font-weight:900;color:var(--ac-yellow);line-height:1;margin-bottom:6px;">C</div>
+        <div style="font-size:16px;font-weight:800;color:#A07000;letter-spacing:0.1em;margin-bottom:8px;">COMMUNITY</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.55;flex:1;" data-ja="興趣タグ整備の前提。まだ未着手。">興趣標籤的前提。尚未啟動。</div>
+        <div style="margin-top:8px;padding:4px 12px;background:var(--ac-yellow);color:#3A2800;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.12em;" data-ja="◯ 準備中">◯ 準備中</div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--yellow-lt);border-top-color:var(--ac-yellow);">
+        <div style="font-size:64px;font-weight:900;color:var(--ac-yellow);line-height:1;margin-bottom:6px;">8</div>
+        <div style="font-size:16px;font-weight:800;color:#A07000;letter-spacing:0.1em;margin-bottom:8px;">SUPER8</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.55;flex:1;" data-ja="ACTSの心臓。月齢起点の自動配信エンジン。">ACTS 的心臟。以月齡為起點的自動配送引擎。</div>
+        <div style="margin-top:8px;padding:4px 12px;background:var(--ac-yellow);color:#3A2800;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.12em;" data-ja="◯ 準備中">◯ 準備中</div>
+      </div>
+      <div class="card coral" style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--coral-lt);border-top-color:var(--ac-coral);">
+        <div style="font-size:64px;font-weight:900;color:var(--ac-coral);line-height:1;margin-bottom:6px;">T</div>
+        <div style="font-size:16px;font-weight:800;color:var(--ac-coral);letter-spacing:0.1em;margin-bottom:8px;">TEL</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.55;flex:1;" data-ja="既存運用中。タグの質が上がれば効率lift。">目前正在運轉。標籤品質提升即可拉高效率。</div>
+        <div style="margin-top:8px;padding:4px 12px;background:var(--ac-coral);color:#fff;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.12em;" data-ja="✓ 稼働中">✓ 運轉中</div>
+      </div>
+    </div>
+    <div class="keymsg dark" style="flex-shrink:0;">
+      <div style="font-size:25px;font-weight:800;line-height:1.5;" data-ja="L だけで <strong style=&quot;color:var(--topbar-logo);&quot;>過去最高</strong>。<br>では <strong style=&quot;color:var(--topbar-logo);&quot;>C・8</strong> が回り始めたら、どこまで行くだろうか?">只有 L，就創下<strong style="color:var(--topbar-logo);">歷史新高</strong>。<br>那當 <strong style="color:var(--topbar-logo);">C・8</strong> 開始運轉，會到達怎樣的高度?</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 15: ACTS定義 ═══════ -->
+<div class="slide" data-ch="06" data-title="ACTSとは">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--blue-lt);color:var(--ac-blue);"><div class="sec-num">06</div> <span data-ja="ACTSが起動する瞬間">當 ACTS 啟動</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="ACTSとは">ACTS 是什麼</div>
+      <div class="keymsg-txt" data-ja="月齢を起点に、配信→興趣タグ→電銷を自動で繋ぐ因果連鎖。">以月齡為起點，自動串連 配信 → 興趣標籤 → 電銷 的因果鏈。</div>
+    </div>
+    <div class="act-flow" style="flex-shrink:0;">
+      <div class="act-card a">
+        <div class="act-letter">A</div>
+        <div class="act-name">AGE</div>
+        <div style="font-size:18px;font-weight:800;margin-top:6px;" data-ja="月齢">月齡</div>
+        <div class="act-desc" data-ja="登録時の子の月齢を索引キーとして配信シナリオを起動">以登錄時孩子月齡為索引鍵啟動配送情境</div>
+      </div>
+      <div class="act-card c">
+        <div class="act-letter">C</div>
+        <div class="act-name">COMMUNICATION</div>
+        <div style="font-size:18px;font-weight:800;margin-top:6px;" data-ja="溝通">溝通</div>
+        <div class="act-desc" data-ja="発展段階に応じて9SKUの教育コンテンツを自動配信、LP誘導">依發展階段自動配送 9SKU 教育內容，引導至 LP</div>
+      </div>
+      <div class="act-card t">
+        <div class="act-letter">T</div>
+        <div class="act-name">TAG</div>
+        <div style="font-size:18px;font-weight:800;margin-top:6px;" data-ja="標籤">標籤</div>
+        <div class="act-desc" data-ja="開封・点击・LP転跳の反応を全て興趣タグとして自動付与">開信・點擊・LP 跳轉的反應全部自動轉為興趣標籤</div>
+      </div>
+      <div class="act-card s">
+        <div class="act-letter">S</div>
+        <div class="act-name">SALES</div>
+        <div style="font-size:18px;font-weight:800;margin-top:6px;" data-ja="業務">業務</div>
+        <div class="act-desc" data-ja="興趣タグから高意向客を抽出、高効率の電銷で刈り取る">從興趣標籤鎖定高意願者，以高效率電銷收割</div>
+      </div>
+    </div>
+    <div class="keymsg aqua" style="flex-shrink:0;">
+      <div style="font-size:21px;font-weight:800;line-height:1.5;" data-ja="<strong style=&quot;color:var(--ac-aqua);&quot;>ACTS = 興趣タグ製造機</strong>。これが LC8T の C・8・T の因果鎖の起点。"><strong style="color:var(--ac-aqua);">ACTS = 興趣標籤製造機</strong>。它是 LC8T 中 C・8・T 的因果鏈起點。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 16: 71050 ═══════ -->
+<div class="slide" data-ch="06" data-title="71,050 個打席">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--blue-lt);color:var(--ac-blue);"><div class="sec-num">06</div> <span data-ja="ACTS の打席数">ACTS 的打席數</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="ACTS が起動した瞬間">當 ACTS 啟動的瞬間</div>
+      <div class="keymsg-txt" data-ja="<strong style=&quot;color:var(--ac-blue);&quot;>71,050</strong> 家族が、同時に配信ループに入る。">一瞬間，<strong style="color:var(--ac-blue);">71,050</strong> 個家庭，同時進入配送循環。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1.5fr 1fr;gap:14px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="生きたBCL の月齢分布（202603時点）">活躍 BCL 月齡分布（202603 時點）</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-age-dist"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box"><div class="kpi-lbl" data-ja="ACTS 配信対象（6M〜59M）">ACTS 配送對象（6M〜59M）</div><div class="kpi-val">71,050</div><div class="kpi-nte" data-ja="同時並行で配信可能な家族数">可同時並行配送的家庭數</div></div>
+        <div class="kpi-box neutral"><div class="kpi-lbl" data-ja="妊娠期 + 0〜5M（パイプライン）">孕期 + 0〜5M（候補）</div><div class="kpi-val" style="color:var(--ac-aqua);">5,273</div><div class="kpi-nte" data-ja="毎月新たに ACTS 開始対象になる">每月新進入 ACTS 對象</div></div>
+        <div class="ins" style="font-size:16px;line-height:1.7;" data-ja="仮に WEB 成交率 1% が引き出せれば、月次 <strong>+700件</strong> の追加成交。年間 <strong>+8,400件</strong> = 現在の套組客の <strong>1倍超</strong> の上乗せ。">假設能引出 WEB 成交率 1%，每月就有 <strong>+700件</strong> 追加成交。一年 <strong>+8,400件</strong> = 目前套組客戶的 <strong>1倍以上</strong>。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 17: 興趣 lift ═══════ -->
+<div class="slide" data-ch="06" data-title="興趣標籤的 lift">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:var(--blue-lt);color:var(--ac-blue);"><div class="sec-num">06</div> <span data-ja="興趣タグの威力">興趣標籤的威力</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="既に検証済み">已經驗證</div>
+      <div class="keymsg-txt" data-ja="興趣タグがある客の成交率は、<strong style=&quot;color:var(--ac-blue);&quot;>+6pt</strong>。">有興趣標籤的客戶，成交率高出 <strong style="color:var(--ac-blue);">+6pt</strong>。</div>
+      <div class="keymsg-sub" data-ja="現状0.5%しかない興趣タグを、ACTSが量産する。">目前只佔 0.5% 的興趣標籤，將由 ACTS 量產。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;">
+        <div class="ctitle" data-ja="行為x興趣 タグ × 60日内成交率">行為x興趣 標籤 × 60日內成交率</div>
+        <div class="ch" style="flex:1;min-height:0;"><canvas id="c-conv-lift"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="kpi-box neutral" style="border-top-color:var(--ac-grey);"><div class="kpi-lbl" data-ja="行為のみ（n=38,049）">只有行為標籤（n=38,049）</div><div class="kpi-val" style="color:var(--ac-grey);">16.3%</div><div class="kpi-nte" data-ja="60日内成交率">60日內成交率</div></div>
+        <div class="kpi-box"><div class="kpi-lbl" data-ja="行為+興趣（n=193）">行為+興趣（n=193）</div><div class="kpi-val">22.0%</div><div class="kpi-nte" data-ja="+5.7pt の確実な lift">+5.7pt 的確切提升</div></div>
+        <div class="ins mint" style="font-size:16px;line-height:1.7;" data-ja="ACTS が動けば、興趣タグ保有客は <strong>0.5% → 数十%</strong> へ。電銷効率は <strong>根本的に変わる</strong>。">當 ACTS 啟動，有興趣標籤的客戶將從 <strong>0.5% → 數十%</strong>。電銷效率將 <strong>根本性地改變</strong>。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 18: 終結問い ═══════ -->
+<div class="slide" data-ch="07" data-title="終結問い">
+  <div class="slide-inner" style="justify-content:center;">
+    <div class="sec-tag" style="flex-shrink:0;background:#FFF3D6;color:#7A5500;"><div class="sec-num" style="background:var(--topbar-logo);color:#3A2800;">07</div> <span data-ja="終結">終結</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px;padding:0 30px;">
+      <div style="text-align:center;font-size:18px;font-weight:700;color:var(--ink-sub);letter-spacing:0.18em;" data-ja="この30分の問い">這 30 分鐘的問題</div>
+      <div style="background:linear-gradient(135deg,#2B3A6B 0%,#4A7CC7 100%);color:#fff;border-radius:20px;padding:48px 56px;text-align:center;">
+        <div style="font-size:24px;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.85);margin-bottom:16px;" data-ja="LC8T の <strong style=&quot;color:var(--topbar-logo);font-weight:900;&quot;>L だけ</strong> でも、<br>過去最高を更新している。">LC8T 中 <strong style="color:var(--topbar-logo);font-weight:900;">只有 L</strong> 在運轉，<br>就已經創下歷史新高。</div>
+        <div style="font-size:42px;font-weight:900;line-height:1.45;letter-spacing:0.02em;" data-ja="では、<em style=&quot;font-style:normal;color:var(--topbar-logo);&quot;>C・8・T</em> が回り始めたら、<br>我々はどこまで行けるだろうか?">那當 <em style="font-style:normal;color:var(--topbar-logo);">C・8・T</em> 開始運轉，<br>我們將達到怎樣的高度?</div>
+      </div>
+      <div style="text-align:center;font-size:18px;color:var(--ink-sub);line-height:1.7;" data-ja="この問いに、誰一人として「分かりません」と答える権利はない。<br>それを <strong>我々が作る</strong>のだから。">沒有任何人有資格回答「不知道」這個問題。<br>因為，這是 <strong>我們親手要建造</strong>的。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 19: ロードマップ ═══════ -->
+<div class="slide" data-ch="07" data-title="FY26 ロードマップ">
+  <div class="slide-inner">
+    <div class="sec-tag" style="flex-shrink:0;background:#FFF3D6;color:#7A5500;"><div class="sec-num" style="background:var(--topbar-logo);color:#3A2800;">07</div> <span data-ja="FY26 行動計画">FY26 行動計劃</span></div>
+    <div class="keymsg" style="flex-shrink:0;">
+      <div class="keymsg-eye" data-ja="FY26 ロードマップ">FY26 路線圖</div>
+      <div class="keymsg-txt" data-ja="未来は、来期の四半期ごとに、確実に動き始める。">未來，從 FY26 每一季開始，將確實啟動。</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;min-height:0;">
+      <div class="card" style="display:flex;flex-direction:column;">
+        <div style="font-size:13px;font-weight:800;color:var(--ac-blue);letter-spacing:0.12em;margin-bottom:8px;">FY26 Q1 (Apr–Jun)</div>
+        <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);margin-bottom:8px;" data-ja="ACTSシステム実装">ACTS 系統實作</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="Super8 廠商確認・LP設計・配信スクリプト構築">Super8 廠商確認、LP 設計、配送腳本建構</div>
+      </div>
+      <div class="card aqua" style="display:flex;flex-direction:column;">
+        <div style="font-size:13px;font-weight:800;color:var(--ac-aqua);letter-spacing:0.12em;margin-bottom:8px;">FY26 Q2 (Jul–Sep)</div>
+        <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);margin-bottom:8px;" data-ja="月齢別配信スタート">月齡別配送啟動</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="9SKU × 2ヶ月4回の配信が、71,050家族へ自動展開">9 SKU × 2 個月 4 次配送，自動展開至 71,050 個家庭</div>
+      </div>
+      <div class="card yellow" style="display:flex;flex-direction:column;">
+        <div style="font-size:13px;font-weight:800;color:#A07000;letter-spacing:0.12em;margin-bottom:8px;">FY26 Q3 (Oct–Dec)</div>
+        <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);margin-bottom:8px;" data-ja="興趣タグ蓄積期">興趣標籤累積期</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="開封・点击・LP転跳が興趣タグとしてDBに自動蓄積">開信、點擊、LP 跳轉自動轉為興趣標籤累積至 DB</div>
+      </div>
+      <div class="card coral" style="display:flex;flex-direction:column;">
+        <div style="font-size:13px;font-weight:800;color:var(--ac-coral);letter-spacing:0.12em;margin-bottom:8px;">FY26 Q4 (Jan–Mar)</div>
+        <div style="font-size:18px;font-weight:800;color:var(--topbar-bg);margin-bottom:8px;" data-ja="高効率電銷の再構築">高效率電銷再啟動</div>
+        <div style="font-size:14px;color:var(--ink-sub);line-height:1.65;flex:1;" data-ja="興趣タグからhot リスト → 電銷専員へ配分 → 高CV 刈り取り">從興趣標籤建構 hot list → 配給專員 → 高 CV 收割</div>
+      </div>
+    </div>
+    <div class="ins yellow" style="flex-shrink:0;font-size:17px;text-align:center;line-height:1.7;" data-ja="このロードマップは <strong>夢ではなく、設計済みの工程</strong>。FY26 中に必ず一通り回し切る。">這份路線圖不是夢想，是 <strong>已經設計完成的工程</strong>。FY26 內必定走完一遍。</div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 20: 最終メッセージ ═══════ -->
+<div class="slide" data-ch="07" data-title="最終訊息">
+  <div class="slide-inner" style="justify-content:center;">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;padding:0 40px;">
+      <div style="text-align:center;font-size:14px;font-weight:800;color:var(--ink-dim);letter-spacing:0.32em;" data-ja="最終メッセージ">最終訊息</div>
+      <div class="final-card" style="border-radius:20px;padding:48px 60px;max-width:920px;">
+        <div class="final-text" style="font-size:40px;font-weight:900;line-height:1.5;color:#fff;margin-bottom:18px;" data-ja="未来は、誰かが用意するものではない。<br><em>我々が作る</em>ものだ。">未來，不是別人準備好的。<br><em>是我們親手建造的</em>。</div>
+        <div style="font-size:20px;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.85);max-width:700px;margin:0 auto;" data-ja="数字は、すでに我々の側にある。<br>あとは、49人それぞれが、自分の場所で<br>この因果連鎖を回し続けるだけ。">數字已經站在我們這邊。<br>剩下的，就是 49 個人，在各自的位置上<br>持續轉動這個因果鏈。</div>
+      </div>
+      <div style="text-align:center;font-size:18px;color:var(--ink-sub);font-weight:500;line-height:1.7;letter-spacing:0.04em;" data-ja="一緒に、未来を作りましょう。">讓我們一起，建造未來。</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ── SLIDE ENGINE ──
+const slides = document.querySelectorAll('.slide');
+const TOTAL = slides.length;
+let cur = 0;
+
+const titles = [
+  ['CH.00','表紙'],
+  ['CH.00','今天要談的事'],
+  ['CH.01','台灣出生數'],
+  ['CH.01','正面回應'],
+  ['CH.02','月刊脫皮'],
+  ['CH.02','移行 + 新規'],
+  ['CH.02','伸び代'],
+  ['CH.03','WEB是 LINE 中心'],
+  ['CH.03','標籤累積開始啟動'],
+  ['CH.03','買い手数も過去最高'],
+  ['CH.04','WEB營收創新高'],
+  ['CH.04','Q4 加速'],
+  ['CH.05','誠實診斷 — 標籤現況'],
+  ['CH.05','LだけでこのGAP'],
+  ['CH.06','ACTSとは'],
+  ['CH.06','71,050 個打席'],
+  ['CH.06','興趣標籤的 lift'],
+  ['CH.07','終結問い'],
+  ['CH.07','FY26 ロードマップ'],
+  ['CH.07','最終訊息']
+];
+const titlesJa = [
+  ['CH.00','表紙'],
+  ['CH.00','本日のアジェンダ'],
+  ['CH.01','台湾出生数'],
+  ['CH.01','正面から認める'],
+  ['CH.02','月刊から脱皮'],
+  ['CH.02','移行 + 新規'],
+  ['CH.02','巨大な伸び代'],
+  ['CH.03','WEBはLINE中心'],
+  ['CH.03','タグ蓄積が始まった'],
+  ['CH.03','買い手数も過去最高'],
+  ['CH.04','WEB売上が過去最高'],
+  ['CH.04','Q4 加速'],
+  ['CH.05','正直に診断 — タグの現状'],
+  ['CH.05','LだけでこのGAP'],
+  ['CH.06','ACTSとは'],
+  ['CH.06','71,050の打席'],
+  ['CH.06','興趣タグの lift'],
+  ['CH.07','終結の問い'],
+  ['CH.07','FY26 ロードマップ'],
+  ['CH.07','最終メッセージ']
+];
+
+let currentLang = 'zh';
+const dotColors = {'CH.00':'#4A7CC7','CH.01':'#E07060','CH.02':'#3AAFA0','CH.03':'#4A7CC7','CH.04':'#E07060','CH.05':'#E8B840','CH.06':'#4A7CC7','CH.07':'#FFD87A'};
+
+const chDots = document.getElementById('ch-dots');
+const uniqueChs = [...new Set(titles.map(t=>t[0]))];
+uniqueChs.forEach(ch=>{
+  const d=document.createElement('div');
+  d.className='ch-dot';
+  d.title=ch;
+  d.style.background=dotColors[ch]||'var(--rule)';
+  d.style.opacity='0.35';
+  d.setAttribute('data-ch',ch);
+  d.onclick=()=>goToFirstOfCh(ch);
+  chDots.appendChild(d);
+});
+
+function goToFirstOfCh(ch){
+  const idx=titles.findIndex(t=>t[0]===ch);
+  if(idx>=0) goTo(idx);
+}
+
+function goTo(n){
+  slides[cur].classList.remove('active');
+  cur=(n+TOTAL)%TOTAL;
+  slides[cur].classList.add('active');
+  const arr = currentLang==='ja' ? titlesJa : titles;
+  const [ch,title]=arr[cur];
+  document.getElementById('tbar-ch').textContent=ch;
+  document.getElementById('tbar-title').textContent=title;
+  document.getElementById('slide-counter').textContent=`${cur+1} / ${TOTAL}`;
+  document.querySelectorAll('.ch-dot').forEach(d=>{
+    d.style.opacity=d.getAttribute('data-ch')===ch?'1':'0.35';
+  });
+}
+
+function switchLang(lang){
+  if(lang===currentLang) return;
+  document.body.setAttribute('data-lang', lang);
+  document.querySelectorAll('[data-ja]').forEach(el=>{
+    if(lang==='ja'){
+      if(!el.hasAttribute('data-zh')) el.setAttribute('data-zh', el.innerHTML);
+      el.innerHTML = el.getAttribute('data-ja');
+    } else {
+      const zh = el.getAttribute('data-zh');
+      if(zh!==null) el.innerHTML = zh;
+    }
+  });
+  currentLang = lang;
+  document.documentElement.lang = lang==='ja' ? 'ja' : 'zh-TW';
+  const arr = lang==='ja' ? titlesJa : titles;
+  const [ch,title]=arr[cur];
+  document.getElementById('tbar-title').textContent=title;
+  const btn = document.getElementById('btn-lang');
+  if(btn) btn.textContent = lang==='ja' ? '🇹🇼 繁中' : '🇯🇵 日本語';
+  if(typeof updateChartsLang==='function') updateChartsLang(lang);
+}
+document.getElementById('btn-lang').onclick=()=>switchLang(currentLang==='zh'?'ja':'zh');
+document.getElementById('btn-next').onclick=()=>goTo(cur+1);
+document.getElementById('btn-prev').onclick=()=>goTo(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') goTo(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') goTo(cur-1);
+});
+goTo(0);
+
+// ── STAGE SCALING ──
+function scaleStage(){
+  const stage=document.getElementById('stage');
+  const W=1280,H=720;
+  const scaleX=window.innerWidth/W;
+  const scaleY=window.innerHeight/H;
+  const s=Math.min(scaleX,scaleY);
+  stage.style.transform=`scale(${s})`;
+  stage.style.left=((window.innerWidth-W*s)/2)+'px';
+  stage.style.top=((window.innerHeight-H*s)/2)+'px';
+}
+scaleStage();
+window.addEventListener('resize',scaleStage);
+
+// ── CHARTS ──
+const AB='#4A7CC7',AS='#7AAEE0',AM='#3AAFA0',AR='#E07060',AY='#E8B840',AG='#C4B898';
+const INK='#1A1A1A',INK2='#555555',INK3='#999999',RULE='#D0D8E8';
+const FONT="'Noto Sans JP',sans-serif";
+
+Chart.defaults.font.family = FONT;
+Chart.defaults.devicePixelRatio = 2;
+
+const months24 = ['202404','202405','202406','202407','202408','202409','202410','202411','202412','202501','202502','202503','202504','202505','202506','202507','202508','202509','202510','202511','202512','202601','202602','202603'];
+
+// === c-birth: 台湾出生数推移 ===
+new Chart('c-birth',{type:'line',data:{
+  labels:[2018,2019,2020,2021,2022,2023,2024,2025],
+  datasets:[{
+    data:[181601,177767,165249,153820,138986,135571,134856,107812],
+    borderColor:AR,backgroundColor:AR+'22',
+    borderWidth:3,fill:true,tension:0.25,
+    pointBackgroundColor:AR,pointRadius:5,pointHoverRadius:7
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+'人'}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:13}}},
+    y:{grid:{color:RULE},min:80000,max:200000,ticks:{color:INK2,callback:v=>(v/1000)+'k',font:{size:11}}}
+  }
+}});
+
+// === c-pl-yoy: 学習商品 FY24 vs FY25 月別 ===
+const months12 = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+new Chart('c-pl-yoy',{type:'bar',data:{
+  labels:months12,
+  datasets:[
+    {label:'FY24（月刊あり）',data:[2.68,2.45,2.06,14.26,6.16,2.16,6.31,4.70,5.53,2.32,3.68,3.32],backgroundColor:AS+'cc',borderRadius:3},
+    {label:'FY25（月刊なし）',data:[2.86,9.68,3.82,3.21,3.52,2.30,4.98,5.21,3.33,5.25,3.72,10.56],backgroundColor:AM+'ee',borderRadius:3}
+  ]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:INK2,font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label+': NT$'+c.raw.toFixed(2)+'M'}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:11}}},
+    y:{grid:{color:RULE},ticks:{color:INK2,callback:v=>v+'M',font:{size:10}}}
+  }
+}});
+
+// === c-migration: 移行/新規 doughnut ===
+new Chart('c-migration',{type:'doughnut',data:{
+  labels:['移行成功（巧連智経験あり）','新規獲得（巧連智経験なし）'],
+  datasets:[{
+    data:[4427,3468],
+    backgroundColor:[AB,AR],
+    borderWidth:3,borderColor:'#fff'
+  }]
+},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{
+  legend:{position:'bottom',labels:{color:INK2,font:{size:12},padding:8,boxWidth:14}},
+  tooltip:{callbacks:{label:c=>c.label+': '+c.raw.toLocaleString()+'人 ('+(c.raw/7895*100).toFixed(0)+'%)'}}
+}}});
+
+// === c-line-rate: WEB買い手 LINE綁定済比率 月別 ===
+new Chart('c-line-rate',{type:'line',data:{
+  labels:months24,
+  datasets:[{
+    data:[100,97.9,100,100,100,100,98.9,100,99.3,100,99.5,100,98.3,100,98.9,100,98.9,98.9,96.4,98.6,95.6,96.4,92.8,96.7],
+    borderColor:AB,backgroundColor:AB+'22',
+    borderWidth:2.5,fill:true,tension:0.2,
+    pointBackgroundColor:AB,pointRadius:2.5
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'%'}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:9},maxRotation:60,minRotation:60,callback:function(v,i){return i%3===0?this.getLabelForValue(v):'';}}},
+    y:{grid:{color:RULE},min:80,max:101,ticks:{color:INK2,callback:v=>v+'%',font:{size:10}}}
+  }
+}});
+
+// === c-tag-avg: 平均タグ数 月別 ===
+new Chart('c-tag-avg',{type:'line',data:{
+  labels:months24,
+  datasets:[{
+    data:[0.95,0.94,0.95,0.83,0.84,0.92,0.88,0.93,0.91,0.88,0.91,0.88,0.84,0.93,0.87,0.90,0.95,2.62,4.18,6.75,6.34,10.67,8.41,14.09],
+    borderColor:AB,backgroundColor:AB+'22',
+    borderWidth:3,fill:true,tension:0.3,
+    pointBackgroundColor:AB,pointRadius:3
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{
+  legend:{display:false},
+  tooltip:{callbacks:{label:c=>c.raw.toFixed(2)+' tags / customer'}},
+  annotation:{}
+},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:9},maxRotation:60,minRotation:60,callback:function(v,i){return i%3===0?this.getLabelForValue(v):'';}}},
+    y:{grid:{color:RULE},min:0,max:16,ticks:{color:INK2,font:{size:10}}}
+  }
+}});
+
+// === c-web-buyers: WEB月別買い手数 ===
+new Chart('c-web-buyers',{type:'bar',data:{
+  labels:months24,
+  datasets:[{
+    data:[129,97,93,421,216,75,446,406,277,103,194,92,120,379,187,174,179,94,303,278,226,253,249,550],
+    backgroundColor:months24.map((_,i)=>i===23?AR:(i>=17?AB:AS+'cc')),
+    borderRadius:3
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'人'}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:9},maxRotation:60,minRotation:60,callback:function(v,i){return i%3===0?this.getLabelForValue(v):'';}}},
+    y:{grid:{color:RULE},min:0,ticks:{color:INK2,font:{size:10}}}
+  }
+}});
+
+// === c-web-rev: WEB月別売上 ===
+const webRevK = [538,439,400,2520,1459,511,1753,1718,1427,518,995,560,748,1680,1072,1017,921,513,1545,1592,1297,1270,1285,2890];
+new Chart('c-web-rev',{type:'bar',data:{
+  labels:months24,
+  datasets:[{
+    data:webRevK,
+    backgroundColor:months24.map((_,i)=>i===23?AR:(i>=17?AB:AS+'cc')),
+    borderRadius:3
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'NT$'+(c.raw/1000).toFixed(2)+'M'}}},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:9},maxRotation:60,minRotation:60,callback:function(v,i){return i%3===0?this.getLabelForValue(v):'';}}},
+    y:{grid:{color:RULE},min:0,ticks:{color:INK2,callback:v=>(v/1000).toFixed(1)+'M',font:{size:10}}}
+  }
+}});
+
+// === c-tag-cmp: 行為 vs 興趣 タグ比率 ===
+new Chart('c-tag-cmp',{type:'bar',data:{
+  labels:['行為タグ あり','興趣タグ あり'],
+  datasets:[{
+    data:[99.3,0.5],
+    backgroundColor:[AM,AY],
+    borderRadius:6
+  }]
+},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{
+  legend:{display:false},
+  tooltip:{callbacks:{label:c=>c.raw+'%'}}
+},
+  scales:{
+    x:{grid:{color:RULE},min:0,max:100,ticks:{color:INK2,callback:v=>v+'%',font:{size:11}}},
+    y:{grid:{display:false},ticks:{color:INK,font:{size:14,weight:'bold'}}}
+  }
+}});
+
+// === c-age-dist: 月齢別ヒストグラム ===
+new Chart('c-age-dist',{type:'bar',data:{
+  labels:['妊娠期','0-5M','6-11M','12-17M','18-23M','24-29M','30-35M','36-41M','42-47M','48-53M','54-59M'],
+  datasets:[{
+    data:[2215,3058,2774,5086,5016,4991,5287,7256,11344,13112,13184],
+    backgroundColor:['#C8D8F0','#9DC0E8',AB,AB,AB,AB,AB,AB,AB,AB,AB],
+    borderRadius:3
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{
+  legend:{display:false},
+  tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+'人'}}
+},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK2,font:{size:10}}},
+    y:{grid:{color:RULE},min:0,ticks:{color:INK2,callback:v=>(v/1000).toFixed(0)+'k',font:{size:10}}}
+  }
+}});
+
+// === c-conv-lift: 興趣 lift ===
+new Chart('c-conv-lift',{type:'bar',data:{
+  labels:['行為のみ\n(n=38,049)','行為+興趣\n(n=193)'],
+  datasets:[{
+    data:[16.3,22.0],
+    backgroundColor:[AG,AB],
+    borderRadius:6
+  }]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{
+  legend:{display:false},
+  tooltip:{callbacks:{label:c=>c.raw+'%'}}
+},
+  scales:{
+    x:{grid:{display:false},ticks:{color:INK,font:{size:13,weight:'bold'}}},
+    y:{grid:{color:RULE},min:0,max:30,ticks:{color:INK2,callback:v=>v+'%',font:{size:11}}}
+  }
+}});
+</script>
+
+</body>
+</html>
